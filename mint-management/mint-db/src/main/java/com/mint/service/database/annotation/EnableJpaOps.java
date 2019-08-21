@@ -6,6 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
@@ -18,6 +19,7 @@ import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 @Retention(RetentionPolicy.RUNTIME)
 @EnableJpaAuditing(auditorAwareRef="mintAuditorAware")
 @EnableJpaRepositories
+@EntityScan
 @Documented
 public @interface EnableJpaOps {
 	@AliasFor(annotation = EnableJpaRepositories.class, attribute = "value")
@@ -48,5 +50,8 @@ public @interface EnableJpaOps {
 	boolean considerNestedRepositories() default false;
 	@AliasFor(annotation = EnableJpaRepositories.class, attribute = "enableDefaultTransactions")
 	boolean enableDefaultTransactions() default true;
-	
+	@AliasFor(annotation = EntityScan.class, attribute="basePackages")
+	String[] entityScanPackages() default {};
+	@AliasFor(annotation = EntityScan.class, attribute="basePackageClasses")
+	Class<?>[] entityClasses() default {};
 }

@@ -8,6 +8,8 @@ import com.mint.common.context.UserContext;
 import com.mint.common.context.UserContextThreadLocal;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
+import com.mint.service.exception.Exceptions;
+import com.mint.service.exception.MintServiceException;
 import com.mint.service.interceptor.MintInterceptor;
 
 
@@ -17,6 +19,9 @@ public class ContextInterceptor extends MintInterceptor {
 	
 	public ContextInterceptor() {
 		wrapper = CommonServiceLoader.getSingleService(ContextWrapper.class, ServiceContext.beanFactory);
+		if (wrapper == null) {
+			throw Exceptions.get(MintServiceException.class, "No implementation for ContextWrapper was found.");
+		}
 	}
 	
 	@Override

@@ -9,7 +9,7 @@ import com.mint.service.test.service.HibernateTesterService;
 import com.mint.service.test.service.JPATestService;
 
 @RestController
-@RequestMapping("/test")
+@RequestMapping("/service")
 public class TestController {
 
 	@Autowired

@@ -27,4 +27,15 @@ public class TestController {
 	public void jpaSave() {
 		jpaTestService.save();
 	}
+	
+	@GetMapping("/hu")
+	public void hibernateUpdate() {
+		hibernateTesterService.update();
+	}
+	
+	@GetMapping("/ju")
+	public void jpaUpdate() {
+		jpaTestService.update();
+	}
+	
 }

@@ -20,5 +20,12 @@ public class JPATestService {
 		e.setDescription("Saved by JPA");
 		jpaTestDao.save(e);
 	}
+
+	@Transactional
+	public void update() {
+		TestEntity e = jpaTestDao.getOne(1L);
+		e.setDescription("Updated by JPA");
+		jpaTestDao.save(e);
+	}
 	
 }

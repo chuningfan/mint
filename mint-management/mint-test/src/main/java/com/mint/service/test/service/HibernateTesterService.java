@@ -21,4 +21,11 @@ public class HibernateTesterService {
 		hibernateTestDao.save(e);
 	}
 	
+	@Transactional
+	public void update() {
+		TestEntity e = hibernateTestDao.getOne(1L);
+		e.setDescription("Updated by hibernate");
+		hibernateTestDao.save(e);
+	}
+	
 }

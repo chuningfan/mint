@@ -9,8 +9,6 @@ import com.mint.service.interceptor.MintInterceptor;
 
 public class ServiceContext {
 	
-	public static ThreadLocal<UserContext> userContextPool;
-	
 	public static DefaultListableBeanFactory beanFactory;
 	
 	public volatile static String id;

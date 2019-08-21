@@ -36,7 +36,7 @@ public class RedisOperationAspect {
 
 	private final LocalVariableTableParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
 
-	@Around("@annotation(com.mint.service.common.annotation.RedisOps)")
+	@Around("@annotation(com.mint.service.cache.annotation.RedisOps)")
 	public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
 		Object result = null;
 		MethodSignature ms = (MethodSignature) pjp.getSignature();

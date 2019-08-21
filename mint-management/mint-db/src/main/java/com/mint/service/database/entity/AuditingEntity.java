@@ -1,18 +1,38 @@
 package com.mint.service.database.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
-public class AuditingEntity implements Serializable {
-	
-	private static final long serialVersionUID = -5456350593218527744L;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.EntityListeners;
+import javax.persistence.MappedSuperclass;
 
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+@MappedSuperclass
+@EntityListeners(AuditingEntityListener.class)
+@Access(AccessType.FIELD)
+public class AuditingEntity  {
+	
+	@Column(name="created_by")
+	@CreatedBy
 	private Long createdBy;
 	
+	@Column(name="created_date")
+	@CreatedDate
 	private Date createdDate;
 	
+	@Column(name="modified_by")
+	@LastModifiedBy
 	private Long modifiedBy;
 	
+	@Column(name="modified_date")
+	@LastModifiedDate
 	private Date modifiedDate;
 
 	public Long getCreatedBy() {
@@ -46,5 +66,6 @@ public class AuditingEntity implements Serializable {
 	public void setModifiedDate(Date modifiedDate) {
 		this.modifiedDate = modifiedDate;
 	}
+
 	
 }

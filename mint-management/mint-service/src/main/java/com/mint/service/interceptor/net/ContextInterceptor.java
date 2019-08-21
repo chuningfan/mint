@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
+import com.mint.common.context.UserContextThreadLocal;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
 import com.mint.service.interceptor.MintInterceptor;
@@ -15,14 +16,13 @@ public class ContextInterceptor extends MintInterceptor {
 	private final ContextWrapper wrapper;
 	
 	public ContextInterceptor() {
-		ServiceContext.userContextPool = new ThreadLocal<>();
 		wrapper = CommonServiceLoader.getSingleService(ContextWrapper.class, ServiceContext.beanFactory);
 	}
 	
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		ServiceContext.userContextPool.remove();
+		UserContextThreadLocal.remove();
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class ContextInterceptor extends MintInterceptor {
 			throws Exception {
 		UserContext context = wrapper.getFromReq(request);
 		if (context != null) {
-			ServiceContext.userContextPool.set(context);
+			UserContextThreadLocal.set(context);
 		}
 		return true;
 	}

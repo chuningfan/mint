@@ -3,10 +3,10 @@ package com.mint.service.database.entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
-public class IdentifiedEntity extends AuditingEntity{
-	
-	private static final long serialVersionUID = -35850400149134639L;
+@MappedSuperclass
+public class IdentifiedEntity extends AuditingEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

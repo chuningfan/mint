@@ -11,6 +11,7 @@
   	<module>mint-cache</module>
   	<module>mint-gateway</module>
   	<module>mint-service-center</module>
+  	<module>mint-test</module>
   </modules>
   <parent>
 		<groupId>org.springframework.boot</groupId>

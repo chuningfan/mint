@@ -49,7 +49,7 @@ public class LocalCacheFactory  {
 	
 	private static final Map<String, CacheOperator<String, Object>> LOCALCACHE = Maps.newConcurrentMap();
 
-	public static void create(String key, LocalCacheType type, Long expireTime, TimeUnit unit, Long byteSize) throws LocalCacheException {
+	public static CacheOperator<String, Object> create(String key, LocalCacheType type, Long expireTime, TimeUnit unit, Long byteSize) throws LocalCacheException {
 		if (LOCALCACHE.containsKey(key)) {
 			throw new LocalCacheException("Cannot allow dupplicate key for local cache.");
 		}
@@ -63,6 +63,7 @@ public class LocalCacheFactory  {
 			break;
 		}
 		LOCALCACHE.putIfAbsent(key, cache);
+		return cache;
 	}
 	
 	public static CacheOperator<String, Object> getLocalCache(String key) {

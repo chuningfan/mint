@@ -13,6 +13,8 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 
+import com.mint.service.database.support.hibernate.HibernateAuditingInterceptor;
+
 /**
  * DAO 核心组件注入
  * 
@@ -49,6 +51,7 @@ public class DAOConfiguration {
 	public HibernateTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
 		HibernateTransactionManager transactionManager = new HibernateTransactionManager();
 		transactionManager.setSessionFactory(entityManagerFactory.unwrap(SessionFactory.class));
+		transactionManager.setEntityInterceptor(new HibernateAuditingInterceptor());
 		return transactionManager;
 	}
 	

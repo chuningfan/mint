@@ -28,7 +28,7 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {
 		// 获取service metadata provider class
-		Map<String, Object> attrMap = importingClassMetadata.getAnnotationAttributes("com.mint.service.common.annotation.MintService");
+		Map<String, Object> attrMap = importingClassMetadata.getAnnotationAttributes("com.mint.service.annotation.MintService");
 		@SuppressWarnings("unchecked")
 		Class<? extends ServiceMetaDataProvider> clazz = (Class<? extends ServiceMetaDataProvider>) attrMap.get("metaDataProvider");
 		

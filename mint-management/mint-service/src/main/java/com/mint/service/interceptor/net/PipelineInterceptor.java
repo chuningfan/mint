@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.mint.common.context.ContextWrapper;
+import com.mint.common.context.UserContextThreadLocal;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
 import com.mint.service.exception.MintServiceException;
@@ -35,7 +36,7 @@ public class PipelineInterceptor extends MintInterceptor {
 		}
 		try {
 			pipelineWorker.doProcess(request, response, 
-					ServiceContext.userContextPool.get());
+					UserContextThreadLocal.get());
 		} catch (MintServiceException e) {
 			response.sendError(500, e.getMessage());
 			LOG.error(e.getMessage());

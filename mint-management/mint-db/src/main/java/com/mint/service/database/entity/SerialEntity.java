@@ -1,27 +1,35 @@
 package com.mint.service.database.entity;
 
-public class SerialEntity extends AuditingEntity {
+import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
+public class SerialEntity extends AuditingEntity implements Serializable {
 
 	private static final long serialVersionUID = 4291964186557917109L;
 
-	private Long version;
+	@Column(name="version_number")
+	private Long versionNumber = 0L;
 	
-	private Long previousVersion;
+	@Column(name="previous_version_number")
+	private Long previousVersionNumber;
 
-	public Long getVersion() {
-		return version;
+	public Long getVersionNumber() {
+		return versionNumber;
 	}
 
-	public void setVersion(Long version) {
-		this.version = version;
+	public void setVersionNumber(Long versionNumber) {
+		this.versionNumber = versionNumber;
 	}
 
-	public Long getPreviousVersion() {
-		return previousVersion;
+	public Long getPreviousVersionNumber() {
+		return previousVersionNumber;
 	}
 
-	public void setPreviousVersion(Long previousVersion) {
-		this.previousVersion = previousVersion;
+	public void setPreviousVersionNumber(Long previousVersionNumber) {
+		this.previousVersionNumber = previousVersionNumber;
 	}
-	
+
 }

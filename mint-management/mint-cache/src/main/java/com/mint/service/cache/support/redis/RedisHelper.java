@@ -96,7 +96,7 @@ public class RedisHelper implements CacheOperator<String, Object> {
 		return redisTemplate.opsForHash().entries(key);
 	}
 
-	public boolean hmset(String key, Map<String, Object> map) {
+	public boolean hmset(String key, Map<Object, Object> map) {
 		try {
 			redisTemplate.opsForHash().putAll(key, map);
 			return true;
@@ -106,7 +106,7 @@ public class RedisHelper implements CacheOperator<String, Object> {
 		}
 	}
 
-	public boolean hmset(String key, Map<String, Object> map, long expireTime, TimeUnit unit) {
+	public boolean hmset(String key, Map<Object, Object> map, long expireTime, TimeUnit unit) {
 		try {
 			redisTemplate.opsForHash().putAll(key, map);
 			if (expireTime > 0) {

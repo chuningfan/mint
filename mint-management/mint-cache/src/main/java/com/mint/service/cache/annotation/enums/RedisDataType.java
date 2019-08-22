@@ -41,7 +41,7 @@ public enum RedisDataType {
 	}, HASH {
 		public void save(RedisHelper helper, String key, Long expireTime, TimeUnit unit, Object...data) {
 			@SuppressWarnings("unchecked")
-			Map<String, Object> map = (Map<String, Object>) data[0];
+			Map<Object, Object> map = (Map<Object, Object>) data[0];
 			helper.hmset(key, map);
 		}
 		

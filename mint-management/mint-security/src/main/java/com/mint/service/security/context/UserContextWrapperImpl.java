@@ -20,7 +20,7 @@ public class UserContextWrapperImpl implements ContextWrapper {
 	@Override
 	public UserContext getFromReq(HttpServletRequest req) throws Exception {
 		UserContext context = new UserContext();
-		
+		req.getCookies();
 		return context;
 	}
 

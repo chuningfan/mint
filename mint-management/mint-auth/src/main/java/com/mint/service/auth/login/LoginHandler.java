@@ -12,7 +12,7 @@ import com.mint.service.auth.exception.AuthException;
 import com.mint.service.auth.listener.LoginListener;
 import com.mint.service.context.ServiceContext;
 
-public abstract class LoginHandler extends Observable {
+public abstract class LoginHandler<FD> extends Observable {
 	
 	protected final LoginListener loginListener;
 	
@@ -21,7 +21,7 @@ public abstract class LoginHandler extends Observable {
 		addObserver(loginListener);
 	}
 	
-	public void doLogin(AuthFormData formData) throws AuthException {
+	public void doLogin(FD formData) throws AuthException {
 		UserContext context = login(formData);
 		if (context != null && context.getStatus() != null) {
 			if (UserStatus.INACTIVE == context.getStatus()) {
@@ -41,6 +41,6 @@ public abstract class LoginHandler extends Observable {
 		throw new AuthException(LoginResult.NOACCOUNT);
 	}
 	
-	protected abstract UserContext login(AuthFormData formData);
+	protected abstract UserContext login(FD formData);
 	
 }

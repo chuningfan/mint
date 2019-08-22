@@ -10,7 +10,7 @@ import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
-import com.mint.service.gateway.meta.GatewayServiceMetadataProvider;
+import com.mint.service.gateway.metadata.GatewayServiceMetadataProvider;
 import com.mint.service.pipeline.PipelineWorker;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;

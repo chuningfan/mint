@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 import com.mint.service.annotation.MintService;
-import com.mint.service.gateway.meta.GatewayServiceMetadataProvider;
+import com.mint.service.gateway.metadata.GatewayServiceMetadataProvider;
 
 @MintService(metaDataProvider = GatewayServiceMetadataProvider.class, noAutoConfigFor = DataSourceAutoConfiguration.class)
 @EnableZuulProxy

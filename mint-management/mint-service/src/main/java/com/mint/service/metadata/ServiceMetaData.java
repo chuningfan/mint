@@ -1,4 +1,4 @@
-package com.mint.service.meta;
+package com.mint.service.metadata;
 
 import java.util.List;
 

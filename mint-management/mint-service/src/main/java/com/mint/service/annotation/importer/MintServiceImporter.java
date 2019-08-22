@@ -17,8 +17,8 @@ import org.springframework.core.type.AnnotationMetadata;
 
 import com.mint.service.context.ServiceContext;
 import com.mint.service.interceptor.MintInterceptor;
-import com.mint.service.meta.ServiceMetaData;
-import com.mint.service.meta.ServiceMetaDataProvider;
+import com.mint.service.metadata.ServiceMetaData;
+import com.mint.service.metadata.ServiceMetadataProvider;
 import com.mint.service.pipeline.PipelineWorker;
 
 public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
@@ -30,7 +30,7 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 		// 获取service metadata provider class
 		Map<String, Object> attrMap = importingClassMetadata.getAnnotationAttributes("com.mint.service.annotation.MintService");
 		@SuppressWarnings("unchecked")
-		Class<? extends ServiceMetaDataProvider> clazz = (Class<? extends ServiceMetaDataProvider>) attrMap.get("metaDataProvider");
+		Class<? extends ServiceMetadataProvider> clazz = (Class<? extends ServiceMetadataProvider>) attrMap.get("metaDataProvider");
 		
 		int readTimeout = (int) attrMap.get("readTimeout");
 		int connectTimeout = (int) attrMap.get("connectTimeout");
@@ -44,7 +44,7 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 		registerBean(registry, PipelineWorker.class, "pipelineWorker");
 		// 获取service metadata
 		DefaultListableBeanFactory bf = (DefaultListableBeanFactory) registry;
-		ServiceMetaDataProvider provider = bf.getBean(clazz);
+		ServiceMetadataProvider provider = bf.getBean(clazz);
 		provider.initPipeline(bf.getBean(PipelineWorker.class)); // 回调方法，初始化时根据service所需 添加或删除pipeline members
 		ServiceMetaData metaData =  provider.metaData();
 		// 赋值ServiceContext

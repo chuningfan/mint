@@ -1,8 +1,8 @@
-package com.mint.service.meta;
+package com.mint.service.metadata;
 
 import com.mint.service.pipeline.PipelineWorker;
 
-public interface ServiceMetaDataProvider {
+public interface ServiceMetadataProvider {
 	
 	ServiceMetaData metaData();
 	

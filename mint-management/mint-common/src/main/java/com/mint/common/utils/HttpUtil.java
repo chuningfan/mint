@@ -1,5 +1,9 @@
 package com.mint.common.utils;
 
+import java.util.Optional;
+import java.util.stream.Stream;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 public class HttpUtil {
@@ -22,6 +26,18 @@ public class HttpUtil {
 			ip = request.getRemoteAddr();  
 		}  
 		return ip;  
-	}  
+	}
+	
+	public static String getCookieValue(HttpServletRequest req, String key) {
+		if (req.getCookies() == null || req.getCookies().length == 0) {
+			return null;
+		}
+		Optional<Cookie> opt = Stream.of(req.getCookies()).filter(c -> c.getName().equals(key)).findFirst();
+		if (opt.isPresent()) {
+			return opt.get().getValue();
+		}
+		return null;
+	}
+	
 	
 }

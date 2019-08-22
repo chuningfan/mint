@@ -1,5 +1,6 @@
 package com.mint.service.auth.login;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Observable;
 
@@ -34,6 +35,7 @@ public abstract class LoginHandler<FD> extends Observable {
 				List<Long> roleIds = context.getRoleIds();
 				String roles = Joiner.on(",").join(roleIds);
 				context.setDescription(String.format(desc, context.getUserTypeId(), context.getUserId(), roles, context.getMarketId()));
+				context.setPrevLoginTime(new Date());
 				setChanged();
 				notifyObservers(context);
 			}

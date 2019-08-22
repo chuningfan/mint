@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 public class HttpUtil {
 	
@@ -39,5 +40,25 @@ public class HttpUtil {
 		return null;
 	}
 	
+	public static void deleteCookiesByDomainName(HttpServletRequest req, HttpServletResponse resp, String domainName) {
+		if (req.getCookies() == null || req.getCookies().length == 0) {
+			return;
+		}
+		if (Stream.of(req.getCookies()).anyMatch(c -> c.getDomain().equals(domainName))) {
+			Stream.of(req.getCookies()).filter(c -> c.getDomain().equals(domainName)).forEach(c -> {
+				c.setMaxAge(0);
+				resp.addCookie(c);
+			});
+		}
+	}
+	
+	public static void deleteCookiesByKey(HttpServletRequest req, HttpServletResponse resp, String key) {
+		if (Stream.of(req.getCookies()).anyMatch(c -> c.getName().equals(key))) {
+			Stream.of(req.getCookies()).filter(c -> c.getName().equals(key)).forEach(c -> {
+				c.setMaxAge(0);
+				resp.addCookie(c);
+			});
+		}
+	}
 	
 }

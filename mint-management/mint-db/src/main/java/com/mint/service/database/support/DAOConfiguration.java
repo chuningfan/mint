@@ -36,7 +36,8 @@ public class DAOConfiguration {
              localContainerEntityManagerFactoryBean.getJpaPropertyMap().put("hibernate.current_session_context_class", "org.springframework.orm.hibernate5.SpringSessionContext");
              HibernateJpaVendorAdapter jpaVendorAdapter = new HibernateJpaVendorAdapter();
              jpaVendorAdapter.setGenerateDdl(true);
-             jpaVendorAdapter.setShowSql(true);
+             String showSql = environment.getProperty("spring.jpa.show-sql");
+             jpaVendorAdapter.setShowSql(showSql == null ? false : Boolean.valueOf(showSql));
              jpaVendorAdapter.setDatabasePlatform(environment.getProperty("spring.jpa.properties.hibernate.dialect"));
              localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
              return localContainerEntityManagerFactoryBean;

@@ -1,7 +1,5 @@
 package com.mint.service.gateway.filter;
 
-import java.util.concurrent.TimeUnit;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -12,10 +10,6 @@ import org.springframework.stereotype.Component;
 
 import com.mint.common.context.UserContext;
 import com.mint.common.utils.HttpUtil;
-import com.mint.service.cache.exception.LocalCacheException;
-import com.mint.service.cache.support.CacheOperator;
-import com.mint.service.cache.support.local.LocalCacheFactory;
-import com.mint.service.cache.support.local.LocalCacheType;
 import com.mint.service.cache.support.redis.RedisHelper;
 import com.mint.service.exception.MintServiceException;
 import com.mint.service.pipeline.ServicePipelineMember;
@@ -26,16 +20,6 @@ import com.mint.service.security.guard.BlackListConcierge;
 public class BlackListValidation implements ServicePipelineMember {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BlackListValidation.class);
-	
-	private static CacheOperator<String, Object> cache;
-	
-	static {
-		try {
-			cache = LocalCacheFactory.create("test", LocalCacheType.MEMORY, 15L, TimeUnit.MINUTES, 10240L);
-		} catch (LocalCacheException e) {
-			LOG.error("Preparing local cache for black list validator error: {}", e.getMessage());
-		}
-	}
 	
 	public static final String ID = "mint-blacklist-validator";
 	

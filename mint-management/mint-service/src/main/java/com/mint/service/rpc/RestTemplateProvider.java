@@ -21,6 +21,8 @@ import org.springframework.web.client.RestTemplate;
 
 import com.google.common.collect.Lists;
 import com.mint.common.context.ContextWrapper;
+import com.mint.common.context.UserContext;
+import com.mint.common.context.UserContextThreadLocal;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
 
@@ -62,7 +64,8 @@ public class RestTemplateProvider {
 			@Override
 			public ClientHttpResponse intercept(HttpRequest req, byte[] body, ClientHttpRequestExecution exe)
 					throws IOException {
-				wrapper.setUserContextIntoRequestHeader(req);
+				UserContext context = UserContextThreadLocal.get();
+				wrapper.setUserContextIntoRequestHeader(context, req);
 				return exe.execute(req, body);
 			}
 		}));

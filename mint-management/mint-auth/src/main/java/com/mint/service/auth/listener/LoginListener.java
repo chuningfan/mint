@@ -2,7 +2,6 @@ package com.mint.service.auth.listener;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.concurrent.TimeUnit;
@@ -15,15 +14,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StopWatch;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.UserContext;
-import com.mint.common.enums.LoginType;
-import com.mint.common.enums.UserStatus;
 import com.mint.service.auth.listener.dto.NormalLoginDto;
 import com.mint.service.cache.support.redis.RedisHelper;
 import com.mint.service.security.sault.Base64Util;

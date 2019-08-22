@@ -2,6 +2,7 @@ package com.mint.service.gateway.metadata;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import com.google.common.collect.Lists;
@@ -15,6 +16,9 @@ import com.mint.service.pipeline.defaultImpl.RateLimitation;
 @Configuration
 public class GatewayServiceMetadataProvider implements ServiceMetadataProvider {
 
+	@Autowired
+	private BlackListValidation blackListValidation;
+	
 	public static final List<String> UNCHECKED_URI = Lists.newArrayList("/userReg", "/userLogin", "/mint-test/service/exc");
 	
 	@Override
@@ -27,7 +31,7 @@ public class GatewayServiceMetadataProvider implements ServiceMetadataProvider {
 	@Override
 	public void initPipeline(PipelineWorker pipelineWorker) {
 		pipelineWorker.removeMember(AuthValidation.ID);
-		pipelineWorker.appendMember(new BlackListValidation(), 0, true);
+		pipelineWorker.appendMember(blackListValidation, 0, true);
 		pipelineWorker.appendMember(new RateLimitation(3000), 1, true);
 	}
 

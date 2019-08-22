@@ -14,4 +14,8 @@ public class MintServiceException extends RuntimeException {
 		super(errorMessage);
 	}
 	
+	public MintServiceException(Throwable e) {
+		super(e);
+	}
+	
 }

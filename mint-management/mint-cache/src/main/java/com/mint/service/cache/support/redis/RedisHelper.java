@@ -6,8 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-import org.assertj.core.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -15,7 +16,6 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
-import org.yaml.snakeyaml.util.ArrayUtils;
 
 import com.mint.service.cache.support.CacheOperator;
 
@@ -56,10 +56,10 @@ public class RedisHelper implements CacheOperator<String, Object> {
 
 	@Override
 	public void removeIfPresent(String... keys) {
-		if (Arrays.isNullOrEmpty(keys)) {
+		if (keys == null || keys.length == 0) {
 			return;
 		}
-		List<String> keyList = ArrayUtils.toUnmodifiableList(keys);
+		List<String> keyList = Stream.of(keys).collect(Collectors.toList());
 		redisTemplate.opsForValue().getOperations().delete(keyList);
 	}
 

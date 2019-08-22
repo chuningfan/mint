@@ -3,9 +3,8 @@ package com.mint.service.cache.support.local.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
-
-import org.assertj.core.util.Arrays;
-import org.yaml.snakeyaml.util.ArrayUtils;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
@@ -65,11 +64,11 @@ public class DefaultLocalMemoryCache implements LocalCache {
 
 		@Override
 		public void removeIfPresent(String... keys) {
-			if (!Arrays.isNullOrEmpty(keys)) {
+			if (keys != null && keys.length > 0) {
 				if (keys.length == 1) {
 					cache.invalidate(keys);
 				} else {
-					List<String> keyList = ArrayUtils.toUnmodifiableList(keys);
+					List<String> keyList = Stream.of(keys).collect(Collectors.toList());
 					cache.invalidateAll(keyList);
 				}
 			}

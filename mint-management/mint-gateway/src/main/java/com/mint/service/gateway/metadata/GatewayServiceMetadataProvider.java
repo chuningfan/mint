@@ -2,9 +2,9 @@ package com.mint.service.gateway.metadata;
 
 import java.util.List;
 
-import org.assertj.core.util.Lists;
 import org.springframework.context.annotation.Configuration;
 
+import com.google.common.collect.Lists;
 import com.mint.service.gateway.filter.BlackListValidation;
 import com.mint.service.metadata.ServiceMetaData;
 import com.mint.service.metadata.ServiceMetadataProvider;

@@ -3,6 +3,8 @@ package com.mint.common.context;
 import java.util.Date;
 import java.util.List;
 
+import com.mint.common.enums.LoginType;
+
 public class UserContext {
 	// 操作者ID
 	private Long userId;
@@ -20,6 +22,8 @@ public class UserContext {
 	private Long userTypeId;
 	// 所属机构ID（agency公司）
 	private Long orgId;
+	// 登录途径
+	private LoginType loginType;
 
 	public Long getUserId() {
 		return userId;
@@ -83,6 +87,14 @@ public class UserContext {
 
 	public void setOrgId(Long orgId) {
 		this.orgId = orgId;
+	}
+
+	public LoginType getLoginType() {
+		return loginType;
+	}
+
+	public void setLoginType(LoginType loginType) {
+		this.loginType = loginType;
 	}
 
 }

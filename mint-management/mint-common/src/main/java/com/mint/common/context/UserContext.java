@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.mint.common.enums.LoginType;
+import com.mint.common.enums.UserStatus;
 
 public class UserContext {
 	// 操作者ID
@@ -24,6 +25,8 @@ public class UserContext {
 	private Long orgId;
 	// 登录途径
 	private LoginType loginType;
+	// 用户限制
+	private UserStatus status;
 
 	public Long getUserId() {
 		return userId;
@@ -95,6 +98,14 @@ public class UserContext {
 
 	public void setLoginType(LoginType loginType) {
 		this.loginType = loginType;
+	}
+
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
 	}
 
 }

@@ -32,9 +32,6 @@ public class AuthValidation implements ServicePipelineMember {
 	@Override
 	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
 			throws MintServiceException {
-		if (!ServiceContext.validateContext) {
-			return;
-		}
 		if (CollectionUtils.isEmpty(ServiceContext.supportedRoleIds)) {
 			return;
 		}

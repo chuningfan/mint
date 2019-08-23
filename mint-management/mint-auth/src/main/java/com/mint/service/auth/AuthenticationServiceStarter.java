@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import com.mint.service.annotation.MintService;
 import com.mint.service.auth.metadata.AuthServiceMetadataProvider;
 
-@MintService(metaDataProvider = AuthServiceMetadataProvider.class)
+@MintService(metadataProvider = AuthServiceMetadataProvider.class)
 public class AuthenticationServiceStarter {
 	
 	public static void main(String[] args) {

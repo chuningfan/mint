@@ -19,6 +19,7 @@ import org.springframework.retry.annotation.EnableRetry;
 import com.mint.service.annotation.importer.MintServiceImporter;
 import com.mint.service.interceptor.MintInterceptor;
 import com.mint.service.interceptor.log.CommonLogInterceptor;
+import com.mint.service.interceptor.net.ContextInterceptor;
 import com.mint.service.interceptor.net.PipelineInterceptor;
 import com.mint.service.metadata.ServiceMetadataProvider;
 
@@ -41,17 +42,15 @@ import com.mint.service.metadata.ServiceMetadataProvider;
 @Documented
 public @interface MintService {
 	// 每个mint service 必须实现ServiceMetaDataProvider接口 并注入spring容器
-	Class<? extends ServiceMetadataProvider> metaDataProvider();
+	Class<? extends ServiceMetadataProvider> metadataProvider();
 	// 本服务调用其他服务超时时间（毫秒）
 	int readTimeout() default 3000;
 	// 本服务长等待调用超时时间（毫秒）
 	int longConnectionReadTimeout() default 180000;
 	// 本服务与其他服务建立连接超时时间（毫秒）
 	int connectTimeout() default 3000;
-	// 本服务是否对全局请求上下文（context）进行校验
-	boolean validateContext() default false;
 	// 使用哪些拦截器
-	Class<? extends MintInterceptor>[] includeInterceptors() default {PipelineInterceptor.class, CommonLogInterceptor.class};
+	Class<? extends MintInterceptor>[] includeInterceptors() default {PipelineInterceptor.class, ContextInterceptor.class, CommonLogInterceptor.class};
 	// 不使用哪些拦截器
 	Class<? extends MintInterceptor>[] excludeInterceptors() default {};
 	// 取消置顶类的自动装载

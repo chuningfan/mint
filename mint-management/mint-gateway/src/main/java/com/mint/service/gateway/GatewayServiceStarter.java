@@ -6,8 +6,10 @@ import org.springframework.cloud.netflix.zuul.EnableZuulProxy;
 
 import com.mint.service.annotation.MintService;
 import com.mint.service.gateway.metadata.GatewayServiceMetadataProvider;
+import com.mint.service.interceptor.net.ContextInterceptor;
 
-@MintService(metaDataProvider = GatewayServiceMetadataProvider.class, noAutoConfigFor = DataSourceAutoConfiguration.class)
+@MintService(metadataProvider = GatewayServiceMetadataProvider.class, 
+noAutoConfigFor = DataSourceAutoConfiguration.class, excludeInterceptors = ContextInterceptor.class)
 @EnableZuulProxy
 public class GatewayServiceStarter {
 	

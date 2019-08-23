@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
-import com.mint.common.context.UserContext;
 import com.mint.service.interceptor.MintInterceptor;
 
 public class ServiceContext {

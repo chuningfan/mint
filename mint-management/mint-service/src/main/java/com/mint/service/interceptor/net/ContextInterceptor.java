@@ -36,6 +36,8 @@ public class ContextInterceptor extends MintInterceptor {
 		UserContext context = wrapper.getFromReq(request);
 		if (context != null) {
 			UserContextThreadLocal.set(context);
+		} else {
+			throw new MintServiceException("No context with current request");
 		}
 		return true;
 	}

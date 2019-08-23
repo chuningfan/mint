@@ -12,6 +12,8 @@ public class LoginFormData {
 	private HttpServletRequest request;
 	
 	private HttpServletResponse response;
+	
+	private String targetUrl;
 
 	public String getUsername() {
 		return username;
@@ -43,6 +45,14 @@ public class LoginFormData {
 
 	public void setResponse(HttpServletResponse response) {
 		this.response = response;
+	}
+
+	public String getTargetUrl() {
+		return targetUrl;
+	}
+
+	public void setTargetUrl(String targetUrl) {
+		this.targetUrl = targetUrl;
 	}
 	
 }

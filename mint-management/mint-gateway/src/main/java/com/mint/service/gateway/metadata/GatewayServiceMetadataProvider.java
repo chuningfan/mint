@@ -1,11 +1,8 @@
 package com.mint.service.gateway.metadata;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
-import com.google.common.collect.Lists;
 import com.mint.service.gateway.filter.BlackListValidation;
 import com.mint.service.metadata.ServiceMetaData;
 import com.mint.service.metadata.ServiceMetadataProvider;
@@ -18,8 +15,6 @@ public class GatewayServiceMetadataProvider implements ServiceMetadataProvider {
 
 	@Autowired
 	private BlackListValidation blackListValidation;
-	
-	public static final List<String> UNCHECKED_URI = Lists.newArrayList("/userReg", "/userLogin", "/mint-test/service/exc");
 	
 	@Override
 	public ServiceMetaData metaData() {

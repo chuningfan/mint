@@ -30,7 +30,7 @@ public class BlackListConcierge {
 	
 	private static CacheOperator<String, Object> cache;
 	
-	private static final long testSec = 2L;
+	private static final long testSec = 1L;
 	
 	static {
 		try {
@@ -46,22 +46,19 @@ public class BlackListConcierge {
 	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
 			throws ViciousRequestException, Exception {
 		String ip = HttpUtil.getIpAddress(req);
+		String reqURI = req.getRequestURI();
+		String cacheKey = new StringBuilder(ip).append(reqURI).toString();
 		Set<Object> viciousIpSet = redisHelper.sGet(rdsSetKey);
 		if (!CollectionUtils.isEmpty(viciousIpSet)) {
 			if (redisHelper.sHasKey(rdsSetKey, ip)) {
 				throw new ViciousRequestException();
 			}
 		}
-		Long times = (Long) cache.getByKey(ip);
-		if (times == null) {
-			cache.store(ip, 1, null, null);
+		boolean flag = cache.getByKey(cacheKey) == null ? false : (boolean) cache.getByKey(cacheKey);
+		if (!flag) {
+			cache.store(cacheKey, true, null, null);
 		} else {
-			if(times >= 5) { // 2s 10 + 次请求 算恶意请求直接入redis
-				redisHelper.sSet(rdsSetKey, ip);
-				throw new ViciousRequestException();
-			} else {
-				cache.store(ip, times + 1, null, null);
-			}
+			throw new ViciousRequestException();
 		}
 	}
 	

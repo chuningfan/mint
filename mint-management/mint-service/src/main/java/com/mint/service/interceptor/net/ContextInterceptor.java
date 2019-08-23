@@ -7,6 +7,7 @@ import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
 import com.mint.common.context.UserContextThreadLocal;
 import com.mint.common.utils.CommonServiceLoader;
+import com.mint.common.utils.HttpUtil;
 import com.mint.service.context.ServiceContext;
 import com.mint.service.exception.Exceptions;
 import com.mint.service.exception.MintServiceException;

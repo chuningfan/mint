@@ -56,7 +56,7 @@ public class BlackListConcierge {
 		if (times == null) {
 			cache.store(ip, 1, null, null);
 		} else {
-			if(times >= 10) { // 2s 10 + 次请求 算恶意请求直接入redis
+			if(times >= 5) { // 2s 10 + 次请求 算恶意请求直接入redis
 				redisHelper.sSet(rdsSetKey, ip);
 				throw new ViciousRequestException();
 			} else {

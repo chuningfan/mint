@@ -6,11 +6,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
+import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.UserContext;
 import com.mint.common.utils.HttpUtil;
-import com.mint.service.cache.support.redis.RedisHelper;
 import com.mint.service.exception.MintServiceException;
 import com.mint.service.pipeline.ServicePipelineMember;
 import com.mint.service.security.exception.ViciousRequestException;
@@ -25,8 +28,9 @@ public class BlackListValidation implements ServicePipelineMember {
 	
 	@Autowired
 	private BlackListConcierge blackListConcierge;
+	
 	@Autowired
-	private RedisHelper redisHelper;
+	private RestTemplate restTemplate;
 	
 	@Override
 	public String id() {
@@ -42,27 +46,14 @@ public class BlackListValidation implements ServicePipelineMember {
 			String ip = HttpUtil.getIpAddress(req);
 			if (e instanceof ViciousRequestException) {
 				LOG.error("received vicious request from {}", ip);
-				throw new MintServiceException(e);
+				// TODO lock user
+				restTemplate.postForEntity("http://user-service/service/lock", context.getUserId(), HttpStatus.class);
+				HttpUtil.deleteCookiesByKey(req, resp, UserContextKeys.USER_CONTEXT);
 			} else {
 				LOG.error("When filtering black list, an error was encountered {}.", e.getMessage());
-				// TODO need a buffer to process vicious request if REDIS cluster crashed
 			}
+			throw new  MintServiceException(e);
 		}
 	}
 
-	private static class IpAndReqTime {
-		private String ip;
-		private volatile long requestedTimes;
-		private volatile long previousReqTime;
-		public IpAndReqTime(String ip, int requestedTimes, long previousReqTime) {
-			this.ip = ip;
-			this.requestedTimes = requestedTimes;
-			this.previousReqTime = previousReqTime;
-		}
-		public void incr() {
-			requestedTimes ++;
-			previousReqTime = System.currentTimeMillis();
-		}
-	}
-	
 }

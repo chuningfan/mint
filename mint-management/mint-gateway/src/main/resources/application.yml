@@ -1,0 +1,41 @@
+server:
+  port: 5000
+spring:
+  application:
+    name: service-zuul
+  cloud:
+    config:
+      retry:
+        max-attempts: 6
+        multiplier: 1.1
+        initial-interval: 1000
+        max-interval: 2000
+  redis:
+    database: 0
+    host: 127.0.0.1
+    port: 6379
+    timeout: 10000
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1
+        max-idle: 8
+        min-idle: 0
+#eureka
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+      
+# gateway settings
+zuul:
+  routes:
+    webtest:
+      path: /webtest/**
+      serviceId: web-test
+  
+#mint
+mint:
+  service:
+    url:
+      login: http://user-service/service/login

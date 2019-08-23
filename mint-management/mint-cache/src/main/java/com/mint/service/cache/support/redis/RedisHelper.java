@@ -9,12 +9,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 import org.springframework.data.redis.core.script.RedisScript;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.mint.service.cache.support.CacheOperator;
@@ -24,13 +21,14 @@ import com.mint.service.cache.support.CacheOperator;
  * @author ningfanchu
  *
  */
-@Component
-@ConditionalOnBean(RedisTemplateConfiguration.class)
 public class RedisHelper implements CacheOperator<String, Object> {
 
-	@Autowired
 	private RedisTemplate<String, Object> redisTemplate;
 
+	public RedisHelper(RedisTemplate<String, Object> redisTemplate) {
+		this.redisTemplate = redisTemplate;
+	}
+	
 	public RedisTemplate<String, Object> getRedisTemplate() {
 		return this.redisTemplate;
 	}

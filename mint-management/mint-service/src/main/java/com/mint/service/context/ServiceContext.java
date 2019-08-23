@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 import com.mint.service.interceptor.MintInterceptor;
+import com.mint.service.metadata.ServiceMetadataProvider;
 
 public class ServiceContext {
 	
@@ -29,5 +30,7 @@ public class ServiceContext {
 	public volatile static boolean useServiceDefaultLogInterceptor = true;
 	
 	public volatile static Class<? extends MintInterceptor>[] interceptors = null;
+	
+	public static Class<? extends ServiceMetadataProvider> metadataProvider = null;
 	
 }

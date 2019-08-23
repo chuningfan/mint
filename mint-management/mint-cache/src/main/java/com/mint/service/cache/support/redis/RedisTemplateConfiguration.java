@@ -24,4 +24,9 @@ public class RedisTemplateConfiguration {
 		return template;
 	} 
 	
+	@Bean
+	public RedisHelper redisHelper(RedisTemplate<String, Object> redisTemplate) {
+		return new RedisHelper(redisTemplate);
+	}
+	
 }

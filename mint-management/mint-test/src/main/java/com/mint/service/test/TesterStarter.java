@@ -6,7 +6,7 @@ import com.mint.service.annotation.MintService;
 import com.mint.service.database.annotation.EnableJpaOps;
 import com.mint.service.test.meta.TesterServiceMetadataProvider;
 
-@MintService(metaDataProvider = TesterServiceMetadataProvider.class)
+@MintService(metadataProvider = TesterServiceMetadataProvider.class)
 @EnableJpaOps(basePackages="com.mint.service.test.db.jpa")
 public class TesterStarter {
 

@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import com.mint.common.constant.UserContextKeys;
@@ -18,15 +17,18 @@ import com.mint.service.pipeline.ServicePipelineMember;
 import com.mint.service.security.exception.ViciousRequestException;
 import com.mint.service.security.guard.BlackListConcierge;
 
-@Component
+
 public class BlackListValidation implements ServicePipelineMember {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BlackListValidation.class);
 	
 	public static final String ID = "mint-blacklist-validator";
 	
-	@Autowired
 	private BlackListConcierge blackListConcierge;
+	
+	public BlackListValidation(BlackListConcierge blackListConcierge) {
+		this.blackListConcierge = blackListConcierge;
+	}
 	
 	@Autowired
 	private RestTemplate restTemplate;

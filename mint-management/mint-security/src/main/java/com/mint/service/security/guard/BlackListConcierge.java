@@ -8,8 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import com.mint.common.context.UserContext;
@@ -21,7 +19,6 @@ import com.mint.service.cache.support.local.LocalCacheType;
 import com.mint.service.cache.support.redis.RedisHelper;
 import com.mint.service.security.exception.ViciousRequestException;
 
-@Component
 public class BlackListConcierge {
 
 	private static final String rdsSetKey = "viciousIPs";
@@ -40,8 +37,11 @@ public class BlackListConcierge {
 		}
 	}
 	
-	@Autowired
 	private RedisHelper redisHelper;
+	
+	public BlackListConcierge(RedisHelper redisHelper) {
+		this.redisHelper = redisHelper;
+	}
 	
 	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
 			throws ViciousRequestException, Exception {
@@ -58,6 +58,7 @@ public class BlackListConcierge {
 		if (!flag) {
 			cache.store(cacheKey, true, null, null);
 		} else {
+			redisHelper.sSet(rdsSetKey, ip);
 			throw new ViciousRequestException();
 		}
 	}

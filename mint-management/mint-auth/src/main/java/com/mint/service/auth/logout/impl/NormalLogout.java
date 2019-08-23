@@ -13,8 +13,8 @@ import com.mint.service.auth.logout.LogoutHandler;
 public class NormalLogout extends LogoutHandler<NormalLogoutDto> {
 
 	@Override
-	protected void doLogout(NormalLogoutDto data) throws IOException, ServletException {
-		data.getRequest().getRequestDispatcher("/login").forward(data.getRequest(), data.getResponse());
+	protected void logout(NormalLogoutDto data) throws IOException, ServletException {
+		
 	}
 
 }

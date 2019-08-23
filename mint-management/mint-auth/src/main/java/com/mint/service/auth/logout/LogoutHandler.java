@@ -22,7 +22,7 @@ protected final LogoutListener logoutListener;
 		addObserver(logoutListener);
 	}
 	
-	public void logout(T data) throws NoSuchAlgorithmException, IOException, ServletException {
+	public void doLogout(T data) throws NoSuchAlgorithmException, IOException, ServletException {
 		if (data instanceof NormalLogoutDto) {
 			NormalLogoutDto dto = (NormalLogoutDto) data;
 			String cookieValue = HttpUtil.getCookieValue(dto.getRequest(), UserContextKeys.USER_CONTEXT);
@@ -30,10 +30,10 @@ protected final LogoutListener logoutListener;
 			HttpUtil.deleteCookiesByKey(dto.getRequest(), dto.getResponse(), UserContextKeys.USER_CONTEXT);
 			setChanged();
 			notifyObservers(userIdStr);
-			doLogout(data);
+			logout(data);
 		}
 	}
 	
-	protected abstract void doLogout(T data) throws IOException, ServletException;
+	protected abstract void logout(T data) throws IOException, ServletException;
 	
 }

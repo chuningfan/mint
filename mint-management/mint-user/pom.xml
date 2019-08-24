@@ -27,6 +27,16 @@
   		<version>${mint-version}</version>
   	</dependency>
   	<dependency>
+  		<groupId>mint</groupId>
+  		<artifactId>mint-security</artifactId>
+  		<version>${mint-version}</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>mint</groupId>
+  		<artifactId>mint-user-api</artifactId>
+  		<version>${mint-version}</version>
+  	</dependency>
+  	<dependency>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-web</artifactId>
 	</dependency>

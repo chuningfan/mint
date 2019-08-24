@@ -38,8 +38,9 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 		int readTimeout = (int) attrMap.get("readTimeout");
 		int connectTimeout = (int) attrMap.get("connectTimeout");
 		int longConnectionReadTimeout = (int) attrMap.get("longConnectionReadTimeout");
-		Class<? extends MintInterceptor>[] includeInterceptors = (Class<? extends MintInterceptor>[]) attrMap.get("includeInterceptors");
-		Class<? extends MintInterceptor>[] excludeInterceptors = (Class<? extends MintInterceptor>[]) attrMap.get("excludeInterceptors");
+		Class<? extends MintInterceptor>[] includeInterceptors = attrMap.get("includeInterceptors") == null ? null : (Class<? extends MintInterceptor>[]) attrMap.get("includeInterceptors");
+		Class<? extends MintInterceptor>[] excludeInterceptors = attrMap.get("excludeInterceptors") == null ? null : (Class<? extends MintInterceptor>[]) attrMap.get("excludeInterceptors");
+		String[] contextInterceptorExcludePaths = attrMap.get("contextInterceptorExcludePaths") == null ? null : (String[])attrMap.get("contextInterceptorExcludePaths");
 		// 注册默认spring bean
 		registerBean(registry, PipelineWorker.class, "pipelineWorker");
 		// 获取service metadata
@@ -64,6 +65,9 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 			ServiceContext.interceptors = includeInterceptors;
 		} else {
 			LOG.info("No interceptors found.");
+		}
+		if (ArrayUtils.isNotEmpty(contextInterceptorExcludePaths)) {
+			ServiceContext.contextInterceptorExcludePaths = contextInterceptorExcludePaths;
 		}
 		try {
 			ServiceContext.serverAddress = InetAddress.getLocalHost().getHostAddress();

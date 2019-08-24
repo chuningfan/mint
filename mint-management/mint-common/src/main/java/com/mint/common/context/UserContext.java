@@ -1,16 +1,16 @@
 package com.mint.common.context;
 
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
+import com.mint.common.enums.AccountStatus;
 import com.mint.common.enums.LoginType;
-import com.mint.common.enums.UserStatus;
 
 public class UserContext {
 	// 操作者ID
 	private Long userId;
 	// 操作者角色ID集合
-	private List<Long> roleIds;
+	private Set<Long> roleIds;
 	// 描述
 	private String description;
 	// 上次登录时间
@@ -20,13 +20,13 @@ public class UserContext {
 	// 顶层业务分类ID
 	private Long marketId;
 	// 操作者分类ID（consumer or agency）
-	private Long userTypeId;
+	private Long accountTypeId;
 	// 所属机构ID（agency公司）
 	private Long orgId;
 	// 登录途径
 	private LoginType loginType;
 	// 用户限制
-	private UserStatus status;
+	private AccountStatus status;
 
 	public Long getUserId() {
 		return userId;
@@ -36,11 +36,11 @@ public class UserContext {
 		this.userId = userId;
 	}
 
-	public List<Long> getRoleIds() {
+	public Set<Long> getRoleIds() {
 		return roleIds;
 	}
 
-	public void setRoleIds(List<Long> roleIds) {
+	public void setRoleIds(Set<Long> roleIds) {
 		this.roleIds = roleIds;
 	}
 
@@ -76,12 +76,12 @@ public class UserContext {
 		this.marketId = marketId;
 	}
 
-	public Long getUserTypeId() {
-		return userTypeId;
+	public Long getAccountTypeId() {
+		return accountTypeId;
 	}
 
-	public void setUserTypeId(Long userTypeId) {
-		this.userTypeId = userTypeId;
+	public void setAccountTypeId(Long accountTypeId) {
+		this.accountTypeId = accountTypeId;
 	}
 
 	public Long getOrgId() {
@@ -100,11 +100,11 @@ public class UserContext {
 		this.loginType = loginType;
 	}
 
-	public UserStatus getStatus() {
+	public AccountStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(UserStatus status) {
+	public void setStatus(AccountStatus status) {
 		this.status = status;
 	}
 

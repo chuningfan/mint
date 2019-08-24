@@ -17,6 +17,7 @@
     <module>mint-auth</module>
     <module>mint-test</module>
 	<module>mint-user</module>
+	<module>mint-user-api</module>
   </modules>
   <parent>
 		<groupId>org.springframework.boot</groupId>

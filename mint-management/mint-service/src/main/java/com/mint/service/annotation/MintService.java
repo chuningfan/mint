@@ -57,4 +57,6 @@ public @interface MintService {
 	@AliasFor(annotation=SpringBootApplication.class, attribute="exclude")
 	Class<?>[] noAutoConfigFor() default {};
 	
+	String[] contextInterceptorExcludePaths() default {};
+	
 }

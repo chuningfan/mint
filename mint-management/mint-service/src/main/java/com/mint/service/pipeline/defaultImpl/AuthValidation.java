@@ -1,6 +1,6 @@
 package com.mint.service.pipeline.defaultImpl;
 
-import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,7 +35,7 @@ public class AuthValidation implements ServicePipelineMember {
 		if (CollectionUtils.isEmpty(ServiceContext.supportedRoleIds)) {
 			return;
 		}
-		List<Long> supportedRoleIds = context.getRoleIds();
+		Set<Long> supportedRoleIds = context.getRoleIds();
 		if (CollectionUtils.isEmpty(supportedRoleIds)) {
 			throw new MintServiceException("Invalid user request, cannot find any role information.");
 		}

@@ -7,7 +7,8 @@ import com.mint.service.annotation.MintService;
 import com.mint.service.database.annotation.EnableJpaOps;
 import com.mint.service.user.meta.UserServiceMetadataProvider;
 
-@MintService(metadataProvider = UserServiceMetadataProvider.class)
+@MintService(metadataProvider = UserServiceMetadataProvider.class, 
+contextInterceptorExcludePaths = {"/service/u_auth/doReg", "/service/u_auth/doLogin"})
 @EnableJpaOps(basePackages="com.mint.service.user")
 public class UserStarter 
 {
@@ -15,4 +16,5 @@ public class UserStarter
     {
         SpringApplication.run(UserStarter.class,args);
     }
+    
 }

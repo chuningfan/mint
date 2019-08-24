@@ -33,4 +33,6 @@ public class ServiceContext {
 	
 	public static Class<? extends ServiceMetadataProvider> metadataProvider = null;
 	
+	public volatile static String[] contextInterceptorExcludePaths = null;
+	
 }

@@ -2,24 +2,25 @@ package com.mint.service.user.entity;
 
 
 
-import java.util.Date;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.mint.common.enums.GenderType;
-import com.mint.common.enums.UserStatus;
 import com.mint.service.database.entity.IdentifiedEntity;
+import com.mint.service.user.enums.GenderType;
 
 @Entity
-@Table(name="user")
+@Table(name="users")
 public class UserEntity  extends IdentifiedEntity{
-	    @Column(name="name")
-		private String name;
+	    @Column(name="family_name")
+		private String familyName;
+	    
+	    @Column(name="given_name")
+		private String givenName;
 	    
 	    @Column(name="gender")
 		private  GenderType gender;
@@ -27,32 +28,32 @@ public class UserEntity  extends IdentifiedEntity{
 	    @Column(name="avatar")
 		private String avatar;
 	    
-	    @Column(name="login_name")
-		private String loginName;
-	    
-	    @Column(name="password")
-		private String password;
-	    
 	    @Column(name="mobile")
 		private String mobile;
 	    
 	    @Column(name="email")
 		private String email;
 	    
-	    @Column(name="status")
-		private UserStatus status;
+	    @Column(name="id_number")
+	    private String IdNumber;
 	    
-	    @Column(name="last_login_time")
-	    private Date lastLoginTime;
-	    
-	    @OneToMany(mappedBy="user", cascade = CascadeType.ALL)
+	    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	    private Set<AddressEntity> address;
-		public String getName() {
-			return name;
+	    
+		public String getFamilyName() {
+			return familyName;
 		}
 
-		public void setName(String name) {
-			this.name = name;
+		public void setFamilyName(String familyName) {
+			this.familyName = familyName;
+		}
+
+		public String getGivenName() {
+			return givenName;
+		}
+
+		public void setGivenName(String givenName) {
+			this.givenName = givenName;
 		}
 
 		public GenderType getGender() {
@@ -71,22 +72,6 @@ public class UserEntity  extends IdentifiedEntity{
 			this.avatar = avatar;
 		}
 
-		public String getLoginName() {
-			return loginName;
-		}
-
-		public void setLoginName(String loginName) {
-			this.loginName = loginName;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-
 		public String getMobile() {
 			return mobile;
 		}
@@ -103,22 +88,6 @@ public class UserEntity  extends IdentifiedEntity{
 			this.email = email;
 		}
 
-		public UserStatus getStatus() {
-			return status;
-		}
-
-		public void setStatus(UserStatus status) {
-			this.status = status;
-		}
-
-		public Date getLastLoginTime() {
-			return lastLoginTime;
-		}
-
-		public void setLastLoginTime(Date lastLoginTime) {
-			this.lastLoginTime = lastLoginTime;
-		}
-
 		public Set<AddressEntity> getAddress() {
 			return address;
 		}
@@ -126,7 +95,13 @@ public class UserEntity  extends IdentifiedEntity{
 		public void setAddress(Set<AddressEntity> address) {
 			this.address = address;
 		}
-	    
-		
+
+		public String getIdNumber() {
+			return IdNumber;
+		}
+
+		public void setIdNumber(String idNumber) {
+			IdNumber = idNumber;
+		}
 
 }

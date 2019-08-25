@@ -2,6 +2,7 @@ package com.mint.service.user.service;
 
 import java.util.Set;
 
+import javax.jws.WebParam;
 import javax.transaction.Transactional;
 
 import org.assertj.core.util.Sets;
@@ -31,9 +32,9 @@ public class AuthEndpoint implements AuthOperationService {
 	@PostMapping("/doReg")
 	@Transactional
 	@Override
-	public boolean doReg(@RequestBody CredentialFormData data) {
+	public boolean doReg(@WebParam(name="data") CredentialFormData data, @WebParam(name="message") String message) {
 		String username = data.getUsername();
-		String password = data.getPassowrd();
+		String password = data.getPassword();
 		AccountEntity accountEntity = new AccountEntity();
 		accountEntity.setUsername(username);
 		accountEntity.setPassword(password);

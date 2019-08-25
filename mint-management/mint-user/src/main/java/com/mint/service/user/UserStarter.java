@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 
 import com.mint.service.annotation.MintService;
 import com.mint.service.database.annotation.EnableJpaOps;
-import com.mint.service.user.meta.UserServiceMetadataProvider;
+import com.mint.service.user.metadata.UserServiceMetadataProvider;
 
 @MintService(metadataProvider = UserServiceMetadataProvider.class, 
 contextInterceptorExcludePaths = {"/service/u_auth/doReg", "/service/u_auth/doLogin"})

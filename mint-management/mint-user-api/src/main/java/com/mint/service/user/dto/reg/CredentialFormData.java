@@ -1,10 +1,14 @@
 package com.mint.service.user.dto.reg;
 
-public class CredentialFormData {
+import java.io.Serializable;
+
+public class CredentialFormData implements Serializable {
 	
+	private static final long serialVersionUID = 3539384262244149651L;
+
 	private String username;
 	
-	private String passowrd;
+	private String password;
 
 	public String getUsername() {
 		return username;
@@ -14,12 +18,12 @@ public class CredentialFormData {
 		this.username = username;
 	}
 
-	public String getPassowrd() {
-		return passowrd;
+	public String getPassword() {
+		return password;
 	}
 
-	public void setPassowrd(String passowrd) {
-		this.passowrd = passowrd;
+	public void setPassword(String password) {
+		this.password = password;
 	}
-	
+
 }

@@ -1,5 +1,7 @@
 package com.mint.service.user.service;
 
+import javax.jws.WebParam;
+
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mint.common.annotation.MethodMapping;
@@ -13,7 +15,7 @@ import com.mint.service.user.dto.reg.CredentialFormData;
 public interface AuthOperationService {
 	
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doReg")
-	boolean doReg(CredentialFormData data);
+	boolean doReg(@WebParam(name="data")CredentialFormData data, @WebParam(name="message")String message);
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doUpdatePwd")
 	boolean updatePwd(UpdatePwdData data);
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doLogin")

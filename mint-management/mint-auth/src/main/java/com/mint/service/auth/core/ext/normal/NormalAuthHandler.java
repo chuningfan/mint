@@ -6,6 +6,8 @@ import org.springframework.stereotype.Component;
 import com.mint.common.enums.LoginType;
 import com.mint.service.auth.core.AuthHandler;
 import com.mint.service.rpc.RpcHandler;
+import com.mint.service.user.dto.reg.CredentialFormData;
+import com.mint.service.user.service.AuthOperationService;
 
 @Component
 public class NormalAuthHandler extends AuthHandler {
@@ -17,7 +19,12 @@ public class NormalAuthHandler extends AuthHandler {
 	protected boolean doReg(Object... data) {
 		String username = data[0].toString();
 		String password = data[1].toString();
-		return false;
+		AuthOperationService aoh = rpcHandler.get(AuthOperationService.class);
+		CredentialFormData formData = new CredentialFormData();
+		formData.setUsername(username);
+		formData.setPassword(password);
+		aoh.doReg(formData, "test");
+		return true;
 	}
 
 	@Override

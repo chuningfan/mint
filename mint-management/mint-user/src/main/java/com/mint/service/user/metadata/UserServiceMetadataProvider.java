@@ -1,4 +1,4 @@
-package com.mint.service.user.meta;
+package com.mint.service.user.metadata;
 
 
 import org.springframework.stereotype.Component;

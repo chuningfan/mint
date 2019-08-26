@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +34,7 @@ public class AuthController {
 		}
 	}
 	
-	@PostMapping("/doLogin")
+	@PostMapping(value = "/doLogin",consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public boolean doLogin(@RequestBody CredentialFormData formData, HttpServletResponse resp) throws AuthException {
 		return normalAuthHandler.route(Action.DO_LOGIN, resp, formData.getUsername(), formData.getPassword());
 	}
@@ -45,7 +46,7 @@ public class AuthController {
 	
 	@GetMapping("/login")
 	public String login() throws AuthException {
-		return "login";
+		return "/login";
 	}
 	
 }

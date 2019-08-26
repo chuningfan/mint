@@ -23,7 +23,7 @@ public class NormalAuthHandler extends AuthHandler {
 		CredentialFormData formData = new CredentialFormData();
 		formData.setUsername(username);
 		formData.setPassword(password);
-		aoh.doReg(formData, "test");
+		aoh.doReg(formData);
 		return true;
 	}
 

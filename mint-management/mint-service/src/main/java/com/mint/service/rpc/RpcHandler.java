@@ -6,17 +6,13 @@ import java.lang.reflect.Parameter;
 import java.lang.reflect.Proxy;
 import java.util.Map;
 
-import javax.jws.WebParam;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
 import com.mint.common.annotation.MethodMapping;
 import com.mint.common.annotation.MintRpc;
@@ -26,8 +22,6 @@ import com.mint.service.exception.MintServiceException;
 public class RpcHandler {
 	
 	private static final Map<Class<?>, Object> PROXIES = Maps.newConcurrentMap();
-	
-	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -75,27 +69,26 @@ public class RpcHandler {
 						String url = baseUri + mmVal; 
 						RequestMethod reqMethod = mm.requestMethod();
 						switch (reqMethod) {
-						case POST: 
+						case POST:
 							int paramSize = parameters.length;
-							if (paramSize == 1) {
-								return template.postForEntity(url, parameters[0], returnType);
-							} else {
-								MultiValueMap<String, Object> requestEntity = new LinkedMultiValueMap<>();
-								Parameter[] params = method.getParameters();
-								Parameter p = null;
-								WebParam wp = null;
-								for (int i = 0; i < params.length; i ++) {
-									p = params[i];
-									if (!p.isAnnotationPresent(WebParam.class)) {
-										throw new MintServiceException("Mint POST RPC API parameters must be defined with @WebParam, and name is needed!");
-									}
-									wp = p.getAnnotation(WebParam.class);
-									requestEntity.add(wp.name(), mapper.writeValueAsString(parameters[i]));
-								}
-								return template.postForObject(url, requestEntity, returnType);
+							if (paramSize != 1) {
+								throw new MintServiceException("POST RPC should have only one parameter (If you have multiple parameters, please wrap them into ONE.)");
 							}
-						case GET: // get
-							return template.getForEntity(url, returnType, parameters);
+							return template.postForEntity(url, parameters[0], returnType).getBody();
+						case GET:
+							Parameter[] params = method.getParameters();
+							Parameter p = null;
+							PathVariable pv = null;
+							String paramName = "{%s}";
+							String reqURL = url;
+							for (int i = 0; i < params.length; i ++) {
+								p = params[i];
+								if (p.isAnnotationPresent(PathVariable.class)) {
+									pv = p.getAnnotation(PathVariable.class);
+									reqURL = reqURL.replace(String.format(paramName, pv.name()), parameters[i].toString());
+								}
+							}
+							return template.getForEntity(reqURL, returnType).getBody();
 						default: throw new MintServiceException("RPC handler just supports POST and GET");
 						}
 					}

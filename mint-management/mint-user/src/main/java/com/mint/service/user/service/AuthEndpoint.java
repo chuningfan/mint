@@ -2,10 +2,11 @@ package com.mint.service.user.service;
 
 import java.util.Set;
 
-import javax.jws.WebParam;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,7 +33,7 @@ public class AuthEndpoint implements AuthOperationService {
 	@PostMapping("/doReg")
 	@Transactional
 	@Override
-	public boolean doReg(@WebParam(name="data") CredentialFormData data, @WebParam(name="message") String message) {
+	public boolean doReg(@RequestBody CredentialFormData data) {
 		String username = data.getUsername();
 		String password = data.getPassword();
 		AccountEntity accountEntity = new AccountEntity();
@@ -87,6 +88,14 @@ public class AuthEndpoint implements AuthOperationService {
 		user.setMobile(info.getMobile());
 		accountDao.save(accountEntity);
 		return false;
+	}
+
+	@GetMapping("/doTest/{param1}/{param2}")
+	@Override
+	public boolean doTest(@PathVariable(name="param1") String param1, @PathVariable(name="param2") String param2) {
+		System.out.println(param1);
+		System.out.println(param2);
+		return true;
 	}
 	
 }

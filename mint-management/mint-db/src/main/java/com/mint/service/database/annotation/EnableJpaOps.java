@@ -22,8 +22,6 @@ import org.springframework.data.repository.query.QueryLookupStrategy.Key;
 @EntityScan
 @Documented
 public @interface EnableJpaOps {
-	@AliasFor(annotation = EnableJpaRepositories.class, attribute = "value")
-	String[] value() default {};
 	@AliasFor(annotation = EnableJpaRepositories.class, attribute = "basePackages")
 	String[] basePackages() default {};
 	@AliasFor(annotation = EnableJpaRepositories.class, attribute = "basePackageClasses")

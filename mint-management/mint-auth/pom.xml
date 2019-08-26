@@ -27,12 +27,12 @@
 		</dependency>
 		<dependency>
 			<groupId>mint</groupId>
-			<artifactId>mint-service</artifactId>
+			<artifactId>mint-cache</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>mint</groupId>
-			<artifactId>mint-db</artifactId>
+			<artifactId>mint-service</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

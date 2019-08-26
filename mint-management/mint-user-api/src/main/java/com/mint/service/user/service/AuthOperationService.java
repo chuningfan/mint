@@ -1,7 +1,6 @@
 package com.mint.service.user.service;
 
-import javax.jws.WebParam;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mint.common.annotation.MethodMapping;
@@ -15,12 +14,15 @@ import com.mint.service.user.dto.reg.CredentialFormData;
 public interface AuthOperationService {
 	
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doReg")
-	boolean doReg(@WebParam(name="data")CredentialFormData data, @WebParam(name="message")String message);
+	boolean doReg(CredentialFormData data);
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doUpdatePwd")
 	boolean updatePwd(UpdatePwdData data);
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doLogin")
 	boolean doLogin(LoginFormData data);
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doSaveInfo")
 	boolean saveOrUpdateBasicInfo(BasicInfo info);
+	
+	@MethodMapping(requestMethod = RequestMethod.GET, value = "/doTest/{param1}/{param2}")
+	boolean doTest(@PathVariable(name="param1") String param1, @PathVariable(name="param2") String param2);
 	
 }

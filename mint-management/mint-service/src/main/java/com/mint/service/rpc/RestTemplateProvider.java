@@ -21,10 +21,8 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.web.client.DefaultResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
-import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.alibaba.fastjson.support.config.FastJsonConfig;
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
@@ -88,17 +86,17 @@ public class RestTemplateProvider {
 		List<HttpMessageConverter<?>> messageConverters = Lists.newArrayList();
         messageConverters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
         messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new MappingJackson2HttpMessageConverter(objectMapper));
-        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
-        FastJsonConfig fastJsonConfig = new FastJsonConfig();
-        fastJsonConfig.setSerializerFeatures(SerializerFeature.WriteMapNullValue,
-                SerializerFeature.QuoteFieldNames, SerializerFeature.DisableCircularReferenceDetect);
-        fastConverter.setFastJsonConfig(fastJsonConfig);
-
-        List<MediaType> fastMediaTypes = Lists.newArrayList();
-        fastMediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
-        fastConverter.setSupportedMediaTypes(fastMediaTypes);
-        messageConverters.add(fastConverter);
+        MappingJackson2HttpMessageConverter jsonHttpMessageConverter = new MappingJackson2HttpMessageConverter(objectMapper);
+        jsonHttpMessageConverter.getObjectMapper().configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+//        messageConverters.add(jsonHttpMessageConverter);
+        List<MediaType> mediaTypes = Lists.newArrayList();
+        mediaTypes.add(MediaType.APPLICATION_JSON_UTF8);
+        mediaTypes.add(MediaType.TEXT_HTML);
+        jsonHttpMessageConverter.setSupportedMediaTypes(mediaTypes);
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL);
+        jsonHttpMessageConverter.setObjectMapper(objectMapper);
+        messageConverters.add(jsonHttpMessageConverter);
         return messageConverters;
 	}
 	

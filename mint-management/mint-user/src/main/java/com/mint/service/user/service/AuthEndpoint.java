@@ -5,6 +5,8 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +37,9 @@ public class AuthEndpoint implements AuthOperationService {
 	@Transactional
 	@Override
 	public boolean doReg(@RequestBody CredentialFormData data) {
+		if ( 0 < accountDao.findAccountCountByUsername(data.getUsername())) {
+			return false;
+		}
 		String username = data.getUsername();
 		String password = data.getPassword();
 		AccountEntity accountEntity = new AccountEntity();
@@ -56,7 +61,7 @@ public class AuthEndpoint implements AuthOperationService {
 	@Transactional
 	@Override
 	public UserContext doLogin(@RequestBody LoginFormData data) {
-		
+		AccountEntity account = accountDao.findByCredential(data.getUsername(), data.getPassword());
 		return null;
 	}
 

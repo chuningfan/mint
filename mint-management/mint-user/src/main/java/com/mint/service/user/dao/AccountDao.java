@@ -17,4 +17,7 @@ public interface AccountDao extends JpaRepository<AccountEntity, Long> {
 	@Query("SELECT a FROM AccountEntity a WHERE a.username = ?1 AND a.password = ?2")
 	public AccountEntity findByCredential(String username, String password);
 	
+	@Query("SELECT COUNT(*) FROM AccountEntity a WHERE a.username = ?1")
+	public int findAccountCountByUsername(String username);
+	
 }

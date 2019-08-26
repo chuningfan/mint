@@ -27,15 +27,21 @@ public class AuthController {
 	@Autowired
 	private NormalAuthHandler normalAuthHandler;
 	
-	@PostMapping(value = "/doReg", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+	@Autowired
+	private PageController pageController;
+	
+	@PostMapping(value = "/doReg", 
+			consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
+			produces = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public void doReg(@RequestBody CredentialFormData formData, HttpServletRequest req, HttpServletResponse resp) throws AuthException, ServletException, IOException {
 		boolean flag = normalAuthHandler.route(Action.DO_REG, formData.getUsername(), formData.getPassword());
 		if (flag) {
-			req.getRequestDispatcher("/login").forward(req, resp);
+			pageController.login();
 		}
 	}
 	
-	@PostMapping(value = "/doLogin", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
+	@PostMapping(value = "/doLogin", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
+			produces = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
 	public boolean doLogin(@RequestBody LoginFormData formData, HttpServletResponse resp) throws AuthException {
 		return normalAuthHandler.route(Action.DO_LOGIN, resp, formData.getUsername(), formData.getPassword());
 	}

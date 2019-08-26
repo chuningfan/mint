@@ -21,7 +21,6 @@
       <div class="main">
          <div class="col-md-6 col-sm-12">
             <div class="login-form">
-               <form action="/mint-auth/auth/doLogin" method="POST">
                   <div class="form-group">
                      <label>User Name</label>
                      <input type="text" class="form-control" name="username"  id="username" placeholder="User Name">
@@ -32,7 +31,6 @@
                   </div>
                   <button  id="login" class="btn btn-black">Login</button>
                   <button  id="register"  class="btn btn-secondary">Register</button>
-               </form>
             </div>
          </div>
       </div>
@@ -49,7 +47,8 @@
       	            url : "http://localhost:8088/mint-auth/auth/doLogin",
       	            data : JSON.stringify(formData),
     		        dataType: 'json',
-	                contentType:'application/json;charset=UTF-8',    
+	                contentType:'application/json;charset=UTF-8',
+	                async: true,
       	            success : function(result) {
       	                console.log(result);
       	            },
@@ -71,7 +70,8 @@
       	            url : "http://localhost:8088/mint-auth/auth/doReg",
       	            data : JSON.stringify(formData),
     		        dataType: 'json',
-	                contentType:'application/json;charset=UTF-8',    
+	                contentType:'application/json;charset=UTF-8',
+	                async: true,
       	            success : function(result) {
       	                console.log(result);
       	            },

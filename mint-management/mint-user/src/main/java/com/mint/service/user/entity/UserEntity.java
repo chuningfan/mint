@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,6 +25,7 @@ public class UserEntity  extends IdentifiedEntity{
 		private String givenName;
 	    
 	    @Column(name="gender")
+	    @Enumerated(EnumType.STRING)
 		private  GenderType gender;
 	    
 	    @Column(name="avatar")

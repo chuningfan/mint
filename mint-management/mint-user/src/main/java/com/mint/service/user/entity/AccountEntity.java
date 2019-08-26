@@ -6,6 +6,8 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
@@ -26,6 +28,7 @@ public class AccountEntity extends IdentifiedEntity{
 	private String password;
 	
 	@Column(name="status")
+	@Enumerated(EnumType.STRING)
 	private AccountStatus status;
     
     @Column(name="last_login_time")

@@ -6,7 +6,9 @@ import com.mint.service.annotation.MintService;
 import com.mint.service.auth.metadata.AuthServiceMetadataProvider;
 
 @MintService(metadataProvider = AuthServiceMetadataProvider.class, 
-contextInterceptorExcludePaths = {"/service/n_auth/doReg", "/service/n_auth/doLogin", "/service/n_auth/doTest/**"})
+contextInterceptorExcludePaths = {
+		"/auth/doReg", "auth/reg", 
+		"/auth/doLogin", "auth/login"})
 public class AuthenticationServiceStarter {
 	
 	public static void main(String[] args) {

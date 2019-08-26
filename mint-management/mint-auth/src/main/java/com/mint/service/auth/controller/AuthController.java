@@ -1,34 +1,51 @@
 package com.mint.service.auth.controller;
 
+import java.io.IOException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mint.service.auth.core.ext.normal.NormalAuthHandler;
 import com.mint.service.auth.enums.Action;
-import com.mint.service.rpc.RpcHandler;
-import com.mint.service.user.service.AuthOperationService;
+import com.mint.service.auth.exception.AuthException;
+import com.mint.service.user.dto.reg.CredentialFormData;
 
 @RequestMapping("/auth")
 @RestController
 public class AuthController {
-
-	@Autowired
-	private RpcHandler rpcHandler;
 	
 	@Autowired
 	private NormalAuthHandler normalAuthHandler;
 	
-	@GetMapping("/doReg")
-	public boolean doReg(String username, String password) {
-		return normalAuthHandler.route(Action.DO_REG, "123", "321");
+	@PostMapping("/doReg")
+	public void doReg(@RequestBody CredentialFormData formData, HttpServletRequest req, HttpServletResponse resp) throws AuthException, ServletException, IOException {
+		boolean flag = normalAuthHandler.route(Action.DO_REG, formData.getUsername(), formData.getPassword());
+		if (flag) {
+			req.getRequestDispatcher("/login").forward(req, resp);
+		}
 	}
 	
-	@GetMapping("/doTest")
-	public boolean doTest() {
-		AuthOperationService as = rpcHandler.get(AuthOperationService.class);
-		return as.doTest("123", "321");
+	@PostMapping("/doLogin")
+	public boolean doLogin(@RequestBody CredentialFormData formData, HttpServletResponse resp) throws AuthException {
+		return normalAuthHandler.route(Action.DO_LOGIN, resp, formData.getUsername(), formData.getPassword());
+	}
+	
+	@GetMapping("/reg")
+	public String reg() throws AuthException {
+		return "regPage";
+	}
+	
+	@GetMapping("/login")
+	public String login() throws AuthException {
+		return "login";
 	}
 	
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Sets;
+import com.mint.common.context.UserContext;
 import com.mint.service.user.dao.AccountDao;
 import com.mint.service.user.dto.login.LoginFormData;
 import com.mint.service.user.dto.login.UpdatePwdData;
@@ -54,10 +55,9 @@ public class AuthEndpoint implements AuthOperationService {
 	@PostMapping("/doLogin")
 	@Transactional
 	@Override
-	public boolean doLogin(@RequestBody LoginFormData data) {
-		accountDao.findByCredential(data.getUsername(), data.getPassword());
-		// TODO user operation record
-		return true;
+	public UserContext doLogin(@RequestBody LoginFormData data) {
+		
+		return null;
 	}
 
 	@PostMapping("/doSaveInfo")

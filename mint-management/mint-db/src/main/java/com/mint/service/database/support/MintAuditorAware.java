@@ -17,7 +17,7 @@ public class MintAuditorAware implements AuditorAware<Long>{
 		if (context == null) {
 			return Optional.of(-1L);
 		}
-		return Optional.ofNullable(context.getUserId());
+		return Optional.ofNullable(context.getAccountId());
 	}
 	
 }

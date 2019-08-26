@@ -8,7 +8,7 @@ import com.mint.common.enums.LoginType;
 
 public class UserContext {
 	// 操作者ID
-	private Long userId;
+	private Long accountId;
 	// 操作者角色ID集合
 	private Set<Long> roleIds;
 	// 描述
@@ -28,12 +28,12 @@ public class UserContext {
 	// 用户限制
 	private AccountStatus status;
 
-	public Long getUserId() {
-		return userId;
+	public Long getAccountId() {
+		return accountId;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
 	}
 
 	public Set<Long> getRoleIds() {

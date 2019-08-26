@@ -70,8 +70,8 @@ public class NormalAuthHandler extends AuthHandler {
 			throw new AuthException();
 		}
 		try {
-			cookieTool.newCookie(resp, UserContextKeys.USER_CONTEXT, context.getUserId().toString());
-			redisHelper.store(context.getUserId().toString(), context, Long.valueOf(expireSc), TimeUnit.SECONDS);
+			cookieTool.newCookie(resp, UserContextKeys.USER_CONTEXT, context.getAccountId().toString());
+			redisHelper.store(context.getAccountId().toString(), context, Long.valueOf(expireSc), TimeUnit.SECONDS);
 			return true;
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			return false;

@@ -46,10 +46,12 @@ public class BlackListValidation implements ServicePipelineMember {
 		} catch (Throwable e) {
 			String ip = HttpUtil.getIpAddress(req);
 			if (e instanceof ViciousRequestException) {
-				LOG.error("received vicious request from {}", ip);
-				// TODO lock user
-				restTemplate.postForEntity("http://user-service/service/lock", context.getAccountId(), HttpStatus.class);
-				HttpUtil.deleteCookiesByKey(req, resp, UserContextKeys.USER_CONTEXT);
+				if (context != null) {
+					LOG.error("received vicious request from {}", ip);
+					// TODO lock user
+					restTemplate.postForEntity("http://user-service/service/lock", context.getAccountId(), HttpStatus.class);
+					HttpUtil.deleteCookiesByKey(req, resp, UserContextKeys.USER_CONTEXT);
+				}
 			} else {
 				LOG.error("When filtering black list, an error was encountered {}.", e.getMessage());
 			}

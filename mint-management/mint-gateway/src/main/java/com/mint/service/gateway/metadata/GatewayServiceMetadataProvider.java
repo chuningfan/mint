@@ -9,6 +9,8 @@ import com.mint.service.gateway.filter.BlackListValidation;
 import com.mint.service.metadata.ServiceMetaData;
 import com.mint.service.metadata.ServiceMetadataProvider;
 import com.mint.service.pipeline.PipelineProvider;
+import com.mint.service.pipeline.pre.AuthValidator;
+import com.mint.service.pipeline.pre.RateLimitationValidator;
 import com.mint.service.security.guard.BlackListConcierge;
 
 @Configuration
@@ -36,8 +38,8 @@ public class GatewayServiceMetadataProvider implements ServiceMetadataProvider {
 
 	@Override
 	public void initPipeline(PipelineProvider pipelineProvider) {
-		pipelineProvider.setPre(blackListValidation(blackListConcierge()), 0);
-		pipelineProvider.removePre("auth-validator");
+		pipelineProvider.removePre(AuthValidator.ID);
+		pipelineProvider.removePre(RateLimitationValidator.ID);
 	}
 
 }

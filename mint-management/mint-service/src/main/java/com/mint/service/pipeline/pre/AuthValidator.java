@@ -20,6 +20,8 @@ public class AuthValidator implements ServicePipelineMember {
 
 	public static final String KEY = "/service/";
 	
+	public static final String ID = "auth-validator";
+	
 	private final ContextWrapper wrapper;
 	
 	public AuthValidator() {
@@ -31,7 +33,7 @@ public class AuthValidator implements ServicePipelineMember {
 	
 	@Override
 	public String id() {
-		return "auth-validator";
+		return ID;
 	}
 
 

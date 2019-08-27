@@ -8,6 +8,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -28,6 +29,7 @@ import com.mint.service.metadata.ServiceMetadataProvider;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @SpringBootApplication(scanBasePackages="com.mint.service")
+@ServletComponentScan(basePackages="com.mint.service")
 @EnableEurekaClient
 @EnableDiscoveryClient
 @EnableCircuitBreaker

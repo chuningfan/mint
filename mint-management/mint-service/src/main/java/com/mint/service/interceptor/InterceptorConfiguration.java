@@ -1,5 +1,6 @@
 package com.mint.service.interceptor;
 
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,4 +22,14 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}
 
+	
+	@Override  
+    public void addCorsMappings(CorsRegistry registry) {  
+        registry.addMapping("/**")  
+                .allowCredentials(true)  
+                .allowedHeaders("*")  
+                .allowedOrigins("*")  
+                .allowedMethods("*");  
+    }  
+	
 }

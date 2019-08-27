@@ -4,19 +4,12 @@ public class MintException extends RuntimeException {
 
 	private static final long serialVersionUID = -3833029340038377442L;
 	
-	private Error error;
-	
-	public MintException(Error e) {
-		super(e.getException());
-		this.error = e;
-	}
-
-	public Error getError() {
-		return error;
+	public MintException(Error e, Lang lang) {
+		super(ErrorMessageResource.getMessage(e.getCode(), lang));
 	}
 	
-	public static void throwException(Error error) {
-		throw new MintException(error);
+	public static void throwException(Error error, Lang lang) {
+		throw new MintException(error, lang);
 	}
 	
 }

@@ -20,9 +20,6 @@ public interface ServicePipelineMember {
 	 */
 	String id();
 	
-	/*
-	 * 过滤处理请求
-	 */
-	void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context) throws MintServiceException;
+	void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context) throws MintServiceException;
 	
 }

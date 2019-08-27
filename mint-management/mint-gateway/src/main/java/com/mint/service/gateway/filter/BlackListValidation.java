@@ -39,7 +39,7 @@ public class BlackListValidation implements ServicePipelineMember {
 	}
 
 	@Override
-	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
+	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
 			throws MintServiceException {
 		try {
 			blackListConcierge.validate(req, resp, context);
@@ -54,7 +54,7 @@ public class BlackListValidation implements ServicePipelineMember {
 				LOG.error("When filtering black list, an error was encountered {}.", e.getMessage());
 			}
 			throw new  MintServiceException(e);
-		}
+		}		
 	}
 
 }

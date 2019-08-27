@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 import com.mint.service.metadata.ServiceMetaData;
 import com.mint.service.metadata.ServiceMetadataProvider;
-import com.mint.service.pipeline.PipelineWorker;
+import com.mint.service.pipeline.PipelineProvider;
 
 @Component
 public class AuthServiceMetadataProvider implements ServiceMetadataProvider {
@@ -17,8 +17,10 @@ public class AuthServiceMetadataProvider implements ServiceMetadataProvider {
 	}
 
 	@Override
-	public void initPipeline(PipelineWorker pipelineWorker) {
+	public void initPipeline(PipelineProvider provider) {
+		// TODO Auto-generated method stub
 		
 	}
+
 
 }

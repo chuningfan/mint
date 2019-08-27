@@ -48,7 +48,7 @@ public @interface EnableJpaOps {
 	boolean considerNestedRepositories() default false;
 	@AliasFor(annotation = EnableJpaRepositories.class, attribute = "enableDefaultTransactions")
 	boolean enableDefaultTransactions() default true;
-	@AliasFor(annotation = EntityScan.class, attribute="basePackages")
+	@AliasFor(annotation = EntityScan.class, attribute="value")
 	String[] entityScanPackages() default {};
 	@AliasFor(annotation = EntityScan.class, attribute="basePackageClasses")
 	Class<?>[] entityClasses() default {};

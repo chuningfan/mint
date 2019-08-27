@@ -1,11 +1,13 @@
 package com.mint.service.metadata;
 
-import com.mint.service.pipeline.PipelineWorker;
+import com.mint.service.pipeline.PipelineProvider;
 
 public interface ServiceMetadataProvider {
 	
 	ServiceMetaData metaData();
 	
-	void initPipeline(PipelineWorker pipelineWorker);
+	default void initPipeline(PipelineProvider provider) {
+		
+	}
 	
 }

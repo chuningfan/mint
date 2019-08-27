@@ -1,4 +1,4 @@
-package com.mint.service.pipeline.defaultImpl;
+package com.mint.service.pipeline.pre;
 
 import java.util.concurrent.TimeUnit;
 
@@ -18,7 +18,7 @@ import com.mint.service.pipeline.ServicePipelineMember;
  * @author ningfanchu
  *
  */
-public class RateLimitation implements ServicePipelineMember {
+public class RateLimitationValidator implements ServicePipelineMember {
 
 	public static final String ID = "mint-service-ratelimitation";
 	
@@ -37,7 +37,7 @@ public class RateLimitation implements ServicePipelineMember {
 	 * @param warmupPeriod 预热令牌数
 	 * @param unit 时间单位
 	 */
-	public RateLimitation(double permitsPerSecond, Long warmupPeriod, TimeUnit unit) {
+	public RateLimitationValidator(double permitsPerSecond, Long warmupPeriod, TimeUnit unit) {
 		limiter = RateLimiter.create(permitsPerSecond, warmupPeriod, unit);
 	} 
 	
@@ -46,21 +46,21 @@ public class RateLimitation implements ServicePipelineMember {
 	 * 
 	 * @param permitsPerSecond 每秒生产领令牌数
 	 */
-	public RateLimitation(double permitsPerSecond) {
+	public RateLimitationValidator(double permitsPerSecond) {
 		limiter = RateLimiter.create(permitsPerSecond);
 	}
 	
-	public RateLimitation retryWithInterval(long timeout, TimeUnit unit) {
+	public RateLimitationValidator retryWithInterval(long timeout, TimeUnit unit) {
 		this.timeout = timeout <= 0 ? this.timeout : unit.toMillis(timeout);
 		return this;
 	}
 	
-	public RateLimitation withRetry(int retryTime) {
+	public RateLimitationValidator withRetry(int retryTime) {
 		this.retryTime = retryTime <= 0 ? 0 : retryTime;
 		return this;
 	}
 	
-	public RateLimitation withTimeout(long timeout, TimeUnit unit) {
+	public RateLimitationValidator withTimeout(long timeout, TimeUnit unit) {
 		this.timeout = timeout <= 0 ? 0 : unit.toMillis(timeout);
 		return this;
 	}
@@ -71,7 +71,7 @@ public class RateLimitation implements ServicePipelineMember {
 	}
 
 	@Override
-	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
+	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
 			throws MintServiceException {
 		if (!limiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			if (retryTime == 0) {

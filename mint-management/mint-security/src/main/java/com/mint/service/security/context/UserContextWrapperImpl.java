@@ -34,10 +34,7 @@ public class UserContextWrapperImpl implements ContextWrapper {
 		if  (context == null) {
 			return null;
 		}
-//		if (StringUtils.isEmpty(context.getToken())) {
-//			context.setToken(cookieValue);
-//		}
-		autoDelayExpiration(userIdStr, redisHelper.getExpireTimeByKey(userIdStr));
+		autoDelayExpiration(userIdStr, context.getPrevLoginTime(), context.getExpirationPeriodMs());
 		return context;
 	}
 
@@ -47,11 +44,12 @@ public class UserContextWrapperImpl implements ContextWrapper {
 		return req;
 	}
 
-	private void autoDelayExpiration(String key, long originalExpireTime) {
-		long currentTime = System.currentTimeMillis() / 1000;
-		long remaining = originalExpireTime - currentTime;
-		if ((remaining << 1) >  originalExpireTime) {
-			redisHelper.changeExpireTime(key, originalExpireTime, TimeUnit.MILLISECONDS);
+	private void autoDelayExpiration(String key, long prevLoginTime, long expirationPeriod) {
+		long passedMs = System.currentTimeMillis() - prevLoginTime;
+		if (passedMs >= (expirationPeriod >>> 2)) {
+			UserContext context = (UserContext) redisHelper.getByKey(key);
+			context.setPrevLoginTime(System.currentTimeMillis());
+			redisHelper.store(key, context, expirationPeriod, TimeUnit.MILLISECONDS);
 		}
 	} 
 	

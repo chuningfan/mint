@@ -1,13 +1,14 @@
 package com.mint.common.context;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Set;
 
 import com.mint.common.enums.AccountStatus;
 import com.mint.common.enums.LoginType;
 
 public class UserContext implements Serializable {
+	
+	private static final long serialVersionUID = -7630251658711933733L;
 	// 操作者ID
 	private Long accountId;
 	// 操作者角色ID集合
@@ -15,7 +16,7 @@ public class UserContext implements Serializable {
 	// 描述
 	private String description;
 	// 上次登录时间
-	private Date prevLoginTime;
+	private long prevLoginTime;
 	// 令牌码（暂定）
 	private String token;
 	// 顶层业务分类ID
@@ -29,6 +30,8 @@ public class UserContext implements Serializable {
 	// 用户限制
 	private AccountStatus status;
 
+	private long expirationPeriodMs;
+	
 	public Long getAccountId() {
 		return accountId;
 	}
@@ -53,11 +56,11 @@ public class UserContext implements Serializable {
 		this.description = description;
 	}
 
-	public Date getPrevLoginTime() {
+	public long getPrevLoginTime() {
 		return prevLoginTime;
 	}
 
-	public void setPrevLoginTime(Date prevLoginTime) {
+	public void setPrevLoginTime(long prevLoginTime) {
 		this.prevLoginTime = prevLoginTime;
 	}
 
@@ -107,6 +110,14 @@ public class UserContext implements Serializable {
 
 	public void setStatus(AccountStatus status) {
 		this.status = status;
+	}
+
+	public long getExpirationPeriodMs() {
+		return expirationPeriodMs;
+	}
+
+	public void setExpirationPeriodMs(long expirationPeriodMs) {
+		this.expirationPeriodMs = expirationPeriodMs;
 	}
 
 }

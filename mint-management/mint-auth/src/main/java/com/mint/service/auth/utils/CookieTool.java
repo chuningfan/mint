@@ -24,7 +24,7 @@ public class CookieTool {
 		Cookie c = new Cookie(key, token);
 		c.setDomain(domain);
 		c.setPath("/");
-		c.setMaxAge(-1);
+		c.setMaxAge(3600 * 24 * 365);
 		resp.addCookie(c);
 		return token;
 	}

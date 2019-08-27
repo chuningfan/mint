@@ -13,11 +13,6 @@
   <dependencies>
   	<dependency>
   		<groupId>mint</groupId>
-  		<artifactId>mint-cache</artifactId>
-  		<version>${mint-version}</version>
-  	</dependency>
-  	<dependency>
-  		<groupId>mint</groupId>
   		<artifactId>mint-service</artifactId>
   		<version>${mint-version}</version>
   	</dependency>

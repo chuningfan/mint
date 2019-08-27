@@ -40,8 +40,8 @@ public class AuthController {
 	
 	@PostMapping(value = "/doLogin", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
 			produces = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public boolean doLogin(@RequestBody LoginFormData formData, HttpServletResponse resp) throws AuthException {
-		return normalAuthHandler.route(Action.DO_LOGIN, resp, formData.getUsername(), formData.getPassword());
+	public boolean doLogin(@RequestBody LoginFormData formData, HttpServletRequest req, HttpServletResponse resp) throws AuthException {
+		return normalAuthHandler.route(Action.DO_LOGIN, req, resp, formData.getUsername(), formData.getPassword());
 	}
 	
 	@GetMapping("/reg")

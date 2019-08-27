@@ -42,6 +42,10 @@ public class RedisHelper implements CacheOperator<String, Object> {
 		return redisTemplate.opsForValue().getOperations().getExpire(key);
 	}
 	
+	public long getExpireTimeByKey(String key, TimeUnit unit) {
+		return redisTemplate.opsForValue().getOperations().getExpire(key, unit);
+	}
+	
 	@Override
 	public Collection<Object> getByKeys(Collection<String> keys) {
 		return CollectionUtils.isEmpty(keys) ? null : redisTemplate.opsForValue().multiGet(keys);

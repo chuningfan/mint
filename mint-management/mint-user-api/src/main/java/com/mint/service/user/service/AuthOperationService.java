@@ -11,7 +11,7 @@ import com.mint.service.user.dto.login.UpdatePwdData;
 import com.mint.service.user.dto.reg.BasicInfo;
 import com.mint.service.user.dto.reg.CredentialFormData;
 
-@MintRpc(requestMapping = "/service/u_auth", serviceName = "mint-user")
+@MintRpc(requestMapping = "/u_auth", serviceName = "mint-user")
 public interface AuthOperationService {
 	
 	@MethodMapping(requestMethod = RequestMethod.POST, value = "/doReg")

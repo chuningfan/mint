@@ -33,11 +33,9 @@ public class AuthController {
 	@PostMapping(value = "/doReg", 
 			consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
 			produces = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public void doReg(@RequestBody CredentialFormData formData, HttpServletRequest req, HttpServletResponse resp) throws AuthException, ServletException, IOException {
+	public boolean doReg(@RequestBody CredentialFormData formData, HttpServletRequest req, HttpServletResponse resp) throws AuthException, ServletException, IOException {
 		boolean flag = normalAuthHandler.route(Action.DO_REG, formData.getUsername(), formData.getPassword());
-		if (flag) {
-			pageController.login();
-		}
+		return flag;
 	}
 	
 	@PostMapping(value = "/doLogin", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
@@ -53,7 +51,7 @@ public class AuthController {
 	
 	@GetMapping("/login")
 	public String login() throws AuthException {
-		return "/login";
+		return "/index";
 	}
 	
 }

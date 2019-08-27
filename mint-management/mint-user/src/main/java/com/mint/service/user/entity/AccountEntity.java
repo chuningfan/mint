@@ -8,8 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -40,8 +38,7 @@ public class AccountEntity extends IdentifiedEntity{
     @ManyToMany(cascade = CascadeType.ALL)
     private Set<RoleEntity> roles;
     
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(insertable = true, referencedColumnName = "id", name = "user_id")
+    @OneToOne(mappedBy="account",cascade = CascadeType.ALL)
 	private UserEntity user;
     
 	public String getUsername() {
@@ -90,6 +87,14 @@ public class AccountEntity extends IdentifiedEntity{
 
 	public void setUser(UserEntity user) {
 		this.user = user;
+	}
+
+	public AccountStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(AccountStatus status) {
+		this.status = status;
 	}
 	
 }

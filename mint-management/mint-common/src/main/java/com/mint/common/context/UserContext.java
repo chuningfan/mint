@@ -1,12 +1,13 @@
 package com.mint.common.context;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
 
 import com.mint.common.enums.AccountStatus;
 import com.mint.common.enums.LoginType;
 
-public class UserContext {
+public class UserContext implements Serializable {
 	// 操作者ID
 	private Long accountId;
 	// 操作者角色ID集合

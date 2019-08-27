@@ -67,7 +67,7 @@ public class NormalAuthHandler extends AuthHandler {
 		formData.setLoginType(LoginType.NORMAL);
 		UserContext context = aos.doLogin(formData);
 		if (context == null) {
-			throw new AuthException();
+			return false;
 		}
 		try {
 			cookieTool.newCookie(resp, UserContextKeys.USER_CONTEXT, context.getAccountId().toString());

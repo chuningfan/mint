@@ -30,7 +30,7 @@
                      <input type="password" class="form-control" name="password" id="password"  placeholder="Password">
                   </div>
                   <button  id="login" class="btn btn-black">Login</button>
-                  <button  id="register"  class="btn btn-secondary">Register</button>
+                  <div style="float:right;padding-top: 9px;">No Acoout ?  <a href="http://localhost:8088/mint-auth/page/register">Register</a></div>
             </div>
          </div>
       </div>
@@ -50,44 +50,16 @@
 	                contentType:'application/json;charset=UTF-8',
 	                async: true,
       	            success : function(result) {
-      	                console.log(result);
+      	            	window.location.href="http://localhost:8088/mint-auth/page/index"
       	            },
       	            //请求失败，包含具体的错误信息
       	            error : function(e){
-      	                console.log(e.status);
-      	                console.log(e.responseText);
+      	                alert("登陆失败");
       	            }
       	        });
         	});
       		
-      		$("#register").click(function(){
-      			var formData={
-      					username:$("#username").val(),
-      					password:$("#password").val()
-      			}
-      			$.ajax({
-      	            type : "POST",
-      	            url : "http://localhost:8088/mint-auth/auth/doReg",
-      	            data : JSON.stringify(formData),
-    		        dataType: 'json',
-	                contentType:'application/json;charset=UTF-8',
-	                async: true,
-      	            success : function(result) {
-      	                console.log(result);
-      	            },
-      	            //请求失败，包含具体的错误信息
-      	            error : function(e){
-      	                console.log(e.status);
-      	                console.log(e.responseText);
-      	            }
-      	        });
-        	});
       	});
-      
-      
-      
-      
-      
       </script>
 </body>
 </html>

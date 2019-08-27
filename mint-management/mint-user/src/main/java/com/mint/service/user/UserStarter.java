@@ -8,7 +8,7 @@ import com.mint.service.database.annotation.EnableJpaOps;
 import com.mint.service.user.metadata.UserServiceMetadataProvider;
 
 @MintService(metadataProvider = UserServiceMetadataProvider.class)
-@EnableJpaOps(basePackages="com.mint.service.user.dao")
+@EnableJpaOps(basePackages="com.mint.service.user.dao", entityScanPackages="com.mint.service.user.entity")
 public class UserStarter 
 {
     public static void main( String[] args )

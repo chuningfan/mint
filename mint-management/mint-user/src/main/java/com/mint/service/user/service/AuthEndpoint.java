@@ -5,8 +5,6 @@ import java.util.Set;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Sets;
 import com.mint.common.context.UserContext;
+import com.mint.service.security.sault.DigestsUtil;
 import com.mint.service.user.dao.AccountDao;
 import com.mint.service.user.dto.login.LoginFormData;
 import com.mint.service.user.dto.login.UpdatePwdData;
@@ -44,7 +43,7 @@ public class AuthEndpoint implements AuthOperationService {
 		String password = data.getPassword();
 		AccountEntity accountEntity = new AccountEntity();
 		accountEntity.setUsername(username);
-		accountEntity.setPassword(password);
+		accountEntity.setPassword(DigestsUtil.shap(password));
 		accountDao.save(accountEntity);
 		return true;
 	}
@@ -61,8 +60,11 @@ public class AuthEndpoint implements AuthOperationService {
 	@Transactional
 	@Override
 	public UserContext doLogin(@RequestBody LoginFormData data) {
-		AccountEntity account = accountDao.findByCredential(data.getUsername(), data.getPassword());
-		return null;
+		AccountEntity account = accountDao.findByCredential(data.getUsername(), DigestsUtil.shap(data.getPassword()));
+		UserContext context = new UserContext();
+		context.setAccountId(account.getId());
+		context.setMarketId(account.getBusinessId());
+		return context;
 	}
 
 	@PostMapping("/doSaveInfo")

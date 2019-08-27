@@ -4,12 +4,15 @@ package com.mint.service.user.entity;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.mint.service.database.entity.IdentifiedEntity;
@@ -42,6 +45,10 @@ public class UserEntity  extends IdentifiedEntity{
 	    
 	    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
 	    private Set<AddressEntity> address;
+	    
+	    @OneToOne(cascade = CascadeType.ALL)
+	    @JoinColumn(name = "account_id")
+	    private  AccountEntity account;
 	    
 		public String getFamilyName() {
 			return familyName;
@@ -106,5 +113,15 @@ public class UserEntity  extends IdentifiedEntity{
 		public void setIdNumber(String idNumber) {
 			IdNumber = idNumber;
 		}
+
+		public AccountEntity getAccount() {
+			return account;
+		}
+
+		public void setAccount(AccountEntity account) {
+			this.account = account;
+		}
+		
+		
 
 }

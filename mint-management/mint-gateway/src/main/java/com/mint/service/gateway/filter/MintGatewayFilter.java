@@ -15,7 +15,6 @@ import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
 import com.mint.service.gateway.exception.GatewayException;
 import com.mint.service.pipeline.pre.AuthValidator;
-import com.mint.service.pipeline.pre.RateLimitationValidator;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;

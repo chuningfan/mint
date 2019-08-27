@@ -26,7 +26,7 @@ import com.mint.service.user.entity.AddressEntity;
 import com.mint.service.user.entity.UserEntity;
 
 @RestController
-@RequestMapping("/service/u_auth")
+@RequestMapping("/u_auth")
 public class AuthEndpoint implements AuthOperationService {
 
 	@Autowired

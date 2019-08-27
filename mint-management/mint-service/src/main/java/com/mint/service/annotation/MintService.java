@@ -15,7 +15,6 @@ import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
-import org.springframework.retry.annotation.EnableRetry;
 
 import com.mint.service.annotation.importer.MintServiceImporter;
 import com.mint.service.metadata.ServiceMetadataProvider;
@@ -35,7 +34,7 @@ import com.mint.service.metadata.ServiceMetadataProvider;
 @EnableCircuitBreaker
 @EnableHystrix
 @Inherited
-@EnableRetry
+//@EnableRetry
 @Import(MintServiceImporter.class)
 @Documented
 public @interface MintService {

@@ -17,7 +17,7 @@ public class InterceptorConfiguration implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		ServiceInterceptor interceptor = new ServiceInterceptor(pipelineProvider);
-		registry.addInterceptor(interceptor).addPathPatterns("/service/**")
+		registry.addInterceptor(interceptor).addPathPatterns("/**")
 		.excludePathPatterns("/resources/**");
 		WebMvcConfigurer.super.addInterceptors(registry);
 	}

@@ -19,12 +19,14 @@ public class CookieTool {
 	
 	
 	
-	public void newCookie(HttpServletResponse resp, String key, String value) throws NoSuchAlgorithmException, UnsupportedEncodingException {
-		Cookie c = new Cookie(key, ContextCookieUtil.createCookieValue(value));
+	public String newCookie(HttpServletResponse resp, String key, String value) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+		String token = ContextCookieUtil.createCookieValue(value);
+		Cookie c = new Cookie(key, token);
 		c.setDomain(domain);
 		c.setPath("/");
 		c.setMaxAge(-1);
 		resp.addCookie(c);
+		return token;
 	}
 	
 }

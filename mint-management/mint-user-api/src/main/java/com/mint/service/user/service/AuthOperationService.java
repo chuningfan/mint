@@ -1,6 +1,5 @@
 package com.mint.service.user.service;
 
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mint.common.annotation.MethodMapping;

@@ -1,31 +1,23 @@
 package com.mint.service.app.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import com.mint.service.rpc.RpcHandler;
-import com.mint.service.user.dto.user.UserInfo;
-import com.mint.service.user.service.UserService;
+import com.mint.common.context.UserContextThreadLocal;
 
-@RequestMapping("/test")
-@RestController
+@RequestMapping("/app")
+@Controller
 public class IndexController {
-@Autowired
-private RpcHandler handler;
-
+	
 	@GetMapping
-	public String index()   {
+	public String index(HttpServletResponse resp) throws Exception   {
+		if (UserContextThreadLocal.get() == null) {
+			resp.sendRedirect("http://localhost:8088/mint-auth/page/login");
+		}
 		return "/index";
 	}
 	
-	@GetMapping("/service/test")
-	public @ResponseBody UserInfo test() {
-		UserService userService = handler.get(UserService.class);
-		UserInfo info  = userService.getUser(1L).getData();
-		System.out.println(123);
-		return info;
-	}
 }

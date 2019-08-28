@@ -3,11 +3,16 @@ package com.mint.service.rpc;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Proxy;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -55,6 +60,7 @@ public class RpcHandler {
 				builder.append(targetServiceName).append(requestMapping).toString();
 				String baseUri = builder.toString();
 				t = Proxy.newProxyInstance(Thread.currentThread().getContextClassLoader(), new Class<?>[]{apiInterfaceClass}, new InvocationHandler() {
+					@SuppressWarnings("rawtypes" )
 					@Override
 					public Object invoke(Object obj, Method method, Object[] parameters) throws Throwable {
 						if (!method.isAnnotationPresent(MethodMapping.class)) {
@@ -65,17 +71,28 @@ public class RpcHandler {
 						if (StringUtils.isBlank(mmVal)) {
 							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg(String.format("No method mapping on method: %s", method.getName()));
 						}
-						Class<?> returnType = method.getReturnType();
 						mmVal = mmVal.startsWith(SPLITTER) ? mmVal : (SPLITTER + mmVal);
 						String url = baseUri + mmVal; 
 						RequestMethod reqMethod = mm.requestMethod();
+						Type returnType = method.getGenericReturnType();
+						ParameterizedType pType = null;
+						ParameterizedTypeReference ptr = null;
+						if (returnType instanceof ParameterizedType) {
+							pType = (ParameterizedType) returnType;
+							ptr = ParameterizedTypeReference.forType(pType);
+						}
 						switch (reqMethod) {
 						case POST:
 							int paramSize = parameters.length;
 							if (paramSize != 1) {
 								throw MintException.getException(Error.INTER_ERROR, null, null).setMsg("POST RPC should have only one parameter (If you have multiple parameters, please wrap them into ONE.)");
 							}
-							return template.postForEntity(url, parameters[0], returnType).getBody();
+							if (ptr != null) {
+								HttpEntity<Object> httpEntity = new HttpEntity<>(parameters[0]); 
+								return restTemplate.exchange(url, HttpMethod.POST, httpEntity, ptr).getBody();
+							} else {
+								return template.postForEntity(url, parameters[0], method.getReturnType()).getBody();
+							}
 						case GET:
 							Parameter[] params = method.getParameters();
 							Parameter p = null;
@@ -89,7 +106,11 @@ public class RpcHandler {
 									reqURL = reqURL.replace(String.format(paramName, pv.name()), parameters[i].toString());
 								}
 							}
-							return template.getForEntity(reqURL, returnType).getBody();
+							if (ptr != null) {
+								return restTemplate.exchange(reqURL, HttpMethod.GET, null, ptr).getBody();
+							} else {
+								return template.getForEntity(reqURL, method.getReturnType()).getBody();
+							}
 						default: 
 							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg("RPC handler just supports POST and GET");
 						}

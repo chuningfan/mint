@@ -50,7 +50,15 @@
 	                contentType:'application/json;charset=UTF-8',
 	                async: true,
       	            success : function(result) {
-      	            	window.location.href="http://localhost:8089/mint-app/test"
+      	            	if(result.exception) {
+      	            		alert(result.exception.msg);
+      	            		return;
+      	            	}
+      	            	if (result.exception === null) {
+      	            		if (result.data) {
+      	            			window.location.href="http://localhost:8089/mint-app/app"
+      	            		}
+      	            	}
       	            },
       	            error : function(e){
       	                alert("登陆失败");

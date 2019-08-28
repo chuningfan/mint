@@ -16,7 +16,7 @@ public class MintException extends RuntimeException {
 	MintException() {}
 	
 	private MintException(Error error, Lang lang, Throwable e, String msg) {
-		super(ErrorMessageResource.getMessage(error.getCode(), lang));
+		this.msg = ErrorMessageResource.getMessage(error.getCode(), lang);
 		this.errorCode = error.getCode();
 		this.exception = e;
 	}

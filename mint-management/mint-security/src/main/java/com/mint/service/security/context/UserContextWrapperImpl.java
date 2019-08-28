@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
+import com.mint.common.context.UserContextThreadLocal;
 import com.mint.common.utils.HttpUtil;
 import com.mint.service.cache.support.redis.RedisHelper;
 
@@ -34,7 +35,7 @@ public class UserContextWrapperImpl implements ContextWrapper {
 		if  (context == null) {
 			return null;
 		}
-		autoDelayExpiration(userIdStr, context.getPrevLoginTime(), context.getExpirationPeriodMs());
+		autoDelayExpiration(userIdStr, context);
 		return context;
 	}
 
@@ -44,13 +45,13 @@ public class UserContextWrapperImpl implements ContextWrapper {
 		return req;
 	}
 
-	private void autoDelayExpiration(String key, long prevLoginTime, long expirationPeriod) {
-		long passedMs = System.currentTimeMillis() - prevLoginTime;
+	private void autoDelayExpiration(String key, UserContext context) {
+		long passedMs = System.currentTimeMillis() - context.getPrevLoginTime();
+		long expirationPeriod = context.getExpirationPeriodMs();
 		if (passedMs >= (expirationPeriod >>> 2)) {
-			UserContext context = (UserContext) redisHelper.getByKey(key);
 			context.setPrevLoginTime(System.currentTimeMillis());
 			redisHelper.store(key, context, expirationPeriod, TimeUnit.MILLISECONDS);
 		}
-	} 
+	}
 	
 }

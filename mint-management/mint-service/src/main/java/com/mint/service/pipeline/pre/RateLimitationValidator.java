@@ -28,7 +28,7 @@ public class RateLimitationValidator implements ServicePipelineMember {
 	
 	private long timeout;
 	
-	private long retryInterval = 3000;
+	private long retryInterval = 30000;
 	
 	/**
 	 * 令牌桶

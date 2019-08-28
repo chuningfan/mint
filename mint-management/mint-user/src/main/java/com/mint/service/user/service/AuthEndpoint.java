@@ -61,6 +61,9 @@ public class AuthEndpoint implements AuthOperationService {
 	@Override
 	public UserContext doLogin(@RequestBody LoginFormData data) {
 		AccountEntity account = accountDao.findByCredential(data.getUsername(), DigestsUtil.shap(data.getPassword()));
+		if (account == null) {
+			return null;
+		}
 		UserContext context = new UserContext();
 		context.setAccountId(account.getId());
 		context.setMarketId(account.getBusinessId());

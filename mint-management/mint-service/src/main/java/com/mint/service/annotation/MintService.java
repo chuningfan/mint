@@ -42,11 +42,11 @@ public @interface MintService {
 	// 每个mint service 必须实现ServiceMetaDataProvider接口 并注入spring容器
 	Class<? extends ServiceMetadataProvider> metadataProvider();
 	// 本服务调用其他服务超时时间（毫秒）
-	int readTimeout() default 3000;
+	int readTimeout() default 30000;
 	// 本服务长等待调用超时时间（毫秒）
 	int longConnectionReadTimeout() default 180000;
 	// 本服务与其他服务建立连接超时时间（毫秒）
-	int connectTimeout() default 3000;
+	int connectTimeout() default 30000;
 	// 取消置顶类的自动装载
 	@AliasFor(annotation=SpringBootApplication.class, attribute="exclude")
 	Class<?>[] noAutoConfigFor() default {};

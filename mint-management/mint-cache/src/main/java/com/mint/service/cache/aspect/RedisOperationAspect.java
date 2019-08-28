@@ -16,10 +16,11 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.service.cache.annotation.RedisOps;
 import com.mint.service.cache.annotation.enums.RedisDataType;
 import com.mint.service.cache.annotation.enums.RedisOpsType;
-import com.mint.service.cache.exception.CacheOperationException;
 import com.mint.service.cache.support.redis.RedisHelper;
 
 @Aspect
@@ -62,7 +63,7 @@ public class RedisOperationAspect {
 				}
 			} catch (Exception e) {
 				redisHelper.getRedisTemplate().discard();
-				throw new CacheOperationException(e);
+				throw MintException.getException(e, null);
 			}
 		} else {
 			return pjp.proceed();
@@ -75,14 +76,14 @@ public class RedisOperationAspect {
 		try {
 			String key = getKey(ro.key(), storedDataObject);
 			if (key == null) {
-				throw new CacheOperationException(
-						String.format("%s in %s is null, could not be a key for REDIS", ro.key(), ro.keyIn()));
+				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
+				.setMsg(String.format("%s in %s is null, could not be a key for REDIS", ro.key(), ro.keyIn()));
 			} else {
 				storeInRedis(key, storedDataObject);
 			}
 		} catch (Exception e) {
 			if (failFast) {
-				throw new CacheOperationException(e);
+				throw MintException.getException(e, null);
 			} else {
 				LOG.info("When saving data in redis occurred an error: {}", e.getMessage());
 			}
@@ -96,15 +97,16 @@ public class RedisOperationAspect {
 			if (StringUtils.isEmpty(ro.keyIn().trim())) {
 				Object keyContainer = getArgByName(args, ro.keyIn(), m);
 				if (keyContainer == null) {
-					throw new CacheOperationException(String.format("Cannot find %s in %s", ro.key(), ro.keyIn()));
+					throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
+					.setMsg(String.format("Cannot find %s in %s", ro.key(), ro.keyIn()));
 				}
 				key = getKey(ro.key(), keyContainer);
 			} else {
 				key = getArgByName(args, ro.key(), m) == null ? null : getArgByName(args, ro.key(), m).toString();
 			}
 			if (key == null) {
-				throw new CacheOperationException(
-						String.format("%s in %s is null, could not be a key for REDIS", ro.key(), ro.keyIn()));
+				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
+				.setMsg(String.format("Cannot find %s in %s", ro.key(), ro.keyIn()));
 			}
 		} catch (Exception e) {
 			if (failFast) {
@@ -124,7 +126,7 @@ public class RedisOperationAspect {
 				redisHelper.removeIfPresent(key);
 			} catch (Exception e) {
 				if (failFast) {
-					throw new CacheOperationException(e);
+					throw MintException.getException(e, null);
 				} else {
 					LOG.info("When finding data in redis occurred an error: {}", e.getMessage());
 				}
@@ -142,7 +144,7 @@ public class RedisOperationAspect {
 				result = redisHelper.getByKey(key);
 			} catch (Exception e) {
 				if (failFast) {
-					throw new CacheOperationException(e);
+					throw MintException.getException(e, null);
 				} else {
 					LOG.info("When finding data in redis occurred an error: {}", e.getMessage());
 				}
@@ -154,7 +156,7 @@ public class RedisOperationAspect {
 				storeInRedis(key, result);
 			} catch (Exception e) {
 				if (failFast) {
-					throw new CacheOperationException(e);
+					throw MintException.getException(e, null);
 				} else {
 					LOG.info("When saving data in redis occurred an error: {}", e.getMessage());
 				}
@@ -184,7 +186,7 @@ public class RedisOperationAspect {
 				f.setAccessible(true);
 				return f.get(keyContainer).toString();
 			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
-				throw new CacheOperationException(e);
+				throw MintException.getException(e, null);
 			}
 		}
 		return null;

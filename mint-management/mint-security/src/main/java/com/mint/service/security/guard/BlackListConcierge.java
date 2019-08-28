@@ -14,7 +14,6 @@ import com.mint.common.context.UserContext;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.common.utils.HttpUtil;
-import com.mint.service.cache.exception.LocalCacheException;
 import com.mint.service.cache.support.CacheOperator;
 import com.mint.service.cache.support.local.LocalCacheFactory;
 import com.mint.service.cache.support.local.LocalCacheType;
@@ -33,7 +32,7 @@ public class BlackListConcierge {
 	static {
 		try {
 			cache = LocalCacheFactory.create("test", LocalCacheType.MEMORY, testSec, TimeUnit.SECONDS, 10240L);
-		} catch (LocalCacheException e) {
+		} catch (MintException e) {
 			LOG.error("Preparing local cache for black list validator error: {}", e.getMessage());
 		}
 	}

@@ -24,7 +24,6 @@ private RpcHandler handler;
 	@GetMapping("/service/test")
 	public @ResponseBody UserInfo test()   {
 		UserService userService = handler.get(UserService.class);
-		@SuppressWarnings("unused")
 		UserInfo info  = userService.getUser(1L);
 		System.out.println(123);
 		return info;

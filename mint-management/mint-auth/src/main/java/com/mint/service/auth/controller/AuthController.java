@@ -25,8 +25,6 @@ public class AuthController {
 	@Autowired
 	private NormalAuthHandler normalAuthHandler;
 	
-	@Autowired
-	private PageController pageController;
 	
 	@PostMapping(value = "/doReg", 
 			consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 

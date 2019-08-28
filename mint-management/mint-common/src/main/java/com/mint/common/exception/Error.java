@@ -12,7 +12,8 @@ public enum Error {
 	VICOUS_REQ_ERROR(-8), // 恶意请求错误
 	INVALID_CONTEXT_ERROR(-9), // 非法用户上下文错误
 	IMPLEMENTATION_NOT_FOUND_ERROR(-10), // 无实现错误
-	UNKNOWN_ERROR(-11) // 未知错误
+	UNSUPPORTED_ERROR(-11), // 非支持操作错误
+	UNKNOWN_ERROR(-12) // 未知错误
 	;
 	
 	private int code;

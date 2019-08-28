@@ -37,6 +37,8 @@ public class ErrorMessageProviderForUS implements ErrorMessageProvider {
 			return "Illegal user";
 		case -10: //IMPLEMENTATION_NOT_FOUND_ERROR
 			return "API/SPI has no implementation";
+		case -11: //UNSUPPORTED_ERROR
+			return "Unsupported operation";
 		default: //UNKNOWN_ERROR
 			return "Unknown error";
 		}

@@ -37,6 +37,8 @@ public class ErrorMessageProviderForCN implements ErrorMessageProvider  {
 			return "非法用户身份";
 		case -10: //IMPLEMENTATION_NOT_FOUND_ERROR
 			return "未找到方法实现";
+		case -11: //UNSUPPORTED_ERROR
+			return "不支持当前操作";
 		default: //UNKNOWN_ERROR
 			return "未知错误";
 		}

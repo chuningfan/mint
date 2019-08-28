@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.mint.common.exception.MintException;
 import com.mint.service.auth.core.ext.normal.NormalAuthHandler;
 import com.mint.service.auth.enums.Action;
+import com.mint.service.response.WebResponse;
 import com.mint.service.user.dto.login.LoginFormData;
 import com.mint.service.user.dto.reg.CredentialFormData;
 
@@ -27,15 +28,16 @@ public class AuthController {
 	@PostMapping(value = "/doReg", 
 			consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
 			produces = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public boolean doReg(@RequestBody CredentialFormData formData, HttpServletRequest req, HttpServletResponse resp) throws MintException {
+	public WebResponse<Boolean> doReg(@RequestBody CredentialFormData formData, HttpServletRequest req, HttpServletResponse resp) throws MintException {
 		boolean flag = normalAuthHandler.route(Action.DO_REG, formData.getUsername(), formData.getPassword());
-		return flag;
+		return new WebResponse<Boolean>(flag);
 	}
 	
 	@PostMapping(value = "/doLogin", consumes = { MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE}, 
 			produces = {MediaType.APPLICATION_FORM_URLENCODED_VALUE, MediaType.APPLICATION_JSON_UTF8_VALUE})
-	public boolean doLogin(@RequestBody LoginFormData formData, HttpServletRequest req, HttpServletResponse resp) throws MintException {
-		return normalAuthHandler.route(Action.DO_LOGIN, req, resp, formData.getUsername(), formData.getPassword());
+	public WebResponse<Boolean> doLogin(@RequestBody LoginFormData formData, HttpServletRequest req, HttpServletResponse resp) throws MintException {
+		boolean flag = normalAuthHandler.route(Action.DO_LOGIN, req, resp, formData.getUsername(), formData.getPassword());
+		return new WebResponse<Boolean>(flag);
 	}
 	
 }

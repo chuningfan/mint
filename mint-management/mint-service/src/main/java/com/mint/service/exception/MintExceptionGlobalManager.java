@@ -21,11 +21,14 @@ public class MintExceptionGlobalManager {
 	
 	private ExceptionDataProcessor processor;
 	
-	private final ThreadPoolExecutor exe;
+	private ThreadPoolExecutor exe;
 	
 	public MintExceptionGlobalManager() {
 		try {
 			processor = CommonServiceLoader.getSingleService(ExceptionDataProcessor.class, ServiceContext.beanFactory);
+			int processorCount = Runtime.getRuntime().availableProcessors();
+			exe = new ThreadPoolExecutor(processorCount, processorCount << 1, 3 * 1000, TimeUnit.MILLISECONDS,
+					new ArrayBlockingQueue<Runnable>(100), Executors.defaultThreadFactory(), new java.util.concurrent.ThreadPoolExecutor.AbortPolicy());
 		} catch (MintException e) {
 			if (e.getErrorCode() == Error.IMPLEMENTATION_NOT_FOUND_ERROR.getCode()) {
 				processor = null;
@@ -33,20 +36,24 @@ public class MintExceptionGlobalManager {
 				throw e;
 			}
 		}
-		int processorCount = Runtime.getRuntime().availableProcessors();
-		exe = new ThreadPoolExecutor(processorCount, processorCount << 1, 3 * 1000, TimeUnit.MILLISECONDS,
-				new ArrayBlockingQueue<Runnable>(100), Executors.defaultThreadFactory(), new java.util.concurrent.ThreadPoolExecutor.AbortPolicy());
 	}
 	
 	@ResponseBody
-    @ExceptionHandler(value = MintException.class)
-    public WebResponse<Object> myExceptionHandler(MintException e){
-        if (processor != null) {
-        	exe.submit(() -> {
-        		processor.process(e);
+    @ExceptionHandler(value = Exception.class)
+    public WebResponse<Object> exceptionHandler(Exception e){
+		if (processor != null && exe != null) {
+        	exe.submit(new Runnable() {
+				@Override
+				public void run() {
+					if (!(e instanceof MintException)) {
+						processor.process(MintException.getException(e, null));
+					} else {
+						processor.process((MintException) e);
+					}
+				}
         	});
         }
-        return new WebResponse<Object>(e);
+        return new WebResponse<Object>((e instanceof MintException) ? (MintException) e : MintException.getException(e, null));
     }
 	
 }

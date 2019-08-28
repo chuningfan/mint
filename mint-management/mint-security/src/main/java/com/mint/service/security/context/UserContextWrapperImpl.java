@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
-import com.mint.common.exception.MintException;
 import com.mint.common.utils.HttpUtil;
 import com.mint.service.cache.support.redis.RedisHelper;
 

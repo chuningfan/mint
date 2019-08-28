@@ -69,7 +69,7 @@ public class ServiceInterceptor implements HandlerInterceptor {
 			throws Exception {
 		UserContext context = wrapper.getFromReq(request);
 		try {
-			if (context != null) {
+			if (UserContextThreadLocal.get() == null && context != null) {
 				UserContextThreadLocal.set(context);
 			}
 			LinkedList<ServicePipelineMember> list = pipelineProvider.prePipeline;

@@ -10,19 +10,21 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
 import com.google.common.collect.Lists;
-import com.mint.common.exception.SPILoadingException;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 
 public class CommonServiceLoader {
 	
 	private static final Logger LOG = LoggerFactory.getLogger(CommonServiceLoader.class);
 	
-	public static <T> T getSingleService(Class<T> clazz, DefaultListableBeanFactory beanFactory) {
+	public static <T> T getSingleService(Class<T> clazz, 
+			DefaultListableBeanFactory beanFactory) throws MintException {
 		 ServiceLoader<T> loader = ServiceLoader.load(clazz);
 		 Iterator<T> itr = loader.iterator();
 		 T t = null;
 		 while (itr.hasNext()) {
 			 if (t != null) {
-				 throw new SPILoadingException("There are too many implementation for target interface");
+				 throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
 			 }
 			 t = itr.next();
 		 }
@@ -30,13 +32,14 @@ public class CommonServiceLoader {
 			 try {
 				 t = beanFactory.getBean(clazz);
 			 } catch (BeansException e) {
-				 LOG.info("No SPI implementation for {} is as a spring bean.", clazz.getName());
+				 throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
 			 }
 		 }
 		 return t;
 	}
 	
-	public static <T> Collection<T> getMultipleServices(Class<T> clazz, DefaultListableBeanFactory beanFactory) {
+	public static <T> Collection<T> getMultipleServices(Class<T> clazz, 
+			DefaultListableBeanFactory beanFactory) throws MintException {
 		 ServiceLoader<T> loader = ServiceLoader.load(clazz);
 		 Iterator<T> itr = loader.iterator();
 		 T t = null;
@@ -51,6 +54,9 @@ public class CommonServiceLoader {
 				 }
 			 }
 			 coll.add(t);
+		 }
+		 if (coll.isEmpty()) {
+			 throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
 		 }
 		 return coll;
 	}

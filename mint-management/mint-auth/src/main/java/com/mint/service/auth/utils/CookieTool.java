@@ -1,8 +1,5 @@
 package com.mint.service.auth.utils;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
@@ -19,7 +16,7 @@ public class CookieTool {
 	
 	
 	
-	public String newCookie(HttpServletResponse resp, String key, String value) throws NoSuchAlgorithmException, UnsupportedEncodingException {
+	public String newCookie(HttpServletResponse resp, String key, String value) {
 		String token = ContextCookieUtil.createCookieValue(value);
 		Cookie c = new Cookie(key, token);
 		c.setDomain(domain);

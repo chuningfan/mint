@@ -7,10 +7,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.util.concurrent.RateLimiter;
 import com.mint.common.context.UserContext;
-import com.mint.service.context.ServiceContext;
-import com.mint.service.exception.AcquiredFailedException;
-import com.mint.service.exception.Exceptions;
-import com.mint.service.exception.MintServiceException;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.service.pipeline.ServicePipelineMember;
 
 /**
@@ -72,23 +70,23 @@ public class RateLimitationValidator implements ServicePipelineMember {
 
 	@Override
 	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws MintServiceException {
+			throws MintException {
 		if (!limiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			if (retryTime == 0) {
-				throw Exceptions.get(MintServiceException.class, "Cannot acquire permit for getting resource from service %s", ServiceContext.id);
+				throw MintException.getException(Error.UNSUPPORTED_ERROR, null, null);
 			} else {
 				int retried = 0;
 				while (retried++ <= retryTime) {
 					try {
 						Thread.sleep(retryInterval);
 					} catch (InterruptedException e) {
-						throw new AcquiredFailedException("When waiting for retrying, error appeared!");
+						throw MintException.getException(Error.INTER_ERROR, null, e);
 					}
 					if (limiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 						return;
 					}
 				}
-				throw Exceptions.get(AcquiredFailedException.class, "Cannot acquire permit for getting resource from service %s", ServiceContext.id);
+				throw MintException.getException(Error.UNSUPPORTED_ERROR, null, null);
 			}
 		}
 	}

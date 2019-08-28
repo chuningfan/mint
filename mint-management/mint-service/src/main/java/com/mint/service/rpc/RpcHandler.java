@@ -16,7 +16,8 @@ import org.springframework.web.client.RestTemplate;
 import com.google.common.collect.Maps;
 import com.mint.common.annotation.MethodMapping;
 import com.mint.common.annotation.MintRpc;
-import com.mint.service.exception.MintServiceException;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 
 @Component
 public class RpcHandler {
@@ -32,7 +33,7 @@ public class RpcHandler {
 	private static final String SPLITTER = "/";
 	
 	@SuppressWarnings("unchecked")
-	public <T> T get(Class<T> apiInterfaceClass) throws MintServiceException {
+	public <T> T get(Class<T> apiInterfaceClass) throws MintException {
 		Object t = PROXIES.get(apiInterfaceClass);
 		if (t != null) {
 			return (T) t;
@@ -57,12 +58,12 @@ public class RpcHandler {
 					@Override
 					public Object invoke(Object obj, Method method, Object[] parameters) throws Throwable {
 						if (!method.isAnnotationPresent(MethodMapping.class)) {
-							throw new MintServiceException(String.format("No method mapping on method: %s", method.getName()));
+							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg(String.format("No method mapping on method: %s", method.getName()));
 						}
 						MethodMapping mm = method.getAnnotation(MethodMapping.class);
 						String mmVal = mm.value();
 						if (StringUtils.isBlank(mmVal)) {
-							throw new MintServiceException(String.format("No method mapping on method: %s", method.getName()));
+							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg(String.format("No method mapping on method: %s", method.getName()));
 						}
 						Class<?> returnType = method.getReturnType();
 						mmVal = mmVal.startsWith(SPLITTER) ? mmVal : (SPLITTER + mmVal);
@@ -72,7 +73,7 @@ public class RpcHandler {
 						case POST:
 							int paramSize = parameters.length;
 							if (paramSize != 1) {
-								throw new MintServiceException("POST RPC should have only one parameter (If you have multiple parameters, please wrap them into ONE.)");
+								throw MintException.getException(Error.INTER_ERROR, null, null).setMsg("POST RPC should have only one parameter (If you have multiple parameters, please wrap them into ONE.)");
 							}
 							return template.postForEntity(url, parameters[0], returnType).getBody();
 						case GET:
@@ -89,14 +90,15 @@ public class RpcHandler {
 								}
 							}
 							return template.getForEntity(reqURL, returnType).getBody();
-						default: throw new MintServiceException("RPC handler just supports POST and GET");
+						default: 
+							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg("RPC handler just supports POST and GET");
 						}
 					}
 				});
 				PROXIES.put(apiInterfaceClass, t);
 				return (T) t;
 			} else {
-				throw new MintServiceException("Invalid mint rpc api.");
+				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null).setMsg("Invalid mint rpc api");
 			}
 		}
 	}

@@ -39,6 +39,8 @@ public class ErrorMessageProviderForUS implements ErrorMessageProvider {
 			return "API/SPI has no implementation";
 		case -11: //UNSUPPORTED_ERROR
 			return "Unsupported operation";
+		case -12: //ROLE_DISALLOWED_ERROR
+			return "Illegal role";
 		default: //UNKNOWN_ERROR
 			return "Unknown error";
 		}

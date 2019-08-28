@@ -2,6 +2,7 @@ package com.mint.common.exception;
 
 public enum Error {
 	
+	UNKNOWN_ERROR(0), // 未知错误
 	INTER_ERROR(-1),  //服务器运行错误
 	READ_TIME_OUT_ERROR(-2), // 等待响应超时错误
 	CONNECTION_ERROR(-3), // 连接错误
@@ -13,7 +14,7 @@ public enum Error {
 	INVALID_CONTEXT_ERROR(-9), // 非法用户上下文错误
 	IMPLEMENTATION_NOT_FOUND_ERROR(-10), // 无实现错误
 	UNSUPPORTED_ERROR(-11), // 非支持操作错误
-	UNKNOWN_ERROR(-12) // 未知错误
+	ROLE_DISALLOWED_ERROR(-12), // 非法角色错误
 	;
 	
 	private int code;

@@ -34,6 +34,7 @@ public class ErrorMessageResource {
 	}
 	
 	public static String getMessage(Integer errorCode, Lang lang) {
+		lang = lang == null ? Lang.US : lang;
 		return resourceMap.get(errorCode) == null ? null : resourceMap.get(errorCode).get(lang);
 	}
 	

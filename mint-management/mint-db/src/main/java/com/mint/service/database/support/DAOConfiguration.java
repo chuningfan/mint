@@ -4,6 +4,8 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +14,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+
+import com.mint.common.exception.MintException;
 
 /**
  * DAO 核心组件注入
@@ -23,11 +27,13 @@ import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 @ConditionalOnProperty(prefix = "spring.datasource", value="url")
 public class DAOConfiguration {
 	
+	private static final Logger LOG = LoggerFactory.getLogger(DAOConfiguration.class);
+	
 	@Autowired
 	private Environment environment;
 	
 	@Bean
-    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) {
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource dataSource) throws MintException {
         try {
              LocalContainerEntityManagerFactoryBean localContainerEntityManagerFactoryBean = new LocalContainerEntityManagerFactoryBean();
              localContainerEntityManagerFactoryBean.setDataSource(dataSource);
@@ -42,8 +48,9 @@ public class DAOConfiguration {
              localContainerEntityManagerFactoryBean.setJpaVendorAdapter(jpaVendorAdapter);
              return localContainerEntityManagerFactoryBean;
         } catch (Exception e) {
+        	LOG.error(e.getMessage());
+        	return new LocalContainerEntityManagerFactoryBean();
         }
-        return new LocalContainerEntityManagerFactoryBean();
     }
 	
 	@Bean

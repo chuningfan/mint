@@ -11,13 +11,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.mint.common.context.UserContext;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.common.utils.HttpUtil;
 import com.mint.service.cache.exception.LocalCacheException;
 import com.mint.service.cache.support.CacheOperator;
 import com.mint.service.cache.support.local.LocalCacheFactory;
 import com.mint.service.cache.support.local.LocalCacheType;
 import com.mint.service.cache.support.redis.RedisHelper;
-import com.mint.service.security.exception.ViciousRequestException;
 
 public class BlackListConcierge {
 
@@ -44,14 +45,14 @@ public class BlackListConcierge {
 	}
 	
 	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws ViciousRequestException, Exception {
+			throws MintException {
 		String ip = HttpUtil.getIpAddress(req);
 		String reqURI = req.getRequestURI();
 		String cacheKey = new StringBuilder(ip).append(reqURI).toString();
 		Set<Object> viciousIpSet = redisHelper.sGet(rdsSetKey);
 		if (!CollectionUtils.isEmpty(viciousIpSet)) {
 			if (redisHelper.sHasKey(rdsSetKey, ip)) {
-				throw new ViciousRequestException();
+				throw MintException.getException(Error.VICOUS_REQ_ERROR, null, null);
 			}
 		}
 		boolean flag = cache.getByKey(cacheKey) == null ? false : (boolean) cache.getByKey(cacheKey);
@@ -59,7 +60,7 @@ public class BlackListConcierge {
 			cache.store(cacheKey, true, null, null);
 		} else {
 			redisHelper.sSet(rdsSetKey, ip);
-			throw new ViciousRequestException();
+			throw MintException.getException(Error.VICOUS_REQ_ERROR, null, null);
 		}
 	}
 	

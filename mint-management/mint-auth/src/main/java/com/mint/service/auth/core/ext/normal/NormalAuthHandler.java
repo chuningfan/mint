@@ -1,7 +1,5 @@
 package com.mint.service.auth.core.ext.normal;
 
-import java.io.UnsupportedEncodingException;
-import java.security.NoSuchAlgorithmException;
 import java.util.concurrent.TimeUnit;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,9 +13,10 @@ import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
 import com.mint.common.enums.LoginType;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.auth.core.AuthHandler;
-import com.mint.service.auth.exception.AuthException;
 import com.mint.service.auth.utils.CookieTool;
 import com.mint.service.cache.support.redis.RedisHelper;
 import com.mint.service.context.ServiceContext;
@@ -48,15 +47,19 @@ public class NormalAuthHandler extends AuthHandler {
 	private String expireSc;
 	
 	@Override
-	protected boolean doReg(Object... data) {
-		String username = data[0].toString();
-		String password = data[1].toString();
-		AuthOperationService aoh = rpcHandler.get(AuthOperationService.class);
-		CredentialFormData formData = new CredentialFormData();
-		formData.setUsername(username);
-		formData.setPassword(password);
-		aoh.doReg(formData);
-		return true;
+	protected boolean doReg(Object... data) throws MintException {
+		try {
+			String username = data[0].toString();
+			String password = data[1].toString();
+			AuthOperationService aoh = rpcHandler.get(AuthOperationService.class);
+			CredentialFormData formData = new CredentialFormData();
+			formData.setUsername(username);
+			formData.setPassword(password);
+			aoh.doReg(formData);
+			return true;
+		} catch (Exception e) {
+			throw MintException.getException(e, null);
+		}
 	}
 
 	@Override
@@ -66,7 +69,7 @@ public class NormalAuthHandler extends AuthHandler {
 	}
 
 	@Override
-	protected boolean doLogin(Object... data) throws AuthException {
+	protected boolean doLogin(Object... data) throws MintException {
 		HttpServletRequest req = (HttpServletRequest) data[0];
 		UserContext context;
 		try {
@@ -75,6 +78,7 @@ public class NormalAuthHandler extends AuthHandler {
 				return true;
 			}
 		} catch (Exception e1) {
+			throw MintException.getException(e1, null);
 		}
 		HttpServletResponse resp = (HttpServletResponse) data[1];
 		String username = data[2].toString();
@@ -86,7 +90,7 @@ public class NormalAuthHandler extends AuthHandler {
 		formData.setLoginType(LoginType.NORMAL);
 		context = aos.doLogin(formData);
 		if (context == null) {
-			return false;
+			throw MintException.getException(Error.INVALID_CONTEXT_ERROR, null, null);
 		}
 		try {
 			String token = cookieTool.newCookie(resp, UserContextKeys.USER_CONTEXT, context.getAccountId().toString());
@@ -96,8 +100,8 @@ public class NormalAuthHandler extends AuthHandler {
 			context.setExpirationPeriodMs(expireSeconds * 1000);
 			redisHelper.store(context.getAccountId().toString(), context, expireSeconds, TimeUnit.SECONDS);
 			return true;
-		} catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
-			return false;
+		} catch (Exception e) {
+			throw MintException.getException(e, null);
 		}
 	}
 

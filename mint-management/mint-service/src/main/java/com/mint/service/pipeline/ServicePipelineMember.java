@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.mint.common.context.UserContext;
-import com.mint.service.exception.MintServiceException;
+import com.mint.common.exception.MintException;
 
 /**
  * 
@@ -20,6 +20,6 @@ public interface ServicePipelineMember {
 	 */
 	String id();
 	
-	void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context) throws MintServiceException;
+	void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context) throws MintException;
 	
 }

@@ -11,10 +11,10 @@ import org.springframework.web.client.RestTemplate;
 
 import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.UserContext;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.common.utils.HttpUtil;
-import com.mint.service.exception.MintServiceException;
 import com.mint.service.pipeline.ServicePipelineMember;
-import com.mint.service.security.exception.ViciousRequestException;
 import com.mint.service.security.guard.BlackListConcierge;
 
 
@@ -40,12 +40,13 @@ public class BlackListValidation implements ServicePipelineMember {
 
 	@Override
 	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws MintServiceException {
+			throws MintException {
 		try {
 			blackListConcierge.validate(req, resp, context);
 		} catch (Throwable e) {
+			MintException exc = (MintException) e;
 			String ip = HttpUtil.getIpAddress(req);
-			if (e instanceof ViciousRequestException) {
+			if (exc.getErrorCode() == Error.VICOUS_REQ_ERROR.getCode()) {
 				if (context != null) {
 					LOG.error("received vicious request from {}", ip);
 					// TODO lock user
@@ -55,7 +56,7 @@ public class BlackListValidation implements ServicePipelineMember {
 			} else {
 				LOG.error("When filtering black list, an error was encountered {}.", e.getMessage());
 			}
-			throw new  MintServiceException(e);
+			throw MintException.getException(e, null);
 		}		
 	}
 

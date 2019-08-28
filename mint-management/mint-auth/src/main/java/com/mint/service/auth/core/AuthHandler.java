@@ -1,12 +1,12 @@
 package com.mint.service.auth.core;
 
 import com.mint.common.enums.LoginType;
+import com.mint.common.exception.MintException;
 import com.mint.service.auth.enums.Action;
-import com.mint.service.auth.exception.AuthException;
 
 public abstract class AuthHandler {
 
-	public boolean route(Action action, Object...data) throws AuthException {
+	public boolean route(Action action, Object...data) throws MintException {
 		if (action == null) {
 			throw new IllegalArgumentException();
 		}
@@ -40,7 +40,7 @@ public abstract class AuthHandler {
 	
 	protected abstract boolean reg(Object...data);
 	
-	protected abstract boolean doLogin(Object...data) throws AuthException;
+	protected abstract boolean doLogin(Object...data) throws MintException;
 	
 	protected abstract boolean login(Object...data);
 	

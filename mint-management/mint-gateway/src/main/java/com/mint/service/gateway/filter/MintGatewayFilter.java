@@ -11,9 +11,10 @@ import org.springframework.context.annotation.Configuration;
 
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
-import com.mint.service.gateway.exception.GatewayException;
 import com.mint.service.pipeline.pre.AuthValidator;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -37,7 +38,7 @@ public class MintGatewayFilter extends ZuulFilter {
 	public MintGatewayFilter() {
 		this.wrapper = CommonServiceLoader.getSingleService(ContextWrapper.class, ServiceContext.beanFactory);
 		if (wrapper == null) {
-			new GatewayException("No context wrapper was found!");
+			MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
 		}
 		authValidator = new AuthValidator();
 	}

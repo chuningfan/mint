@@ -39,6 +39,8 @@ public class ErrorMessageProviderForCN implements ErrorMessageProvider  {
 			return "未找到方法实现";
 		case -11: //UNSUPPORTED_ERROR
 			return "不支持当前操作";
+		case -12: //ROLE_DISALLOWED_ERROR
+			return "非法角色";
 		default: //UNKNOWN_ERROR
 			return "未知错误";
 		}

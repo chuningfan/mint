@@ -17,12 +17,12 @@ public class MintException extends RuntimeException {
 	
 	public static MintException getException(Error error, Lang lang, Throwable e) {
 		lang = lang == null ? Lang.US : lang;
-		return new MintException(error, lang, e, e.getMessage());
+		return new MintException(error, lang, e, e == null ? null : e.getMessage());
 	}
 	
 	public static MintException getException(Throwable e, Lang lang) {
 		lang = lang == null ? Lang.US : lang;
-		return new MintException(Error.INTER_ERROR, lang, e, e.getMessage());
+		return new MintException(Error.INTER_ERROR, lang, e, e == null ? null : e.getMessage());
 	}
 
 	public int getErrorCode() {

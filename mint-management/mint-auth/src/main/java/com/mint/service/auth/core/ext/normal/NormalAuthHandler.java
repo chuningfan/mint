@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.UserContext;
+import com.mint.common.dto.web.WebResponse;
 import com.mint.common.enums.LoginType;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
@@ -47,7 +48,7 @@ public class NormalAuthHandler extends AuthHandler {
 	private String expireSc;
 	
 	@Override
-	protected boolean doReg(Object... data) throws MintException {
+	protected WebResponse<Boolean> doReg(Object... data) throws MintException {
 		try {
 			String username = data[0].toString();
 			String password = data[1].toString();
@@ -55,27 +56,26 @@ public class NormalAuthHandler extends AuthHandler {
 			CredentialFormData formData = new CredentialFormData();
 			formData.setUsername(username);
 			formData.setPassword(password);
-			aoh.doReg(formData);
-			return true;
+			return aoh.doReg(formData);
 		} catch (Exception e) {
 			throw MintException.getException(e, null);
 		}
 	}
 
 	@Override
-	protected boolean reg(Object... data) {
+	protected WebResponse<Boolean> reg(Object... data) {
 		
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean doLogin(Object... data) throws MintException {
+	protected WebResponse<Boolean> doLogin(Object... data) throws MintException {
 		HttpServletRequest req = (HttpServletRequest) data[0];
 		UserContext context;
 		try {
 			context = contextWrapper.getFromReq(req);
 			if (context != null) {
-				return true;
+				return new WebResponse<Boolean>(true);
 			}
 		} catch (Exception e1) {
 			throw MintException.getException(e1, null);
@@ -88,7 +88,7 @@ public class NormalAuthHandler extends AuthHandler {
 		formData.setUsername(username);
 		formData.setPassword(password);
 		formData.setLoginType(LoginType.NORMAL);
-		context = aos.doLogin(formData);
+		context = aos.doLogin(formData).getData();
 		if (context == null) {
 			throw MintException.getException(Error.INVALID_CONTEXT_ERROR, null, null);
 		}
@@ -99,54 +99,54 @@ public class NormalAuthHandler extends AuthHandler {
 			Long expireSeconds = Long.valueOf(expireSc);
 			context.setExpirationPeriodMs(expireSeconds * 1000);
 			redisHelper.store(context.getAccountId().toString(), context, expireSeconds, TimeUnit.SECONDS);
-			return true;
+			return new WebResponse<Boolean>(true);
 		} catch (Exception e) {
 			throw MintException.getException(e, null);
 		}
 	}
 
 	@Override
-	protected boolean login(Object... data) {
+	protected WebResponse<Boolean> login(Object... data) {
 		
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean logout(Object... data) {
+	protected WebResponse<Boolean> logout(Object... data) {
 		
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean doUpdatePwd(Object... data) {
+	protected WebResponse<Boolean> doUpdatePwd(Object... data) {
 		String username = data[0].toString();
 		String password = data[1].toString();
 		String oldPassword = data[2].toString();
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean updatePwd(Object... data) {
+	protected WebResponse<Boolean> updatePwd(Object... data) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean doGetBackPwd(Object... data) {
+	protected WebResponse<Boolean> doGetBackPwd(Object... data) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean getBackPwd(Object... data) {
+	protected WebResponse<Boolean> getBackPwd(Object... data) {
 		// TODO Auto-generated method stub
-		return false;
+		return null;
 	}
 
 	@Override
-	protected boolean checkDuplicateUserName(Object... data) {
+	protected WebResponse<Boolean> checkDuplicateUserName(Object... data) {
 		String username = data[0].toString();
-		return false;
+		return null;
 	}
 	
 	@Override

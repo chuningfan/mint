@@ -41,6 +41,8 @@ public class ErrorMessageProviderForUS implements ErrorMessageProvider {
 			return "Unsupported operation";
 		case -12: //ROLE_DISALLOWED_ERROR
 			return "Illegal role";
+		case -13: //USER_DUPLICATE_ERROR
+			return "Duplicate username";
 		default: //UNKNOWN_ERROR
 			return "Unknown error";
 		}

@@ -41,6 +41,8 @@ public class ErrorMessageProviderForCN implements ErrorMessageProvider  {
 			return "不支持当前操作";
 		case -12: //ROLE_DISALLOWED_ERROR
 			return "非法角色";
+		case -13: //USER_DUPLICATE_ERROR
+			return "用户重复";
 		default: //UNKNOWN_ERROR
 			return "未知错误";
 		}

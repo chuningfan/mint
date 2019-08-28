@@ -1,12 +1,13 @@
 package com.mint.service.auth.core;
 
+import com.mint.common.dto.web.WebResponse;
 import com.mint.common.enums.LoginType;
 import com.mint.common.exception.MintException;
 import com.mint.service.auth.enums.Action;
 
 public abstract class AuthHandler {
 
-	public boolean route(Action action, Object...data) throws MintException {
+	public WebResponse<Boolean> route(Action action, Object...data) throws MintException {
 		if (action == null) {
 			throw new IllegalArgumentException();
 		}
@@ -32,29 +33,29 @@ public abstract class AuthHandler {
 			return getBackPwd(data);
 		case LOGOUT: 
 			return logout(data);
-		default: return false;
+		default: return new WebResponse<Boolean>(false);
 		}
 	}
 	
-	protected abstract boolean doReg(Object...data);
+	protected abstract WebResponse<Boolean> doReg(Object...data);
 	
-	protected abstract boolean reg(Object...data);
+	protected abstract WebResponse<Boolean> reg(Object...data);
 	
-	protected abstract boolean doLogin(Object...data) throws MintException;
+	protected abstract WebResponse<Boolean> doLogin(Object...data) throws MintException;
 	
-	protected abstract boolean login(Object...data);
+	protected abstract WebResponse<Boolean> login(Object...data);
 	
-	protected abstract boolean logout(Object...data);
+	protected abstract WebResponse<Boolean> logout(Object...data);
 	
-	protected abstract boolean doUpdatePwd(Object...data);
+	protected abstract WebResponse<Boolean> doUpdatePwd(Object...data);
 	
-	protected abstract boolean updatePwd(Object...data);
+	protected abstract WebResponse<Boolean> updatePwd(Object...data);
 	
-	protected abstract boolean doGetBackPwd(Object...data);
+	protected abstract WebResponse<Boolean> doGetBackPwd(Object...data);
 	
-	protected abstract boolean getBackPwd(Object...data);
+	protected abstract WebResponse<Boolean> getBackPwd(Object...data);
 	
-	protected abstract boolean checkDuplicateUserName(Object...data);
+	protected abstract WebResponse<Boolean> checkDuplicateUserName(Object...data);
 
 	public abstract LoginType getLoginType();
 	

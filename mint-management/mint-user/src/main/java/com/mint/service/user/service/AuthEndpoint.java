@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.Sets;
 import com.mint.common.context.UserContext;
+import com.mint.common.dto.web.WebResponse;
+import com.mint.common.exception.Error;
+import com.mint.common.exception.MintException;
 import com.mint.service.security.sault.DigestsUtil;
 import com.mint.service.user.dao.AccountDao;
 import com.mint.service.user.dto.login.LoginFormData;
@@ -35,9 +38,9 @@ public class AuthEndpoint implements AuthOperationService {
 	@PostMapping("/doReg")
 	@Transactional
 	@Override
-	public boolean doReg(@RequestBody CredentialFormData data) {
+	public WebResponse<Boolean> doReg(@RequestBody CredentialFormData data) {
 		if ( 0 < accountDao.findAccountCountByUsername(data.getUsername())) {
-			return false;
+			return new WebResponse<Boolean>(MintException.getException(Error.USER_DUPLICATE_ERROR, null, null));
 		}
 		String username = data.getUsername();
 		String password = data.getPassword();
@@ -45,35 +48,39 @@ public class AuthEndpoint implements AuthOperationService {
 		accountEntity.setUsername(username);
 		accountEntity.setPassword(DigestsUtil.shap(password));
 		accountDao.save(accountEntity);
-		return true;
+		return new WebResponse<Boolean>(true);
 	}
 
 	@PostMapping("/doUpdatePwd")
 	@Transactional
 	@Override
-	public boolean updatePwd(@RequestBody UpdatePwdData data) {
-		accountDao.updatePassword(data.getNewPassword(), data.getUsername(), data.getOldPassword());
-		return true;
+	public WebResponse<Boolean> updatePwd(@RequestBody UpdatePwdData data) {
+		try {
+			accountDao.updatePassword(data.getNewPassword(), data.getUsername(), data.getOldPassword());
+		} catch (Exception e) {
+			return new WebResponse<Boolean>(MintException.getException(Error.INTER_ERROR, null, null));
+		}
+		return new WebResponse<Boolean>(true);
 	}
 
 	@PostMapping("/doLogin")
 	@Transactional
 	@Override
-	public UserContext doLogin(@RequestBody LoginFormData data) {
+	public WebResponse<UserContext> doLogin(@RequestBody LoginFormData data) {
 		AccountEntity account = accountDao.findByCredential(data.getUsername(), DigestsUtil.shap(data.getPassword()));
 		if (account == null) {
-			return null;
+			return new WebResponse<UserContext>(MintException.getException(Error.NO_DATA_FOUND_ERROR, null, null));
 		}
 		UserContext context = new UserContext();
 		context.setAccountId(account.getId());
 		context.setMarketId(account.getBusinessId());
-		return context;
+		return new WebResponse<UserContext>(context);
 	}
 
 	@PostMapping("/doSaveInfo")
 	@Transactional
 	@Override
-	public boolean saveOrUpdateBasicInfo(@RequestBody BasicInfo info) {
+	public WebResponse<Boolean> saveOrUpdateBasicInfo(@RequestBody BasicInfo info) {
 		AccountEntity accountEntity = accountDao.getOne(info.getAccountId());
 		UserEntity user = accountEntity.getUser();
 		if (user == null) {
@@ -97,15 +104,15 @@ public class AuthEndpoint implements AuthOperationService {
 		user.setIdNumber(info.getIdNumber());
 		user.setMobile(info.getMobile());
 		accountDao.save(accountEntity);
-		return false;
+		return new WebResponse<Boolean>(true);
 	}
 
-	@GetMapping("/doTest/{param1}/{param2}")
-	@Override
-	public boolean doTest(@PathVariable(name="param1") String param1, @PathVariable(name="param2") String param2) {
-		System.out.println(param1);
-		System.out.println(param2);
-		return true;
-	}
+//	@GetMapping("/doTest/{param1}/{param2}")
+//	@Override
+//	public boolean doTest(@PathVariable(name="param1") String param1, @PathVariable(name="param2") String param2) {
+//		System.out.println(param1);
+//		System.out.println(param2);
+//		return true;
+//	}
 	
 }

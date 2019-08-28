@@ -1,4 +1,4 @@
-package com.mint.service.response;
+package com.mint.common.dto.web;
 
 import com.mint.common.exception.MintException;
 
@@ -8,6 +8,8 @@ public class WebResponse<T> {
 	
 	private MintException exception;
 
+	public WebResponse() {}
+	
 	public WebResponse(T data) {
 		this.data = data;
 	}

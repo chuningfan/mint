@@ -1,18 +1,24 @@
 package com.mint.common.exception;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MintException extends RuntimeException {
 
 	private static final long serialVersionUID = -3833029340038377442L;
 	
 	private int errorCode;
 	
-	private Throwable e;
+	private Throwable exception;
 	
 	private String msg;
+	
+	MintException() {}
 	
 	private MintException(Error error, Lang lang, Throwable e, String msg) {
 		super(ErrorMessageResource.getMessage(error.getCode(), lang));
 		this.errorCode = error.getCode();
+		this.exception = e;
 	}
 	
 	public static MintException getException(Error error, Lang lang, Throwable e) {
@@ -29,13 +35,12 @@ public class MintException extends RuntimeException {
 		return errorCode;
 	}
 
-	public Throwable getE() {
-		return e;
+	public Throwable getException() {
+		return exception;
 	}
 
-	public MintException setE(Throwable e) {
-		this.e = e;
-		return this;
+	public void setException(Throwable exception) {
+		this.exception = exception;
 	}
 
 	public String getMsg() {

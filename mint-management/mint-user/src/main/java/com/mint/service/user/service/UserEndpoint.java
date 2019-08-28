@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mint.common.dto.web.WebResponse;
 import com.mint.service.user.dto.user.UserInfo;
 
 @RestController
@@ -13,11 +14,11 @@ public class UserEndpoint implements UserService {
 
 	@Override
 	@GetMapping("/user/{userId}")
-	public UserInfo getUser(@PathVariable(name = "userId")Long userId) {
+	public WebResponse<UserInfo> getUser(@PathVariable(name = "userId")Long userId) {
 		UserInfo info = new UserInfo();
 		info.setFamilyName("Cai");
 		info.setGivenName("Xukun");
-		return info;
+		return new WebResponse<UserInfo>(info);
 	}
 
 }

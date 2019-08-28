@@ -22,9 +22,9 @@ private RpcHandler handler;
 	}
 	
 	@GetMapping("/service/test")
-	public @ResponseBody UserInfo test()   {
+	public @ResponseBody UserInfo test() {
 		UserService userService = handler.get(UserService.class);
-		UserInfo info  = userService.getUser(1L);
+		UserInfo info  = userService.getUser(1L).getData();
 		System.out.println(123);
 		return info;
 	}

@@ -8,13 +8,13 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.mint.common.dto.web.WebResponse;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.common.exception.advice.ExceptionDataProcessor;
 import com.mint.common.thread.ThreadPoolExecutor;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
-import com.mint.service.response.WebResponse;
 
 @ControllerAdvice(basePackages="com.mint")
 public class MintExceptionGlobalManager {

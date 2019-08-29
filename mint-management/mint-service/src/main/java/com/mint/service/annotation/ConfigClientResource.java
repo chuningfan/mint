@@ -13,7 +13,7 @@ import org.springframework.core.annotation.AliasFor;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @PropertySource(value = "")
-public @interface EnableConfigClient {
+public @interface ConfigClientResource {
 
 	@AliasFor(annotation = PropertySource.class, attribute = "value")
 	String[] classpathConfigResources();

@@ -17,6 +17,8 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.annotation.AliasFor;
 import org.springframework.retry.annotation.EnableRetry;
 
+import com.mint.common.exception.advice.ExceptionDataProcessor;
+import com.mint.common.exception.advice.ExceptionDataProcessorImpl;
 import com.mint.service.annotation.importer.MintServiceImporter;
 import com.mint.service.metadata.ServiceMetadataProvider;
 
@@ -50,4 +52,6 @@ public @interface MintService {
 	// 取消置顶类的自动装载
 	@AliasFor(annotation=SpringBootApplication.class, attribute="exclude")
 	Class<?>[] noAutoConfigFor() default {};
+	Class<? extends ExceptionDataProcessor> specifiedExceptionDataProcessor() default ExceptionDataProcessorImpl.class;
+	
 }

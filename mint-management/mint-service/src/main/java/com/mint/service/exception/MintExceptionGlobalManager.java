@@ -16,7 +16,12 @@ public class MintExceptionGlobalManager {
 	private ExceptionDataProcessor processor;
 	
 	public MintExceptionGlobalManager() {
-		processor = CommonServiceLoader.getSingleService(ExceptionDataProcessor.class, ServiceContext.beanFactory);
+		processor = CommonServiceLoader
+				.getMultipleServices(ExceptionDataProcessor.class, ServiceContext.beanFactory)
+				.stream()
+				.filter(p -> p.getClass() == ServiceContext.exceptionDataProcessor)
+				.findFirst().get();
+				
 	}
 	
 	@ResponseBody
@@ -28,7 +33,9 @@ public class MintExceptionGlobalManager {
 		} else {
 			exc = (MintException) e;
 		}
-		processor.process(exc);
+		if (processor != null) {
+			processor.process(exc);
+		}
         return new WebResponse<Object>(exc);
     }
 	

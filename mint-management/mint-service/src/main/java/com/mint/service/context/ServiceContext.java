@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
+import com.mint.common.exception.advice.ExceptionDataProcessor;
 import com.mint.service.metadata.ServiceMetadataProvider;
 
 public class ServiceContext {
@@ -27,5 +28,7 @@ public class ServiceContext {
 	public volatile static boolean useServiceDefaultLogInterceptor = true;
 
 	public static Class<? extends ServiceMetadataProvider> metadataProvider = null;
+	
+	public static Class<? extends ExceptionDataProcessor> exceptionDataProcessor = null;
 
 }

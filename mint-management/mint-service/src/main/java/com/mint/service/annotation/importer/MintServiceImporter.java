@@ -13,6 +13,7 @@ import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 
+import com.mint.common.exception.advice.ExceptionDataProcessor;
 import com.mint.service.context.ServiceContext;
 import com.mint.service.interceptor.InterceptorConfiguration;
 import com.mint.service.metadata.ServiceMetadataProvider;
@@ -32,6 +33,7 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 		int readTimeout = (int) attrMap.get("readTimeout");
 		int connectTimeout = (int) attrMap.get("connectTimeout");
 		int longConnectionReadTimeout = (int) attrMap.get("longConnectionReadTimeout");
+		Class<? extends ExceptionDataProcessor> exceptionDataProcessor = (Class<? extends ExceptionDataProcessor>) attrMap.get("specifiedExceptionDataProcessor");
 		// 获取service metadata
 		DefaultListableBeanFactory bf = (DefaultListableBeanFactory) registry;
 		// 赋值ServiceContext
@@ -40,6 +42,7 @@ public class MintServiceImporter implements ImportBeanDefinitionRegistrar {
 		ServiceContext.readTimeout = readTimeout <= 0 ? 30000 : readTimeout;
 		ServiceContext.connectTimeout = connectTimeout <= 0 ? 10000 : connectTimeout;
 		ServiceContext.longConnectionReadTimeout = longConnectionReadTimeout <= 0 ? 180000 : longConnectionReadTimeout;
+		ServiceContext.exceptionDataProcessor = exceptionDataProcessor;
 		try {
 			ServiceContext.serverAddress = InetAddress.getLocalHost().getHostAddress();
 		} catch (UnknownHostException e) {

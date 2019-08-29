@@ -22,18 +22,22 @@ public class CommonServiceLoader {
 		 ServiceLoader<T> loader = ServiceLoader.load(clazz);
 		 Iterator<T> itr = loader.iterator();
 		 T t = null;
-		 while (itr.hasNext()) {
-			 if (t != null) {
-				 throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
-			 }
-			 t = itr.next();
-		 }
 		 if (beanFactory != null) {
 			 try {
 				 t = beanFactory.getBean(clazz);
+				 return t;
 			 } catch (BeansException e) {
-				 throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
+				 LOG.info("No implementation for {} in SPRING container, skip!", clazz.getName());
 			 }
+		 }
+		 while (itr.hasNext()) {
+			 if (t != null) {
+				 throw MintException.getException(Error.UNEXPECT_DATA_ERROR, null, null);
+			 }
+			 t = itr.next();
+		 }
+		 if (t == null) {
+			 throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
 		 }
 		 return t;
 	}

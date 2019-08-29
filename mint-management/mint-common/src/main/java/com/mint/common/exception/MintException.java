@@ -16,14 +16,14 @@ public class MintException extends RuntimeException {
 	MintException() {}
 	
 	private MintException(Error error, Lang lang, Throwable e, String msg) {
-		this.msg = ErrorMessageResource.getMessage(error.getCode(), lang);
+		this.msg = msg;
 		this.errorCode = error.getCode();
 		this.exception = e;
 	}
 	
 	public static MintException getException(Error error, Lang lang, Throwable e) {
 		lang = lang == null ? Lang.US : lang;
-		return new MintException(error, lang, e, e == null ? null : e.getMessage());
+		return new MintException(error, lang, e, ErrorMessageResource.getMessage(error.getCode(), lang));
 	}
 	
 	public static MintException getException(Throwable e, Lang lang) {

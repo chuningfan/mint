@@ -1,13 +1,10 @@
 package com.mint.service.webtest;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import com.mint.service.annotation.EnableConfigClient;
-import com.mint.service.annotation.MintService;
-import com.mint.service.webtest.metadata.WebTestServiceMetadataProvider;
-
-@MintService(metadataProvider = WebTestServiceMetadataProvider.class)
-@EnableConfigClient(classpathConfigResources = "classpath:bootstrap.properties")
+//@MintService(metadataProvider = WebTestServiceMetadataProvider.class)
+@SpringBootApplication
 public class Starter {
 	public static void main(String[] args) {
 		SpringApplication.run(Starter.class, args);

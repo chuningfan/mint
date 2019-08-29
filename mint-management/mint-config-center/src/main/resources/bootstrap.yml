@@ -7,9 +7,9 @@ spring:
     config: 
       label: master 
       server: 
-        default-application-name: @pom.artifactId@
+        default-application-name: mint-config
         git: 
-          uri: https://github.com/chuningfan/mintConfig
-          search-paths: blob
+          uri: https://github.com/chuningfan/mintConfig.git
+          search-paths: config
           username:
           password:

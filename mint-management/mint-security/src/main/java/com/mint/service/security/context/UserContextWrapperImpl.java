@@ -30,9 +30,13 @@ public class UserContextWrapperImpl implements ContextWrapper {
 			}
 		}
 		String userIdStr = ContextCookieUtil.getCookieRealValue(cookieValue);
-		UserContext context = (UserContext) redisHelper.getByKey(userIdStr);
-		if  (context == null) {
-			return null;
+		UserContext context =  null;
+		try {
+			context = (UserContext) redisHelper.getByKey(userIdStr);
+		} catch (Exception e) {
+		}
+		if (context == null) {
+			
 		}
 		autoDelayExpiration(userIdStr, context);
 		return context;

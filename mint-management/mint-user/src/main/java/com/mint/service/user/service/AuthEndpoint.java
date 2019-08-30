@@ -1,9 +1,11 @@
 package com.mint.service.user.service;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,6 +26,7 @@ import com.mint.service.user.dto.reg.BasicInfo;
 import com.mint.service.user.dto.reg.CredentialFormData;
 import com.mint.service.user.entity.AccountEntity;
 import com.mint.service.user.entity.AddressEntity;
+import com.mint.service.user.entity.RoleEntity;
 import com.mint.service.user.entity.UserEntity;
 
 @RestController
@@ -72,6 +75,12 @@ public class AuthEndpoint implements AuthOperationService {
 		UserContext context = new UserContext();
 		context.setAccountId(account.getId());
 		context.setMarketId(account.getBusinessId());
+		Set<RoleEntity> roles = account.getRoles();
+		if (CollectionUtils.isNotEmpty(roles)) {
+			context.setRoleIds(roles.stream().map(RoleEntity::getId).collect(Collectors.toSet()));
+		}
+		context.setAccountTypeId(account.getBusinessId());
+		context.setStatus(account.getStatus());
 		return new WebResponse<UserContext>(context);
 	}
 

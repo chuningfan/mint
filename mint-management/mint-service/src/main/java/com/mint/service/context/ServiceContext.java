@@ -30,5 +30,5 @@ public class ServiceContext {
 	public static Class<? extends ServiceMetadataProvider> metadataProvider = null;
 	
 	public static Class<? extends ExceptionDataProcessor> exceptionDataProcessor = null;
-
+	
 }

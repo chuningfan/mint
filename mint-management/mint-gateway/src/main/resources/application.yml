@@ -30,9 +30,9 @@ eureka:
 # gateway settings
 zuul:
   routes:
-    webtest:
-      path: /webtest/**
-      serviceId: web-test
+    mint-app:
+      path: /**
+      serviceId: mint-app-service
   
 #mint
 mint:

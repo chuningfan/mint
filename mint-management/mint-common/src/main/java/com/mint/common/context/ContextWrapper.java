@@ -14,6 +14,6 @@ public interface ContextWrapper {
 	
 	UserContext getFromReq(HttpServletRequest req) throws Exception;
 	
-	HttpRequest setUserContextIntoRequestHeader(UserContext context, HttpRequest req);
+	void setUserContextIntoRequestHeader(UserContext context, HttpRequest req);
 	
 }

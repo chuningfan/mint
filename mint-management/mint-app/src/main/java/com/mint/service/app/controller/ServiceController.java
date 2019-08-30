@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mint.common.dto.web.WebResponse;
 import com.mint.service.rpc.RpcHandler;
+import com.mint.service.user.dto.user.UserInfo;
 import com.mint.service.user.service.UserService;
 
 @RestController
@@ -17,10 +19,9 @@ public class ServiceController {
 	private RpcHandler rpcHandler;
 	
 	@GetMapping("/getUser/{id}")
-	public void getUser(@PathVariable("id") Long id) {
+	public WebResponse<UserInfo> getUser(@PathVariable("id") Long id) {
 		UserService us = rpcHandler.get(UserService.class);
-		us.getUser(id);
-		System.out.println();
+		return us.getUser(id);
 	}
 	
 }

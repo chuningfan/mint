@@ -20,6 +20,7 @@ public class CookieTool {
 		String token = ContextCookieUtil.createCookieValue(value);
 		Cookie c = new Cookie(key, token);
 		c.setDomain(domain);
+		c.setHttpOnly(true);
 		c.setPath("/");
 		c.setMaxAge(3600 * 24 * 365);
 		resp.addCookie(c);

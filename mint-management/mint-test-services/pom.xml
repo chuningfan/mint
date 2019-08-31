@@ -22,5 +22,6 @@
 	</dependencies>
 	<modules>
 		<module>mint-test-jars</module>
+		<module>mint-test-web</module>
 	</modules>
 </project>

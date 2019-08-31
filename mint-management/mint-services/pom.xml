@@ -16,5 +16,18 @@
   	<module>mint-email-service</module>
   	<module>mint-map-service</module>
   	<module>mint-auth-service</module>
+  	<module>mint-user-service-api</module>
+  	<module>mint-user-service</module>
   </modules>
+  <dependencies>
+  	<dependency>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-web</artifactId>
+	</dependency>
+	<dependency>
+		<groupId>mint</groupId>
+		<artifactId>mint-service</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
+  </dependencies>
 </project>

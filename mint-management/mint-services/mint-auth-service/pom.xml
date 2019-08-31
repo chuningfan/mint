@@ -32,8 +32,8 @@
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>mint</groupId>
-			<artifactId>mint-user-api</artifactId>
+			<groupId>mint-services</groupId>
+			<artifactId>mint-user-service-api</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>

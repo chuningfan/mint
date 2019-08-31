@@ -23,5 +23,6 @@
 	<modules>
 		<module>mint-test-jars</module>
 		<module>mint-test-web</module>
+		<module>mint-test-app</module>
 	</modules>
 </project>

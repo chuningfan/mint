@@ -11,13 +11,7 @@
 		<module>mint-db</module>
 		<module>mint-common</module>
 		<module>mint-cache</module>
-		<module>mint-gateway</module>
-		<module>mint-service-center</module>
 		<module>mint-security</module>
-		<module>mint-auth</module>
-		<module>mint-user</module>
-		<module>mint-user-api</module>
-		<module>mint-config-center</module>
 		<module>mint-services</module>
 		<module>mint-service-infrastructure</module>
 		<module>mint-test-services</module>

@@ -15,5 +15,6 @@
   	<module>mint-comment-service</module>
   	<module>mint-email-service</module>
   	<module>mint-map-service</module>
+  	<module>mint-auth-service</module>
   </modules>
 </project>

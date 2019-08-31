@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.mint.common.constant.UserContextKeys;
-import com.mint.common.context.ContextWrapper;
 import com.mint.common.context.TokenHandler;
 import com.mint.common.context.UserContext;
 import com.mint.common.dto.web.WebResponse;
@@ -38,9 +37,6 @@ public class NormalAuthHandler extends AuthHandler {
 	
 	@Autowired
 	private TokenHandler tokenHandler;
-	
-	@Autowired
-	private ContextWrapper contextWrapper;
 	
 	@Value("${auth.redis.expire.timeSc}")
 	private String expireSc;

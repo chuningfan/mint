@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.mint.service.cache.support.redis.RedisHelper;
 
+@SuppressWarnings("unused")
 public enum RedisDataType {
 	
 	STRING {
@@ -45,7 +46,6 @@ public enum RedisDataType {
 			helper.hmset(key, map);
 		}
 		
-		@SuppressWarnings("unused")
 		public void save(RedisHelper helper, String key, Object mapKey, Object mapValue) {
 			helper.hset(key, mapKey, mapValue);
 		}

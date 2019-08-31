@@ -18,6 +18,7 @@
   	<module>mint-auth-service</module>
   	<module>mint-user-service-api</module>
   	<module>mint-user-service</module>
+  	<module>mint-gateway-service</module>
   </modules>
   <dependencies>
   	<dependency>

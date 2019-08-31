@@ -20,6 +20,7 @@
 		<module>mint-config-center</module>
 		<module>mint-services</module>
 		<module>mint-service-infrastructure</module>
+		<module>mint-test-services</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

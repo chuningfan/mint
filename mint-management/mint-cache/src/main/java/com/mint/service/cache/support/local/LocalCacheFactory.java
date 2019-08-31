@@ -24,7 +24,12 @@ public class LocalCacheFactory  {
 	
 	static {
 		// local cache must be implemented by SPI
-		Collection<LocalCache> caches = CommonServiceLoader.getMultipleServices(LocalCache.class, null);
+		Collection<LocalCache> caches = null;
+		try {
+			caches = CommonServiceLoader.getMultipleServices(LocalCache.class, null);
+		} catch (MintException e) {
+			LOG.info("No customized implementation for LocalCache was found, we will use the default local cache.");
+		}
 		if (caches != null && !caches.isEmpty()) {
 			for (LocalCache c: caches) {
 				if (LocalCacheType.DISK == c.getType()) {

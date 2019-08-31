@@ -10,7 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
-import com.mint.common.context.UserContext;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.common.utils.HttpUtil;
@@ -43,7 +42,7 @@ public class BlackListConcierge {
 		this.redisHelper = redisHelper;
 	}
 	
-	public void validate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
+	public void validate(HttpServletRequest req, HttpServletResponse resp)
 			throws MintException {
 		String ip = HttpUtil.getIpAddress(req);
 		String reqURI = req.getRequestURI();

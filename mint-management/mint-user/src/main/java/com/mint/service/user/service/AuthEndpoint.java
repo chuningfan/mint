@@ -74,13 +74,15 @@ public class AuthEndpoint implements AuthOperationService {
 		}
 		UserContext context = new UserContext();
 		context.setAccountId(account.getId());
-		context.setMarketId(account.getBusinessId());
-		Set<RoleEntity> roles = account.getRoles();
-		if (CollectionUtils.isNotEmpty(roles)) {
-			context.setRoleIds(roles.stream().map(RoleEntity::getId).collect(Collectors.toSet()));
+		context.setBusinessId(account.getBusinessId());
+		if (CollectionUtils.isNotEmpty(account.getRoles())) {
+			context.setRoleIds(account.getRoles().stream()
+					.map(RoleEntity::getId).collect(Collectors.toSet()));
 		}
-		context.setAccountTypeId(account.getBusinessId());
-		context.setStatus(account.getStatus());
+		if (account.getUser() != null) {
+			context.setFamilyName(account.getUser().getFamilyName());
+			context.setGivenName(account.getUser().getGivenName());
+		}
 		return new WebResponse<UserContext>(context);
 	}
 

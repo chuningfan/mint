@@ -7,47 +7,46 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 
-import com.mint.common.context.UserContext;
-import com.mint.common.context.UserContextThreadLocal;
+import com.mint.common.context.TokenThreadLocal;
 
 public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor {
 	
-	private UserContext context;
+	private String token;
 	
 	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			BlockingQueue<Runnable> workQueue) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue);
-		context = UserContextThreadLocal.get();
+		token = TokenThreadLocal.get();
 	}
 
 	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			BlockingQueue<Runnable> workQueue, RejectedExecutionHandler handler) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
-		context = UserContextThreadLocal.get();
+		token = TokenThreadLocal.get();
 	}
 
 	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory, RejectedExecutionHandler handler) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory, handler);
-		context = UserContextThreadLocal.get();
+		token = TokenThreadLocal.get();
 	}
 
 	public ThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit,
 			BlockingQueue<Runnable> workQueue, ThreadFactory threadFactory) {
 		super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
-		context = UserContextThreadLocal.get();
+		token = TokenThreadLocal.get();
 	}
 	
-	private void setContextForCurrentThread() {
-		if (context != null) {
-			UserContextThreadLocal.set(context);
+	private void setAccountIdForCurrentThread() {
+		if (token != null) {
+			TokenThreadLocal.set(token);
 		}
 	}
 	
 	@Override
 	public void execute(Runnable runnable) {
 		super.execute(() -> {
-			setContextForCurrentThread();
+			setAccountIdForCurrentThread();
 			runnable.run();
 		});
 	}
@@ -55,7 +54,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 	@Override
 	public Future<?> submit(Runnable runnable) {
 		return super.submit(() -> {
-			setContextForCurrentThread();
+			setAccountIdForCurrentThread();
 			runnable.run();
 		});
 	}
@@ -65,7 +64,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 		return super.submit(new Callable<T>() {
 			@Override
 			public T call() throws Exception {
-				setContextForCurrentThread();
+				setAccountIdForCurrentThread();
 				return task.call();
 			}
 		});
@@ -74,7 +73,7 @@ public class ThreadPoolExecutor extends java.util.concurrent.ThreadPoolExecutor 
 	@Override
 	public <T> Future<T> submit(Runnable runnable, T result) {
 		return super.submit(() -> {
-			setContextForCurrentThread();
+			setAccountIdForCurrentThread();
 			runnable.run();
 		}, result);
 	}

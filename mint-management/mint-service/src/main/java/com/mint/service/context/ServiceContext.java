@@ -2,14 +2,15 @@ package com.mint.service.context;
 
 import java.util.List;
 
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.beans.factory.ListableBeanFactory;
 
 import com.mint.common.exception.advice.ExceptionDataProcessor;
 import com.mint.service.metadata.ServiceMetadataProvider;
 
 public class ServiceContext {
 
-	public static DefaultListableBeanFactory beanFactory;
+	public static ListableBeanFactory beanFactory;
 
 	public volatile static String id;
 

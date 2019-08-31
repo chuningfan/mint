@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mint.common.context.UserContextThreadLocal;
+import com.mint.common.context.TokenThreadLocal;
 import com.mint.common.exception.MintException;
 
 @RequestMapping("/page")
@@ -33,7 +33,7 @@ public class PageController {
 	}
 
 	private boolean hasLogged() {
-		return UserContextThreadLocal.get() != null;
+		return TokenThreadLocal.get() != null;
 	}
 	
 }

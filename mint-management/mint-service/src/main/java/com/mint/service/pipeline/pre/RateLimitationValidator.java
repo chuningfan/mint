@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.common.util.concurrent.RateLimiter;
-import com.mint.common.context.UserContext;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.service.pipeline.ServicePipelineMember;
@@ -16,7 +15,7 @@ import com.mint.service.pipeline.ServicePipelineMember;
  * @author ningfanchu
  *
  */
-public class RateLimitationValidator implements ServicePipelineMember {
+public class RateLimitationValidator implements ServicePipelineMember<String> {
 
 	public static final String ID = "mint-service-ratelimitation";
 	
@@ -69,8 +68,7 @@ public class RateLimitationValidator implements ServicePipelineMember {
 	}
 
 	@Override
-	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws MintException {
+	public void doValidate(HttpServletRequest req, HttpServletResponse resp, String t) throws MintException {
 		if (!limiter.tryAcquire(timeout, TimeUnit.MILLISECONDS)) {
 			if (retryTime == 0) {
 				throw MintException.getException(Error.UNSUPPORTED_ERROR, null, null);

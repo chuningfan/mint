@@ -8,6 +8,8 @@ public class ServiceMetaData {
 	
 	private List<Long> supportedRoleIds;
 	
+	private String serviceIp;
+	
 	public String getServiceId() {
 		return serviceId;
 	}
@@ -22,6 +24,14 @@ public class ServiceMetaData {
 
 	public void setSupportedRoleIds(List<Long> supportedRoleIds) {
 		this.supportedRoleIds = supportedRoleIds;
+	}
+
+	public String getServiceIp() {
+		return serviceIp;
+	}
+
+	public void setServiceIp(String serviceIp) {
+		this.serviceIp = serviceIp;
 	}
 	
 }

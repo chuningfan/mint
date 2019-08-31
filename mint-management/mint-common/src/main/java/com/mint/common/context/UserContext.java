@@ -3,35 +3,30 @@ package com.mint.common.context;
 import java.io.Serializable;
 import java.util.Set;
 
-import com.mint.common.enums.AccountStatus;
-import com.mint.common.enums.LoginType;
-
 public class UserContext implements Serializable {
-	
+
 	private static final long serialVersionUID = -7630251658711933733L;
 	// 操作者ID
 	private Long accountId;
 	// 操作者角色ID集合
 	private Set<Long> roleIds;
-	// 描述
-	private String description;
 	// 上次登录时间
 	private long prevLoginTime;
-	// 令牌码（暂定）
-	private String token;
-	// 顶层业务分类ID
-	private Long marketId;
-	// 操作者分类ID（consumer or agency）
-	private Long accountTypeId;
-	// 所属机构ID（agency公司）
-	private Long orgId;
-	// 登录途径
-	private LoginType loginType;
-	// 用户限制
-	private AccountStatus status;
-
+	// cookie域
+	private String cookieDomain;
+	// 过期周期
 	private long expirationPeriodMs;
 	
+	private Long businessId;
+	
+	private String givenName;
+	
+	private String familyName;
+	
+	private String email;
+	
+	private String fromIP;
+
 	public Long getAccountId() {
 		return accountId;
 	}
@@ -48,14 +43,6 @@ public class UserContext implements Serializable {
 		this.roleIds = roleIds;
 	}
 
-	public String getDescription() {
-		return description;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
 	public long getPrevLoginTime() {
 		return prevLoginTime;
 	}
@@ -64,52 +51,12 @@ public class UserContext implements Serializable {
 		this.prevLoginTime = prevLoginTime;
 	}
 
-	public String getToken() {
-		return token;
+	public String getCookieDomain() {
+		return cookieDomain;
 	}
 
-	public void setToken(String token) {
-		this.token = token;
-	}
-
-	public Long getMarketId() {
-		return marketId;
-	}
-
-	public void setMarketId(Long marketId) {
-		this.marketId = marketId;
-	}
-
-	public Long getAccountTypeId() {
-		return accountTypeId;
-	}
-
-	public void setAccountTypeId(Long accountTypeId) {
-		this.accountTypeId = accountTypeId;
-	}
-
-	public Long getOrgId() {
-		return orgId;
-	}
-
-	public void setOrgId(Long orgId) {
-		this.orgId = orgId;
-	}
-
-	public LoginType getLoginType() {
-		return loginType;
-	}
-
-	public void setLoginType(LoginType loginType) {
-		this.loginType = loginType;
-	}
-
-	public AccountStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(AccountStatus status) {
-		this.status = status;
+	public void setCookieDomain(String cookieDomain) {
+		this.cookieDomain = cookieDomain;
 	}
 
 	public long getExpirationPeriodMs() {
@@ -120,4 +67,50 @@ public class UserContext implements Serializable {
 		this.expirationPeriodMs = expirationPeriodMs;
 	}
 
+	public Long getBusinessId() {
+		return businessId;
+	}
+
+	public void setBusinessId(Long businessId) {
+		this.businessId = businessId;
+	}
+
+	public String getGivenName() {
+		return givenName;
+	}
+
+	public void setGivenName(String givenName) {
+		this.givenName = givenName;
+	}
+
+	public String getFamilyName() {
+		return familyName;
+	}
+
+	public void setFamilyName(String familyName) {
+		this.familyName = familyName;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFromIP() {
+		return fromIP;
+	}
+
+	public void setFromIP(String fromIP) {
+		this.fromIP = fromIP;
+	}
+
+	public static UserContext fromLite(LiteUserContext lc) {
+		UserContext context = new UserContext();
+		context.setAccountId(lc.getAccountId());
+		return context;
+	}
+	
 }

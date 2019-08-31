@@ -10,7 +10,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.beans.factory.ListableBeanFactory;
 
 import com.google.common.collect.Maps;
 import com.mint.common.exception.Error;
@@ -21,7 +21,7 @@ public class CommonServiceLoader {
 	private static final Logger LOG = LoggerFactory.getLogger(CommonServiceLoader.class);
 	
 	public static <T> T getSingleService(Class<T> clazz, 
-			DefaultListableBeanFactory beanFactory) throws MintException {
+			ListableBeanFactory beanFactory) throws MintException {
 		 ServiceLoader<T> loader = ServiceLoader.load(clazz);
 		 Iterator<T> itr = loader.iterator();
 		 T t = null;
@@ -47,7 +47,7 @@ public class CommonServiceLoader {
 	
 	@SuppressWarnings("unchecked")
 	public static <T> Collection<T> getMultipleServices(Class<T> clazz, 
-			DefaultListableBeanFactory beanFactory) throws MintException {
+			ListableBeanFactory beanFactory) throws MintException {
 		// process spring beans
 		Map<Class<? extends T>, T> collectedMap = Maps.newHashMap();
 		if (beanFactory != null) {

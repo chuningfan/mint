@@ -5,32 +5,30 @@ import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.mint.common.constant.UserContextKeys;
 import com.mint.common.context.ContextWrapper;
+import com.mint.common.context.TokenHandler;
 import com.mint.common.context.UserContext;
 import com.mint.common.dto.web.WebResponse;
 import com.mint.common.enums.LoginType;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
-import com.mint.common.utils.CommonServiceLoader;
+import com.mint.common.utils.HttpUtil;
 import com.mint.service.auth.core.AuthHandler;
-import com.mint.service.auth.utils.CookieTool;
 import com.mint.service.cache.support.redis.RedisHelper;
-import com.mint.service.context.ServiceContext;
 import com.mint.service.rpc.RpcHandler;
+import com.mint.service.security.token.TokenResolverImpl;
 import com.mint.service.user.dto.login.LoginFormData;
 import com.mint.service.user.dto.reg.CredentialFormData;
 import com.mint.service.user.service.AuthOperationService;
 
 @Component
 public class NormalAuthHandler extends AuthHandler {
-
-	@Autowired
-	private CookieTool cookieTool;
 	
 	@Autowired
 	private RpcHandler rpcHandler;
@@ -38,14 +36,17 @@ public class NormalAuthHandler extends AuthHandler {
 	@Autowired
 	private RedisHelper redisHelper;
 	
-	private final ContextWrapper contextWrapper;
+	@Autowired
+	private TokenHandler tokenHandler;
 	
-	public NormalAuthHandler() {
-		contextWrapper = CommonServiceLoader.getSingleService(ContextWrapper.class, ServiceContext.beanFactory);
-	}
+	@Autowired
+	private ContextWrapper contextWrapper;
 	
 	@Value("${auth.redis.expire.timeSc}")
 	private String expireSc;
+	
+	@Value("${auth.cookie.domain}")
+	private String domain;
 	
 	@Override
 	protected WebResponse<Boolean> doReg(Object... data) throws MintException {
@@ -71,10 +72,13 @@ public class NormalAuthHandler extends AuthHandler {
 	@Override
 	protected WebResponse<Boolean> doLogin(Object... data) throws MintException {
 		HttpServletRequest req = (HttpServletRequest) data[0];
+		String token = HttpUtil.getCookieValue(req, UserContextKeys.USER_CONTEXT);
+		if (StringUtils.isEmpty(token)) {
+			token = req.getHeader(UserContextKeys.USER_CONTEXT);
+		}
 		UserContext context;
 		try {
-			context = contextWrapper.getFromReq(req);
-			if (context != null) {
+			if (StringUtils.isNotBlank(token) && tokenHandler.validate(token)) {
 				return new WebResponse<Boolean>(true);
 			}
 		} catch (Exception e1) {
@@ -93,11 +97,14 @@ public class NormalAuthHandler extends AuthHandler {
 			throw MintException.getException(Error.INVALID_CONTEXT_ERROR, null, null);
 		}
 		try {
-			String token = cookieTool.newCookie(resp, UserContextKeys.USER_CONTEXT, context.getAccountId().toString());
-			context.setToken(token);
-			context.setPrevLoginTime(System.currentTimeMillis());
 			Long expireSeconds = Long.valueOf(expireSc);
-			context.setExpirationPeriodMs(expireSeconds * 1000);
+			context.setPrevLoginTime(System.currentTimeMillis());
+			context.setCookieDomain(domain);
+			context.setExpirationPeriodMs(expireSeconds);
+			context.setFromIP(HttpUtil.getIpAddress(req));
+			token = tokenHandler.create(context, expireSeconds * 1000, TimeUnit.MILLISECONDS);
+			TokenResolverImpl.newCookie(resp, UserContextKeys.USER_CONTEXT, token, domain);
+//			contextWrapper.storeIntoCache(context.getAccountId().toString(), context);
 			redisHelper.store(context.getAccountId().toString(), context, expireSeconds, TimeUnit.SECONDS);
 			return new WebResponse<Boolean>(true);
 		} catch (Exception e) {
@@ -119,9 +126,7 @@ public class NormalAuthHandler extends AuthHandler {
 
 	@Override
 	protected WebResponse<Boolean> doUpdatePwd(Object... data) {
-		String username = data[0].toString();
-		String password = data[1].toString();
-		String oldPassword = data[2].toString();
+		
 		return null;
 	}
 
@@ -145,7 +150,6 @@ public class NormalAuthHandler extends AuthHandler {
 
 	@Override
 	protected WebResponse<Boolean> checkDuplicateUserName(Object... data) {
-		String username = data[0].toString();
 		return null;
 	}
 	

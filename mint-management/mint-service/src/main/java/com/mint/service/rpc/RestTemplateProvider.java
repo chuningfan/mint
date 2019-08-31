@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +25,8 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
-import com.mint.common.context.ContextWrapper;
-import com.mint.common.context.UserContext;
-import com.mint.common.context.UserContextThreadLocal;
-import com.mint.common.utils.CommonServiceLoader;
+import com.mint.common.context.TokenResolver;
+import com.mint.common.context.TokenThreadLocal;
 import com.mint.service.context.ServiceContext;
 
 /**
@@ -39,14 +38,11 @@ import com.mint.service.context.ServiceContext;
 @Configuration
 public class RestTemplateProvider {
 	
-	private final ContextWrapper wrapper;
+	@Autowired
+	private TokenResolver tokenResolver;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
-	
-	public RestTemplateProvider() {
-		wrapper = CommonServiceLoader.getSingleService(ContextWrapper.class, ServiceContext.beanFactory);
-	}
 	
 	@Bean
 	@LoadBalanced
@@ -71,9 +67,9 @@ public class RestTemplateProvider {
 			@Override
 			public ClientHttpResponse intercept(HttpRequest req, byte[] body, ClientHttpRequestExecution exe)
 					throws IOException {
-				UserContext context = UserContextThreadLocal.get();
-				if (context != null) {
-					wrapper.setUserContextIntoRequestHeader(context, req);
+				String token = TokenThreadLocal.get();
+				if (StringUtils.isNotBlank(token)) {
+					tokenResolver.setTokenToRequestHeader(token, req);
 				}
 				return exe.execute(req, body);
 			}

@@ -3,14 +3,11 @@ package com.mint.service.gateway.filter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.client.RestTemplate;
 
 import com.mint.common.constant.UserContextKeys;
-import com.mint.common.context.UserContext;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.common.utils.HttpUtil;
@@ -18,7 +15,7 @@ import com.mint.service.pipeline.ServicePipelineMember;
 import com.mint.service.security.guard.BlackListConcierge;
 
 
-public class BlackListValidation implements ServicePipelineMember {
+public class BlackListValidation implements ServicePipelineMember<String> {
 
 	private static final Logger LOG = LoggerFactory.getLogger(BlackListValidation.class);
 	
@@ -30,27 +27,22 @@ public class BlackListValidation implements ServicePipelineMember {
 		this.blackListConcierge = blackListConcierge;
 	}
 	
-	@Autowired
-	private RestTemplate restTemplate;
-	
 	@Override
 	public String id() {
 		return ID;
 	}
 
 	@Override
-	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws MintException {
+	public void doValidate(HttpServletRequest req, HttpServletResponse resp, String token) throws MintException {
 		try {
-			blackListConcierge.validate(req, resp, context);
+			blackListConcierge.validate(req, resp);
 		} catch (Throwable e) {
 			MintException exc = (MintException) e;
 			String ip = HttpUtil.getIpAddress(req);
 			if (exc.getErrorCode() == Error.VICOUS_REQ_ERROR.getCode()) {
-				if (context != null) {
+				if (StringUtils.isNoneBlank(token)) {
 					LOG.error("received vicious request from {}", ip);
 					// TODO lock user
-					restTemplate.postForEntity("http://user-service/service/lock", context.getAccountId(), HttpStatus.class);
 					HttpUtil.deleteCookiesByKey(req, resp, UserContextKeys.USER_CONTEXT);
 				}
 			} else {

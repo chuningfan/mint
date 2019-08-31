@@ -1,19 +1,11 @@
 package com.mint.common.context;
 
-import javax.servlet.http.HttpServletRequest;
-
-import org.springframework.http.HttpRequest;
-
-/**
- * SPI 接口，外部实现context 获取方法。
- * 
- * @author ningfanchu
- *
- */
 public interface ContextWrapper {
+
+	void storeIntoCache(String key, UserContext context) throws Exception;
 	
-	UserContext getFromReq(HttpServletRequest req) throws Exception;
-	
-	void setUserContextIntoRequestHeader(UserContext context, HttpRequest req);
+	void deleteFromCache(String...keys) throws Exception;
+
+	boolean validate(String key);
 	
 }

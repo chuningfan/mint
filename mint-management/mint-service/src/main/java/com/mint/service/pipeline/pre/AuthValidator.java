@@ -1,32 +1,28 @@
 package com.mint.service.pipeline.pre;
 
-import java.util.Set;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
-import com.google.common.base.Joiner;
-import com.mint.common.context.ContextWrapper;
-import com.mint.common.context.UserContext;
+import com.mint.common.context.TokenHandler;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.common.utils.CommonServiceLoader;
 import com.mint.service.context.ServiceContext;
 import com.mint.service.pipeline.ServicePipelineMember;
 
-public class AuthValidator implements ServicePipelineMember {
+public class AuthValidator implements ServicePipelineMember<String> {
 
 	public static final String KEY = "/service/";
 	
 	public static final String ID = "auth-validator";
 	
-	private final ContextWrapper wrapper;
+	private final TokenHandler tokenHandler;
 	
 	public AuthValidator() {
-		wrapper = CommonServiceLoader.getSingleService(ContextWrapper.class, ServiceContext.beanFactory);
-		if (wrapper == null) {
+		tokenHandler = CommonServiceLoader.getSingleService(TokenHandler.class, ServiceContext.beanFactory);
+		if (tokenHandler == null) {
 			throw MintException.getException(Error.IMPLEMENTATION_NOT_FOUND_ERROR, null, null);
 		}
 	}
@@ -38,32 +34,13 @@ public class AuthValidator implements ServicePipelineMember {
 
 
 	@Override
-	public void doValidate(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws MintException {
+	public void doValidate(HttpServletRequest req, HttpServletResponse resp, String t) throws MintException {
 		String uri = req.getRequestURI();
 		if (!uri.contains(KEY)) {
 			return;
 		}
-		if (context == null) {
+		if (StringUtils.isEmpty(t) || !tokenHandler.validate(t)) {
 			throw MintException.getException(Error.INVALID_CONTEXT_ERROR, null, null);
-		}
-		roleValidation(req, resp, context);
-	}
-
-	private void roleValidation(HttpServletRequest req, HttpServletResponse resp, UserContext context)
-			throws MintException {
-		if (CollectionUtils.isEmpty(ServiceContext.supportedRoleIds)) {
-			return; // if service has no role limitations
-		}
-		Set<Long> supportedRoleIds = context.getRoleIds();
-		if (CollectionUtils.isEmpty(supportedRoleIds)) {
-			throw MintException.getException(Error.ROLE_DISALLOWED_ERROR, null, null);
-		}
-		if (!ServiceContext.supportedRoleIds.stream().anyMatch(i -> supportedRoleIds.contains(i))) {
-			MintException exc = MintException.getException(Error.ROLE_DISALLOWED_ERROR, null, null);
-			exc.setMsg(String.format("User request is illegal. Service %s just supports role id %s", 
-					ServiceContext.id, Joiner.on(",").join(ServiceContext.supportedRoleIds)));
-			throw exc;
 		}
 	}
 	

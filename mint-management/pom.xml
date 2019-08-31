@@ -18,6 +18,7 @@
 		<module>mint-user</module>
 		<module>mint-user-api</module>
 		<module>mint-config-center</module>
+		<module>mint-services</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

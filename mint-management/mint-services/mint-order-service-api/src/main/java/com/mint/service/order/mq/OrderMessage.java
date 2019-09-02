@@ -4,13 +4,13 @@ import java.util.Date;
 
 import com.mint.service.order.dto.OrderProcessingResult;
 
-public class OrderMessage {
+public class OrderMessage<T> {
 	
 	private Long orderRequestId;
 	
 	private Long orderId;
 	
-	private OrderProcessingResult result;
+	private OrderProcessingResult<T> result;
 	
 	private Date time;
 
@@ -30,11 +30,11 @@ public class OrderMessage {
 		this.orderId = orderId;
 	}
 
-	public OrderProcessingResult getResult() {
+	public OrderProcessingResult<T> getResult() {
 		return result;
 	}
 
-	public void setResult(OrderProcessingResult result) {
+	public void setResult(OrderProcessingResult<T> result) {
 		this.result = result;
 	}
 

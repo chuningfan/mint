@@ -43,6 +43,8 @@ public class ErrorMessageProviderForUS implements ErrorMessageProvider {
 			return "Illegal role";
 		case -13: //USER_DUPLICATE_ERROR
 			return "Duplicate username";
+		case -14: //RESOURCE_NOT_AVAILABLE_ERROR
+			return "Resouce is not available";
 		default: //UNKNOWN_ERROR
 			return "Unknown error";
 		}

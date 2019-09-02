@@ -1,5 +1,6 @@
 package com.mint.service.order.dto;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 import com.mint.service.order.enums.OrderItemStatus;
@@ -17,6 +18,8 @@ public class OrderItemDto {
 	private ProductDto product;
 	
 	private Set<DiscountDto> discounts;
+	
+	private BigDecimal amount;
 	
 	public Long getId() {
 		return id;
@@ -64,6 +67,14 @@ public class OrderItemDto {
 
 	public void setDiscounts(Set<DiscountDto> discounts) {
 		this.discounts = discounts;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+
+	public void setAmount(BigDecimal amount) {
+		this.amount = amount;
 	}
 	
 }

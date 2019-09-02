@@ -6,4 +6,26 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>mint-order-service</artifactId>
+  <dependencies>
+  	<dependency>
+  		<groupId>mint</groupId>
+  		<artifactId>mint-service</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>mint</groupId>
+  		<artifactId>mint-db</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>mint</groupId>
+  		<artifactId>mint-cache</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  	<dependency>
+  		<groupId>mint-services</groupId>
+  		<artifactId>mint-order-service-api</artifactId>
+  		<version>0.0.1-SNAPSHOT</version>
+  	</dependency>
+  </dependencies>
 </project>

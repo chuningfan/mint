@@ -43,6 +43,8 @@ public class ErrorMessageProviderForCN implements ErrorMessageProvider  {
 			return "非法角色";
 		case -13: //USER_DUPLICATE_ERROR
 			return "用户重复";
+		case -14: //RESOURCE_NOT_AVAILABLE_ERROR
+			return "资源不足";
 		default: //UNKNOWN_ERROR
 			return "未知错误";
 		}

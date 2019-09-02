@@ -9,6 +9,8 @@ public class OrderDto {
 	
 	private Long id;
 	
+	private Long requestId;
+	
 	private String order_number;
 	
 	private Date createdDate;
@@ -23,6 +25,14 @@ public class OrderDto {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public Long getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(Long requestId) {
+		this.requestId = requestId;
 	}
 
 	public String getOrder_number() {

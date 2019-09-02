@@ -15,7 +15,8 @@ public enum Error {
 	IMPLEMENTATION_NOT_FOUND_ERROR(-10), // 无实现错误
 	UNSUPPORTED_ERROR(-11), // 非支持操作错误
 	ROLE_DISALLOWED_ERROR(-12), // 非法角色错误
-	USER_DUPLICATE_ERROR(-13) // 用户重复
+	USER_DUPLICATE_ERROR(-13), // 用户重复
+	RESOURCE_NOT_AVAILABLE_ERROR(-14) // 资源非可用错误
 	;
 	
 	private int code;

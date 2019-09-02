@@ -9,6 +9,8 @@ public class DiscountDto {
 	private DiscountType type;
 	
 	private String description;
+	
+	private double value;
 
 	public Long getId() {
 		return id;
@@ -32,6 +34,14 @@ public class DiscountDto {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public double getValue() {
+		return value;
+	}
+
+	public void setValue(double value) {
+		this.value = value;
 	}
 	
 }

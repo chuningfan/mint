@@ -16,8 +16,8 @@ public class UserContextWrapperImpl implements ContextWrapper {
 	private RedisHelper redisHelper;
 
 	@Override
-	public void storeIntoCache(String key, UserContext context) throws Exception {
-		redisHelper.store(key, context, 3600 * 1000 * 24L, TimeUnit.MILLISECONDS);
+	public void storeIntoCache(String key, UserContext context, long expireTime, TimeUnit unit) throws Exception {
+		redisHelper.store(key, context, expireTime, unit);
 	}
 
 	@Override

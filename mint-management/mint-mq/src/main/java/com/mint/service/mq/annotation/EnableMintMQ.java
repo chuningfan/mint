@@ -17,6 +17,6 @@ import com.mint.service.mq.common.SupportedMQ;
 @Documented
 public @interface EnableMintMQ {
 	
-	SupportedMQ[] use();
+	SupportedMQ use() default SupportedMQ.RABBIT;
 	
 }

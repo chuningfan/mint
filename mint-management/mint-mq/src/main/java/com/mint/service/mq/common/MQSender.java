@@ -1,15 +1,15 @@
 package com.mint.service.mq.common;
 
-public abstract class MQSender<D, T, R> {
+public abstract class MQSender<D, T> {
 
-	public R send0(D destination, T message, MQExceptionHandler<T, R> handler) {
+	public void send(D destination, T message, MQExceptionHandler<T> handler) {
 		try {
-			return send(destination, message);
+			send(destination, message);
 		} catch (Exception e) {
-			return handler.processIfException(message, e);
+			handler.processIfException(message, e);
 		}
 	}
 	
-	protected abstract R send(D destination, T message) throws Exception;
+	protected abstract void send(D destination, T message) throws Exception;
 	
 }

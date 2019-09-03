@@ -1,7 +1,7 @@
 package com.mint.service.mq.common;
 
-public interface MQExceptionHandler<T, R> {
+public interface MQExceptionHandler<T> {
 	
-	R processIfException(T message, Exception e);
+	void processIfException(T message, Exception e);
 	
 }

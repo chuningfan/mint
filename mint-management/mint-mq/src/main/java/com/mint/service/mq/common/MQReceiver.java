@@ -1,15 +1,15 @@
 package com.mint.service.mq.common;
 
-public abstract class MQReceiver<T, R> {
+public abstract class MQReceiver {
 
-	public R onMessage0(T message, MQExceptionHandler<T, R> handler) {
+	public void onMessage(Object message, MQExceptionHandler<Object> handler) {
 		try {
-			return onMessage(message);
+			onMessage(message);
 		} catch (Exception e) {
-			return handler.processIfException(message, e);
+			handler.processIfException(message, e);
 		}
 	}
 	
-	protected abstract R onMessage(T message) throws Exception;
+	protected abstract void onMessage(Object message) throws Exception;
 	
 }

@@ -6,13 +6,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.mint.service.mq.annotation.MintSender;
+import com.mint.service.mq.annotation.MintReceiver;
 import com.mint.service.mq.support.rabbit.RabbitStyle;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@MintSender
+@MintReceiver
 public @interface RabbitReceiver {
 	
 	RabbitStyle style() default RabbitStyle.DIRECT;

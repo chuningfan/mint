@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Configuration;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Configuration
-public @interface MintSender {
+public @interface MintReceiver {
 	
 }

@@ -10,19 +10,29 @@ import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.FanoutExchange;
+import org.springframework.amqp.core.MessageListener;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.util.CollectionUtils;
 
 import com.mint.common.utils.SpringUtil;
-import com.mint.service.mq.annotation.support.RabbitReceiver;
+import com.mint.service.mq.annotation.support.RabbitComponent;
+import com.mint.service.mq.common.MQRole;
 
 public class RabbitMQConfiguration {
 	
 	private static final String BINDING_PREFIX = "MQBINDING$";
+	
+	private static final String LISTENER_ADP_PREFIX = "MQLSTNRADP$";
+	
+	private static final String LISTENER_CONTAINER_PREFIX = "MQLSTNRCTNR$";
 	
 	private DefaultListableBeanFactory beanFactory;
 	
@@ -35,33 +45,65 @@ public class RabbitMQConfiguration {
 	}
 
 	private void createComponents() throws Exception {
-		Map<String, Object> beanMap = beanFactory.getBeansWithAnnotation(RabbitReceiver.class);
+		Map<String, Object> beanMap = beanFactory.getBeansWithAnnotation(RabbitComponent.class);
 		if (!CollectionUtils.isEmpty(beanMap)) {
+			ConnectionFactory connectionFactory = (ConnectionFactory) beanFactory.getBean("rabbitConnectionFactory");
 			Set<Entry<String, Object>> entrySet = beanMap.entrySet();
 			Iterator<Entry<String, Object>> itr = entrySet.iterator();
 			Entry<String, Object> entry = null;
 			Object originalObject = null;
-			RabbitReceiver rr = null;
+			RabbitComponent rc = null;
 			String exchangeName = null;
 			String queueName = null;
 			String routeName = null;
 			RabbitStyle style = null;
+			Object beanObj = null;
+			MQRole role = null;
 			while (itr.hasNext()) {
 				entry = itr.next();
 				originalObject = SpringUtil.getTarget(entry.getValue());
-				rr = originalObject.getClass().getAnnotation(RabbitReceiver.class);
-				exchangeName = rr.exchangeKey();
-				queueName = rr.queueKey();
-				routeName = rr.routeKey();
-				style = rr.style();
+				rc = originalObject.getClass().getAnnotation(RabbitComponent.class);
+				exchangeName = rc.exchangeKey();
+				queueName = rc.queueKey();
+				routeName = rc.routeKey();
+				style = rc.style();
+				role = rc.role();
 				createMQ(originalObject.getClass(), style, exchangeName, routeName, queueName);
+				if (MQRole.LISTENER == role) {
+					beanObj = entry.getValue();
+					createListenerContainer(connectionFactory, beanObj, originalObject.getClass(), 
+							rc, createListenerAdapter(beanObj, originalObject.getClass()));
+				}
 			}
+			
 		}
 	}
 	
+	private void createListenerContainer(ConnectionFactory connectionFactory, Object bean, Class<?> clazz, RabbitComponent rc, MessageListener listener) {
+		SimpleMessageListenerContainer c = new SimpleMessageListenerContainer();
+		Queue q = (Queue) beanFactory.getBean(rc.queueKey());
+		c.setQueues(q);
+		c.setConnectionFactory(connectionFactory);
+		c.setMessageListener(listener);
+		c.setRabbitAdmin(beanFactory.getBean(RabbitAdmin.class));
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(SimpleMessageListenerContainer.class, () -> {
+			return c;
+		});
+		registry.registerBeanDefinition(getListenerContainerBeanName(clazz), builder.getRawBeanDefinition());
+	}
+	
+	private MessageListenerAdapter createListenerAdapter(Object bean, Class<?> clazz) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(MessageListenerAdapter.class, () -> {
+			return new MessageListenerAdapter(bean);
+		});
+		registry.registerBeanDefinition(getListenerAdapterBeanName(clazz), builder.getRawBeanDefinition());
+		return (MessageListenerAdapter) beanFactory.getBean(getListenerAdapterBeanName(clazz));
+	}
+	
 	private void createMQ(Class<?> clazz, RabbitStyle style, String exchangeName, String routeName, String queueName) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Queue.class);
-		builder.addConstructorArgValue(queueName);
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Queue.class, () -> {
+			return new Queue(queueName);
+		});
 		registry.registerBeanDefinition(queueName, builder.getRawBeanDefinition());
 		Queue q = (Queue) beanFactory.getBean(queueName);
 		Binding binding = null;
@@ -84,6 +126,14 @@ public class RabbitMQConfiguration {
 			bindingBuilder.getRawBeanDefinition().setSource(binding);
 			registry.registerBeanDefinition(getBindingBeanName(clazz), bindingBuilder.getRawBeanDefinition());
 		}
+	}
+	
+	private String getListenerContainerBeanName(Class<?> clazz) {
+		return String.format("%s%s", LISTENER_CONTAINER_PREFIX, clazz.getName());
+	}
+	
+	private String getListenerAdapterBeanName(Class<?> clazz) {
+		return String.format("%s%s", LISTENER_ADP_PREFIX, clazz.getName());
 	}
 	
 	private String getBindingBeanName(Class<?> clazz) {

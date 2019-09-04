@@ -6,12 +6,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.AliasFor;
+import org.springframework.stereotype.Component;
 
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Configuration
-public @interface MintReceiver {
+@Component
+public @interface MintMQComponent {
+	
+	@AliasFor(annotation = Component.class, attribute = "value")
+	String value() default "";
 	
 }

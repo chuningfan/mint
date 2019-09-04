@@ -12,5 +12,10 @@
   		<artifactId>mint-security</artifactId>
   		<version>0.0.1-SNAPSHOT</version>
   	</dependency>
+  	<dependency>
+		<groupId>mint</groupId>
+		<artifactId>mint-mq</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</dependency>
   </dependencies>
 </project>

@@ -102,22 +102,23 @@ public class RabbitMQConfiguration {
 	
 	private void createMQ(Class<?> clazz, RabbitStyle style, String exchangeName, String routeName, String queueName) {
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(Queue.class, () -> {
-			return new Queue(queueName);
+			Queue q = new Queue(queueName, true, false, true);
+			return q;
 		});
 		registry.registerBeanDefinition(queueName, builder.getRawBeanDefinition());
 		Queue q = (Queue) beanFactory.getBean(queueName);
 		Binding binding = null;
 		switch (style) {
 		case FANOUT: 
-			FanoutExchange fx = getOrCreateExchange(style, exchangeName, clazz);
+			FanoutExchange fx = getOrCreateExchange(style, exchangeName, FanoutExchange.class);
 			binding = BindingBuilder.bind(q).to(fx);
 			break;
 		case TOPIC: 
-			TopicExchange tx = getOrCreateExchange(style, exchangeName, clazz);
+			TopicExchange tx = getOrCreateExchange(style, exchangeName, TopicExchange.class);
 			binding = BindingBuilder.bind(q).to(tx).with(routeName);
 			break;
 		default: // direct & TTL
-			DirectExchange dx = getOrCreateExchange(style, exchangeName, clazz);
+			DirectExchange dx = getOrCreateExchange(style, exchangeName, DirectExchange.class);
 			binding = BindingBuilder.bind(q).to(dx).with(routeName);
 			break;
 		}
@@ -147,6 +148,7 @@ public class RabbitMQConfiguration {
 	@SuppressWarnings("unchecked")
 	private <T extends AbstractExchange> T getOrCreateExchange(RabbitStyle style, String exchangeName, Class<?> clazz) {
 		AbstractExchange x = null;
+		
 		String exchangeBeanName = getExchangeBeanName(style, clazz);
 		if(!beanFactory.containsBean(exchangeBeanName)) {
 			BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(clazz);

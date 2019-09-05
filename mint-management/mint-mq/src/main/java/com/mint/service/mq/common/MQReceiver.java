@@ -10,12 +10,6 @@ import com.rabbitmq.client.Channel;
 
 public abstract class MQReceiver<T> implements ChannelAwareMessageListener {
 	
-	private Class<T> tClass;
-	
-	protected MQReceiver(Class<T> tClass) {
-		this.tClass = tClass;
-	}
-	
 	private final ObjectMapper mapper = new ObjectMapper();
 	
 	public void onMessage(T message, MQExceptionHandler<T> handler) {
@@ -30,6 +24,8 @@ public abstract class MQReceiver<T> implements ChannelAwareMessageListener {
 	
 	protected abstract void onMessage(T message) throws Exception;
 	
+	protected abstract Class<T> getGenericClass();
+	
 	public abstract MQExceptionHandler<T> getExceptionHandler();
 
 	@Override
@@ -41,7 +37,7 @@ public abstract class MQReceiver<T> implements ChannelAwareMessageListener {
 			return;
 		}
 		byte[] bodyBytes = message.getBody();
-		T body = mapper.readValue(bodyBytes, tClass);
+		T body = mapper.readValue(bodyBytes, getGenericClass());
 		onMessage(body, getExceptionHandler());
 	}
 	

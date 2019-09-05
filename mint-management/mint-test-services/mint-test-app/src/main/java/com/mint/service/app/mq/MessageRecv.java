@@ -8,10 +8,6 @@ import com.mint.service.mq.common.MQRole;
 @RabbitComponent(exchangeKey = "extest", queueKey = "qtest", role = MQRole.LISTENER)
 public class MessageRecv extends MQReceiver<String> {
 
-	protected MessageRecv(Class<String> tClass) {
-		super(String.class);
-	}
-
 	@Override
 	protected void onMessage(String message) throws Exception {
 		System.out.println("接收到消息：" + message);
@@ -26,6 +22,11 @@ public class MessageRecv extends MQReceiver<String> {
 			}
 		};
 		return h;
+	}
+
+	@Override
+	protected Class<String> getGenericClass() {
+		return String.class;
 	}
 
 }

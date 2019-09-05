@@ -15,6 +15,7 @@ import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -85,11 +86,22 @@ public class RabbitMQConfiguration {
 		c.setQueues(q);
 		c.setConnectionFactory(connectionFactory);
 		c.setMessageListener(listener);
-		c.setRabbitAdmin(beanFactory.getBean(RabbitAdmin.class));
+		c.setRabbitAdmin(getOrCreateRabbitAdmin());
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(SimpleMessageListenerContainer.class, () -> {
 			return c;
 		});
 		registry.registerBeanDefinition(getListenerContainerBeanName(clazz), builder.getRawBeanDefinition());
+	}
+	
+	private RabbitAdmin getOrCreateRabbitAdmin() {
+		if (!beanFactory.containsBean(RabbitAdmin.DEFAULT_EXCHANGE_NAME)) {
+			BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(RabbitAdmin.class, () -> {
+				RabbitAdmin rabbitAdmin = new RabbitAdmin(beanFactory.getBean(RabbitTemplate.class));
+				return rabbitAdmin;
+			});
+			registry.registerBeanDefinition("rabbitAdmin", builder.getRawBeanDefinition());
+		}
+		return beanFactory.getBean(RabbitAdmin.class);
 	}
 	
 	private MessageListenerAdapter createListenerAdapter(Object bean, Class<?> clazz) {
@@ -107,26 +119,31 @@ public class RabbitMQConfiguration {
 		});
 		registry.registerBeanDefinition(queueName, builder.getRawBeanDefinition());
 		Queue q = (Queue) beanFactory.getBean(queueName);
-		Binding binding = null;
+		BeanDefinitionBuilder bindingBuilder = null;
 		switch (style) {
 		case FANOUT: 
 			FanoutExchange fx = getOrCreateExchange(style, exchangeName, FanoutExchange.class);
-			binding = BindingBuilder.bind(q).to(fx);
+			Binding bindingF = BindingBuilder.bind(q).to(fx);
+			bindingBuilder = BeanDefinitionBuilder.genericBeanDefinition(Binding.class, () -> {
+				return bindingF;
+			});
 			break;
 		case TOPIC: 
 			TopicExchange tx = getOrCreateExchange(style, exchangeName, TopicExchange.class);
-			binding = BindingBuilder.bind(q).to(tx).with(routeName);
+			Binding bindingT = BindingBuilder.bind(q).to(tx).with(routeName);
+			bindingBuilder = BeanDefinitionBuilder.genericBeanDefinition(Binding.class, () -> {
+				return bindingT;
+			});
 			break;
 		default: // direct & TTL
 			DirectExchange dx = getOrCreateExchange(style, exchangeName, DirectExchange.class);
-			binding = BindingBuilder.bind(q).to(dx).with(routeName);
+			Binding bindingD = BindingBuilder.bind(q).to(dx).with(routeName);
+			bindingBuilder = BeanDefinitionBuilder.genericBeanDefinition(Binding.class, () -> {
+				return bindingD;
+			});
 			break;
 		}
-		if (binding != null) {
-			BeanDefinitionBuilder bindingBuilder = BeanDefinitionBuilder.genericBeanDefinition(Binding.class);
-			bindingBuilder.getRawBeanDefinition().setSource(binding);
-			registry.registerBeanDefinition(getBindingBeanName(clazz), bindingBuilder.getRawBeanDefinition());
-		}
+		registry.registerBeanDefinition(getBindingBeanName(clazz), bindingBuilder.getRawBeanDefinition());
 	}
 	
 	private String getListenerContainerBeanName(Class<?> clazz) {

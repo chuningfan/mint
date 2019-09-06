@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <configuration status="WARN" monitorInterval="30">
+ 	 <Properties>
+        <Property name="PATTERN">%date{yyyy-MM-dd HH:mm:ss,SSS} %-5level [%logger{0}][%thread] %message%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout charset="UTF-8" pattern="${PATTERN}" />
+        </Console>
+
+        
+       <!--  <Socket name="Logstash" host="127.0.0.1" port="4560"  protocol="TCP">
+            <PatternLayout pattern="${PATTERN}"/>
+        </Socket> -->
+        
+    </Appenders>
+
+    <Loggers>
+        <logger name="org.springframework" level="INFO"/>
+        <root level="INFO">
+            <AppenderRef ref="CONSOLE" />
+           <!--  <AppenderRef ref="Logstash" /> -->
+        </root>
+    </Loggers>
+</configuration>
+

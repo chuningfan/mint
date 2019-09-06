@@ -19,6 +19,7 @@
   	<module>mint-user-service</module>
   	<module>mint-gateway-service</module>
   	<module>mint-order-service-api</module>
+  	<module>mint-email-service-api</module>
   </modules>
   <dependencies>
   	<dependency>

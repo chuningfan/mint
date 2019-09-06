@@ -2,7 +2,7 @@ package com.mint.service.metadata;
 
 import java.util.List;
 
-public class ServiceMetaData {
+public class ServiceMetadata {
 	
 	private String serviceId;
 	

@@ -6,7 +6,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.mint.service.cache.support.redis.RedisHelper;
 import com.mint.service.gateway.filter.BlackListValidation;
-import com.mint.service.metadata.ServiceMetaData;
+import com.mint.service.metadata.ServiceMetadata;
 import com.mint.service.metadata.ServiceMetadataProvider;
 import com.mint.service.pipeline.PipelineProvider;
 import com.mint.service.pipeline.pre.AuthValidator;
@@ -30,8 +30,8 @@ public class GatewayServiceMetadataProvider implements ServiceMetadataProvider {
 	}
 	
 	@Override
-	public ServiceMetaData metaData() {
-		ServiceMetaData md = new ServiceMetaData();
+	public ServiceMetadata metaData() {
+		ServiceMetadata md = new ServiceMetadata();
 		md.setServiceId("gateway-service");
 		return md;
 	}

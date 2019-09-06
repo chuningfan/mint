@@ -4,7 +4,7 @@ import com.mint.service.pipeline.PipelineProvider;
 
 public interface ServiceMetadataProvider {
 	
-	ServiceMetaData metaData();
+	ServiceMetadata metaData();
 	
 	default void initPipeline(PipelineProvider provider) {
 		

@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import com.mint.common.utils.SystemUtil;
-import com.mint.service.metadata.ServiceMetaData;
+import com.mint.service.metadata.ServiceMetadata;
 import com.mint.service.metadata.ServiceMetadataProvider;
 
 @Component
@@ -20,8 +20,8 @@ public class OrderServiceMetadataProvider implements ServiceMetadataProvider {
 	private String serviceName;
 	
 	@Override
-	public ServiceMetaData metaData() {
-		ServiceMetaData md = new ServiceMetaData();
+	public ServiceMetadata metaData() {
+		ServiceMetadata md = new ServiceMetadata();
 		md.setServiceId(serviceName);
 		try {
 			md.setServiceIp(SystemUtil.getLocalAddress());

@@ -8,7 +8,7 @@ import com.mint.common.annotation.MintRpc;
 import com.mint.common.dto.web.WebResponse;
 import com.mint.service.user.dto.user.UserInfo;
 
-@MintRpc(requestMapping = "/service", serviceName = "mint-user")
+@MintRpc(requestMapping = "/service", serviceName = "mint-user-service")
 public interface UserService {
 
 	@MethodMapping(value = "/user/{userId}", requestMethod = RequestMethod.GET)

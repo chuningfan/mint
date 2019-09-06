@@ -2,27 +2,31 @@ package com.mint.service.email.manager;
 
 import java.io.File;
 import java.util.List;
+import java.util.Properties;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Component;
 
 import com.mint.service.email.dto.AttachmentDto;
 import com.mint.service.email.dto.EmailDto;
 import com.mint.service.email.dto.ResourceDto;
 
-@Component
-public class EmailManager {
+public class EmailManager extends JavaMailSenderImpl {
 	
-	@Autowired
-	private JavaMailSender mailSender;
+	private String key;
+	
+	public EmailManager(Properties prop) {
+		super.setJavaMailProperties(prop);
+	}
+	
+	public EmailManager() {
+	}
 	
 	public void sendSimpleMail(EmailDto email) {
 		SimpleMailMessage message = new SimpleMailMessage();
@@ -32,11 +36,11 @@ public class EmailManager {
         message.setText(email.getMessageBody());
         message.setCc(email.getCcList());
         message.setBcc(email.getBccList());
-        mailSender.send(message);
+        send(message);
 	}
 	
 	public void sendHtmlMail(EmailDto email) throws MessagingException {
-		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessage message = createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(email.getFromAddress());
         helper.setTo(email.getRecipients());
@@ -44,11 +48,11 @@ public class EmailManager {
         helper.setText(email.getMessageBody(), true);
         helper.setBcc(email.getBccList());
         helper.setCc(email.getCcList());
-        mailSender.send(message);
+        send(message);
 	}
 	
 	public void sendAttachmentsMail(EmailDto email) throws MessagingException {
-		MimeMessage message = mailSender.createMimeMessage();
+		MimeMessage message = createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(email.getFromAddress());
         helper.setTo(email.getRecipients());
@@ -57,7 +61,7 @@ public class EmailManager {
         helper.setCc(email.getCcList());
         helper.setBcc(email.getBccList());
         addAttachments(helper, email.getAttachments());
-        mailSender.send(message);
+        send(message);
 	}
 	
 	private void addAttachments(MimeMessageHelper helper, List<AttachmentDto> attachments) throws MessagingException {
@@ -73,7 +77,7 @@ public class EmailManager {
 	}
 	
     public void sendResourceMail(EmailDto email) throws MessagingException {
-    	MimeMessage message = mailSender.createMimeMessage();
+    	MimeMessage message = createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
         helper.setFrom(email.getFromAddress());
         helper.setTo(email.getRecipients());
@@ -82,7 +86,7 @@ public class EmailManager {
         helper.setCc(email.getCcList());
         helper.setBcc(email.getBccList());
         addResource(helper, email.getResourceDtos());
-        mailSender.send(message);
+        send(message);
     }
     
     private void addResource(MimeMessageHelper helper, List<ResourceDto> resourceDtos) throws MessagingException {
@@ -94,5 +98,13 @@ public class EmailManager {
     		}
     	}
     }
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
+	}
 	
 }

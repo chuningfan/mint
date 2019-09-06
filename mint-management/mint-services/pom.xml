@@ -10,7 +10,6 @@
   <packaging>pom</packaging>
   <modules>
   	<module>mint-order-service</module>
-  	<module>mint-payment-service</module>
   	<module>mint-file-service</module>
   	<module>mint-comment-service</module>
   	<module>mint-email-service</module>

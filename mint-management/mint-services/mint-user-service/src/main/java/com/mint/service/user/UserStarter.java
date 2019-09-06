@@ -10,7 +10,7 @@ import com.mint.service.user.metadata.UserServiceMetadataProvider;
 
 @EnableActuator
 @MintService(metadataProvider = UserServiceMetadataProvider.class)
-@EnableJpaOps(basePackages="com.mint.service.user.dao", entityScanPackages="com.mint.service.user.entity")
+@EnableJpaOps(basePackages={"com.mint.service.user.dao", "com.mint.service.user.entity"})
 public class UserStarter 
 {
     public static void main( String[] args )

@@ -10,6 +10,7 @@ import javax.mail.internet.MimeMessage;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 
@@ -17,7 +18,7 @@ import com.mint.service.email.dto.AttachmentDto;
 import com.mint.service.email.dto.EmailDto;
 import com.mint.service.email.dto.ResourceDto;
 
-public class EmailManager extends JavaMailSenderImpl {
+public class EmailManager extends JavaMailSenderImpl implements JavaMailSender {
 	
 	private String key;
 	

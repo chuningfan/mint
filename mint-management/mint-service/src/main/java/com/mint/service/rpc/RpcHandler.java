@@ -64,12 +64,12 @@ public class RpcHandler {
 					@Override
 					public Object invoke(Object obj, Method method, Object[] parameters) throws Throwable {
 						if (!method.isAnnotationPresent(MethodMapping.class)) {
-							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg(String.format("No method mapping on method: %s", method.getName()));
+							throw MintException.getException(Error.INTER_ERROR, null, "No method mapping on method: %s", method.getName());
 						}
 						MethodMapping mm = method.getAnnotation(MethodMapping.class);
 						String mmVal = mm.value();
 						if (StringUtils.isBlank(mmVal)) {
-							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg(String.format("No method mapping on method: %s", method.getName()));
+							throw MintException.getException(Error.INTER_ERROR, null, "No method mapping on method: %s", method.getName());
 						}
 						mmVal = mmVal.startsWith(SPLITTER) ? mmVal : (SPLITTER + mmVal);
 						String url = baseUri + mmVal; 
@@ -85,7 +85,7 @@ public class RpcHandler {
 						case POST:
 							int paramSize = parameters.length;
 							if (paramSize != 1) {
-								throw MintException.getException(Error.INTER_ERROR, null, null).setMsg("POST RPC should have only one parameter (If you have multiple parameters, please wrap them into ONE.)");
+								throw MintException.getException(Error.INTER_ERROR, null, "POST RPC should have only one parameter (If you have multiple parameters, please wrap them into ONE.)");
 							}
 							if (ptr != null) {
 								HttpEntity<Object> httpEntity = new HttpEntity<>(parameters[0]); 
@@ -112,14 +112,14 @@ public class RpcHandler {
 								return template.getForEntity(reqURL, method.getReturnType()).getBody();
 							}
 						default: 
-							throw MintException.getException(Error.INTER_ERROR, null, null).setMsg("RPC handler just supports POST and GET");
+							throw MintException.getException(Error.INTER_ERROR, null, "RPC handler just supports POST and GET");
 						}
 					}
 				});
 				PROXIES.put(apiInterfaceClass, t);
 				return (T) t;
 			} else {
-				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null).setMsg("Invalid mint rpc api");
+				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, "Invalid mint rpc api");
 			}
 		}
 	}

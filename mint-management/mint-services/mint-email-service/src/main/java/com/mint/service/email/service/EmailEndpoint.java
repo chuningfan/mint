@@ -9,16 +9,16 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mint.service.email.annotation.importer.RoutingContext;
 import com.mint.service.email.dto.EmailDto;
 import com.mint.service.email.dto.ResultDto;
-import com.mint.service.email.manager.EmailManager;
 
 @RestController
 @RequestMapping("/test")
 public class EmailEndpoint implements EmailService {
 
 	@Autowired
-	private EmailManager emailManager;
+	private RoutingContext routingContext;
 	
 	@Override
 	@PostMapping("/send")
@@ -35,10 +35,11 @@ public class EmailEndpoint implements EmailService {
 	@GetMapping("/testSend")
 	public void testSend() {
 		EmailDto email = new EmailDto();
-		email.setRecipients(new String[]{"Francis.Fang@activenetwork.com"});
-		email.setFromAddress("chuqingning@163.com");
-		email.setMessageBody("MINT Test Email, DO NOT REPLY.");
-		emailManager.sendSimpleMail(email);
+		email.setSubject("TEST");
+		email.setRecipients(new String[]{"297231034@qq.com"});
+		email.setFromAddress("mintmail@163.com");
+		email.setMessageBody("你好，\n	这是一封测试邮件，请勿回复。\n 感谢配合！");
+		routingContext.getManager().sendSimpleMail(email);
 	}
 
 }

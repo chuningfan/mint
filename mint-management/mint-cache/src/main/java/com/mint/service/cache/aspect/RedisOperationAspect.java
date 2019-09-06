@@ -76,8 +76,7 @@ public class RedisOperationAspect {
 		try {
 			String key = getKey(ro.key(), storedDataObject);
 			if (key == null) {
-				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
-				.setMsg(String.format("%s in %s is null, could not be a key for REDIS", ro.key(), ro.keyIn()));
+				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, "%s in %s is null, could not be a key for REDIS", ro.key(), ro.keyIn());
 			} else {
 				storeInRedis(key, storedDataObject);
 			}
@@ -97,16 +96,14 @@ public class RedisOperationAspect {
 			if (StringUtils.isEmpty(ro.keyIn().trim())) {
 				Object keyContainer = getArgByName(args, ro.keyIn(), m);
 				if (keyContainer == null) {
-					throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
-					.setMsg(String.format("Cannot find %s in %s", ro.key(), ro.keyIn()));
+					throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, "Cannot find %s in %s", ro.key(), ro.keyIn());
 				}
 				key = getKey(ro.key(), keyContainer);
 			} else {
 				key = getArgByName(args, ro.key(), m) == null ? null : getArgByName(args, ro.key(), m).toString();
 			}
 			if (key == null) {
-				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
-				.setMsg(String.format("Cannot find %s in %s", ro.key(), ro.keyIn()));
+				throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, "Cannot find %s in %s", ro.key(), ro.keyIn());
 			}
 		} catch (Exception e) {
 			if (failFast) {

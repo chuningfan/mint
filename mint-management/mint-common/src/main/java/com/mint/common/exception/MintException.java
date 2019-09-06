@@ -9,16 +9,23 @@ public class MintException extends RuntimeException {
 	
 	private int errorCode;
 	
-	private Throwable exception;
-	
-	private String msg;
-	
 	MintException() {}
 	
 	private MintException(Error error, Lang lang, Throwable e, String msg) {
-		this.msg = msg;
+		super(msg, e);
 		this.errorCode = error.getCode();
-		this.exception = e;
+	}
+	
+	private MintException(Error error, Throwable e, String msg) {
+		super(msg, e);
+		this.errorCode = error.getCode();
+	}
+	
+	public static MintException getException(Error error, Throwable e, String msg, Object...args) {
+		if (args != null && args.length > 0) {
+			msg = String.format(msg, args);
+		}
+		return new MintException(error, e, msg);
 	}
 	
 	public static MintException getException(Error error, Lang lang, Throwable e) {
@@ -33,23 +40,6 @@ public class MintException extends RuntimeException {
 
 	public int getErrorCode() {
 		return errorCode;
-	}
-
-	public Throwable getException() {
-		return exception;
-	}
-
-	public void setException(Throwable exception) {
-		this.exception = exception;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public MintException setMsg(String msg) {
-		this.msg = msg;
-		return this;
 	}
 
 	public MintException setErrorCode(int errorCode) {

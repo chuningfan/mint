@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.assertj.core.util.Lists;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -19,10 +18,10 @@ import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ResourceUtils;
 
+import com.google.common.collect.Lists;
 import com.mint.common.exception.Error;
 import com.mint.common.exception.MintException;
 import com.mint.service.email.manager.EmailManager;
-import com.mint.service.email.route.RoutingContext;
 import com.mint.service.email.route.RoutingStrategy;
 
 public class MultipleSMTPImporter implements ImportBeanDefinitionRegistrar {
@@ -55,16 +54,21 @@ public class MultipleSMTPImporter implements ImportBeanDefinitionRegistrar {
 			e.printStackTrace();
 		}
 		if (CollectionUtils.isNotEmpty(props)) {
-			String username = null;
 			EmailManager mgr = null;
 			for (Properties p : props) {
-				username = p.getProperty("spring.mail.username");
-				builder = BeanDefinitionBuilder.genericBeanDefinition(EmailManager.class, () -> {
-					return new EmailManager(p);
-				});
-				registry.registerBeanDefinition(p.getProperty("spring.mail.username"), builder.getRawBeanDefinition());
-				mgr = (EmailManager) beanFactory.getBean(username);
-				cxt.addManager(mgr);
+				final String username = p.getProperty("mail.smtp.user");
+				final String pwd = p.getProperty("password");
+				if (!beanFactory.containsBean(username)) {
+					builder = BeanDefinitionBuilder.genericBeanDefinition(EmailManager.class, () -> {
+						EmailManager em = new EmailManager(p);
+						em.setKey(username);
+						em.setPassword(pwd);
+						return em;
+					});
+					registry.registerBeanDefinition(username, builder.getRawBeanDefinition());
+					mgr = (EmailManager) beanFactory.getBean(username);
+					cxt.addManager(mgr);
+				}
 			}
 		} else {
 			throw MintException.getException(Error.RESOURCE_NOT_AVAILABLE_ERROR, null, null);

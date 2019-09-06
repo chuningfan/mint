@@ -17,6 +17,6 @@ import com.mint.service.email.route.RoutingStrategy;
 @Import(MultipleSMTPImporter.class)
 public @interface EmailConfig {
 	RoutingStrategy strategy() default RoutingStrategy.HASH;
-	String propertiesPath() default "classpath: resources/routing";
+	String propertiesPath() default "classpath:routing";
 	String filePrex() default "email_";
 }

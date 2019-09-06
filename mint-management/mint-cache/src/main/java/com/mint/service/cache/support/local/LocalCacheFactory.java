@@ -57,15 +57,13 @@ public class LocalCacheFactory  {
 
 	public static CacheOperator<String, Object> create(String key, LocalCacheType type, Long expireTime, TimeUnit unit, Long byteSize) throws MintException {
 		if (LOCALCACHE.containsKey(key)) {
-			throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
-			.setMsg("Cannot allow dupplicate key for local cache");
+			throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, "Cannot allow dupplicate key for local cache");
 		}
 		CacheOperator<String, Object> cache = null;
 		switch(type) {
 		case DISK: 
 //			cache = DISKCACHE.getOperator();
-			throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, null)
-			.setMsg("DISK type cache must be implemented by customer");
+			throw MintException.getException(Error.ILLEGAL_PARAM_ERROR, null, "DISK type cache must be implemented by customer");
 		default: 
 			cache = MEMCACHE.getOperator(expireTime, unit, byteSize);
 			break;

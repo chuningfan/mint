@@ -15,7 +15,6 @@
 		<module>mint-services</module>
 		<module>mint-service-infrastructure</module>
 		<module>mint-test-services</module>
-		<module>mint-mq</module>
 	</modules>
 	<parent>
 		<groupId>org.springframework.boot</groupId>

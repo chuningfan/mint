@@ -20,6 +20,7 @@
   	<module>mint-gateway-service</module>
   	<module>mint-order-service-api</module>
   	<module>mint-email-service-api</module>
+  	<module>mint-map-service-api</module>
   </modules>
   <dependencies>
   	<dependency>

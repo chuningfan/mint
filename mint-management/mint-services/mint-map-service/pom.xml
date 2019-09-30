@@ -9,12 +9,23 @@
 	<artifactId>mint-map-service</artifactId>
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-solr</artifactId>
-		</dependency>
-		<dependency>
 			<groupId>mint-services</groupId>
 			<artifactId>mint-map-service-api</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>mint</groupId>
+			<artifactId>mint-service</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>mint</groupId>
+			<artifactId>mint-cache</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>mint</groupId>
+			<artifactId>mint-security</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

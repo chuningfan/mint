@@ -110,37 +110,31 @@ public class NormalAuthHandler extends AuthHandler {
 
 	@Override
 	protected WebResponse<Boolean> login(Object... data) {
-		
 		return null;
 	}
 
 	@Override
 	protected WebResponse<Boolean> logout(Object... data) {
-		
 		return null;
 	}
 
 	@Override
 	protected WebResponse<Boolean> doUpdatePwd(Object... data) {
-		
 		return null;
 	}
 
 	@Override
 	protected WebResponse<Boolean> updatePwd(Object... data) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected WebResponse<Boolean> doGetBackPwd(Object... data) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	protected WebResponse<Boolean> getBackPwd(Object... data) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

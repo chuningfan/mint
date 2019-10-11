@@ -10,6 +10,8 @@ import org.springframework.stereotype.Component;
 import com.mint.common.utils.SystemUtil;
 import com.mint.service.metadata.ServiceMetadata;
 import com.mint.service.metadata.ServiceMetadataProvider;
+import com.mint.service.pipeline.PipelineProvider;
+import com.mint.service.pipeline.pre.AuthValidator;
 
 @Component
 public class OrderServiceMetadataProvider implements ServiceMetadataProvider {
@@ -31,4 +33,9 @@ public class OrderServiceMetadataProvider implements ServiceMetadataProvider {
 		return md;
 	}
 
+	@Override
+	public void initPipeline(PipelineProvider provider) {
+		provider.removePre(AuthValidator.ID);
+	}
+	
 }

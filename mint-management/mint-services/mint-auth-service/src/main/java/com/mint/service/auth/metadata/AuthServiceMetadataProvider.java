@@ -18,7 +18,6 @@ public class AuthServiceMetadataProvider implements ServiceMetadataProvider {
 
 	@Override
 	public void initPipeline(PipelineProvider provider) {
-		// TODO Auto-generated method stub
 		
 	}
 

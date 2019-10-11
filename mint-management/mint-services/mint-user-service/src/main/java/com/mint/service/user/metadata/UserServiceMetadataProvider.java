@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import com.mint.service.metadata.ServiceMetadata;
 import com.mint.service.metadata.ServiceMetadataProvider;
 import com.mint.service.pipeline.PipelineProvider;
+import com.mint.service.pipeline.pre.AuthValidator;
 
 @Component
 public class UserServiceMetadataProvider implements ServiceMetadataProvider {
@@ -13,14 +14,13 @@ public class UserServiceMetadataProvider implements ServiceMetadataProvider {
 	@Override
 	public ServiceMetadata metaData() {
 		ServiceMetadata md = new ServiceMetadata();
-		md.setServiceId("user");
+		md.setServiceId("mint-user-service");
 		return md;
 	}
 
 	@Override
 	public void initPipeline(PipelineProvider provider) {
-		// TODO Auto-generated method stub
-		
+		provider.removePre(AuthValidator.ID);
 	}
 
 }

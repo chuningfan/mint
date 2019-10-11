@@ -8,7 +8,7 @@ import com.mint.service.annotation.MintService;
 import com.mint.service.gateway.metadata.GatewayServiceMetadataProvider;
 
 @MintService(metadataProvider = GatewayServiceMetadataProvider.class, 
-noAutoConfigFor = DataSourceAutoConfiguration.class)
+	noAutoConfigFor = DataSourceAutoConfiguration.class)
 @EnableZuulProxy
 public class GatewayServiceStarter {
 	
